@@ -201,14 +201,14 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
 /* --- محراب تزئینی صفحه اصلی --- */
 .hero-war { background:linear-gradient(110deg,#f6efdf 0%,#faf7ec 45%,#e4ece5 100%); }
 
-/* --- پس‌زمینه‌های عکسی بخش‌ها (با حفظ گرادیان رنگی به عنوان روکش) --- */
+/* --- پس‌زمینه‌های عکسی بخش‌ها (تصاویر واقعی از قالب‌های فارسی + شهدا) --- */
 .hero-war { position:relative; }
 .hero-war::before {
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(110deg, rgba(247,242,231,.68) 0%, rgba(250,248,241,.62) 45%, rgba(231,239,234,.55) 100%),
-    url(../images/hero-banner.jpg);
+    linear-gradient(110deg, rgba(247,242,231,.62) 0%, rgba(250,248,241,.55) 45%, rgba(231,239,234,.50) 100%),
+    url(../images/hero/home-hero.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -219,8 +219,8 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(0deg, rgba(23,63,61,.62), rgba(18,46,43,.55)),
-    url(../images/memories-bg.jpg);
+    linear-gradient(0deg, rgba(23,63,61,.72), rgba(18,46,43,.65)),
+    url(../images/hero/memories-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -232,7 +232,7 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   position:absolute; inset:0;
   background:
     linear-gradient(135deg, rgba(228,236,229,.65) 0%, rgba(244,239,223,.60) 50%, rgba(231,239,234,.60) 100%),
-    url(../images/offline-bg.jpg);
+    url(../images/hero/offline-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -244,7 +244,7 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   position:absolute; inset:0;
   background:
     linear-gradient(120deg, rgba(226,233,223,.65) 0%, rgba(244,239,223,.60) 50%, rgba(231,239,234,.60) 100%),
-    url(../images/directory-hero.jpg);
+    url(../images/hero/directory-hero.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -255,8 +255,8 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(0deg, rgba(252,250,245,.65), rgba(252,250,245,.60)),
-    url(../images/front-bg.jpg);
+    linear-gradient(0deg, rgba(252,250,245,.70), rgba(252,250,245,.65)),
+    url(../images/hero/front-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -268,8 +268,8 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(0deg, rgba(252,250,245,.65), rgba(252,250,245,.60)),
-    url(../images/testament-bg.jpg);
+    linear-gradient(0deg, rgba(252,250,245,.70), rgba(252,250,245,.65)),
+    url(../images/hero/testament-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -700,3 +700,95 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
 .offline-icon svg { width:32px; height:32px; }
 .offline-retry { display:inline-flex; align-items:center; gap:8px; }
 .offline-retry svg { width:16px; height:16px; }
+
+/* --- بخش رهبران انقلاب --- */
+.leaders-section { background:linear-gradient(180deg,#fcfaf5 0%,#f5f1e8 100%); }
+.leaders-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:30px;
+  margin-top:40px;
+}
+.leader-card {
+  display:grid;
+  grid-template-columns:160px 1fr;
+  gap:24px;
+  align-items:start;
+  background:#fffefa;
+  border:1px solid rgba(189,147,69,.4);
+  border-radius:18px;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+}
+.leader-card::before {
+  content:"";
+  position:absolute; inset:6px;
+  border:1px dashed rgba(189,147,69,.25);
+  border-radius:12px;
+  pointer-events:none;
+}
+.leader-portrait {
+  width:160px;
+  height:200px;
+  overflow:hidden;
+  border-radius:12px;
+  background:linear-gradient(135deg,#e4ece5,#b6c9bd);
+  box-shadow:0 4px 14px rgba(0,0,0,.1), inset 0 0 0 2px rgba(189,147,69,.4);
+  position:relative;
+  z-index:1;
+}
+.leader-portrait img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+}
+.leader-body {
+  position:relative;
+  z-index:1;
+}
+.leader-eyebrow {
+  display:inline-block;
+  color:var(--gold);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
+  margin-bottom:6px;
+}
+.leader-body h3 {
+  font-size:22px;
+  color:var(--navy);
+  margin:0 0 12px;
+}
+.leader-honor {
+  color:var(--gold);
+  font-size:14px;
+  font-weight:600;
+  margin-right:6px;
+}
+.leader-body p {
+  color:#5a6b66;
+  font-size:13px;
+  line-height:2;
+  margin:0 0 12px;
+}
+.leader-quote {
+  display:block;
+  padding:10px 14px 10px 16px;
+  background:rgba(23,63,61,.06);
+  border-right:3px solid var(--gold);
+  color:var(--jade);
+  font-size:12.5px;
+  font-weight:600;
+  line-height:1.9;
+  border-radius:0 8px 8px 0;
+  font-style:italic;
+}
+@media (max-width:768px) {
+  .leaders-grid { grid-template-columns:1fr; }
+  .leader-card { grid-template-columns:110px 1fr; gap:16px; padding:18px; }
+  .leader-portrait { width:110px; height:140px; }
+  .leader-body h3 { font-size:18px; }
+  .leader-body p { font-size:12px; line-height:1.9; }
+}
