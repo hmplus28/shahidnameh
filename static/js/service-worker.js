@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shahidnameh-v9';
+const CACHE_NAME = 'shahidnameh-v10';
 const APP_SHELL = [
   '/', '/martyrs/', '/offline/',
   '/static/css/site.css', '/static/css/fonts.css',
@@ -14,12 +14,16 @@ const APP_SHELL = [
   '/static/icons/page.svg', '/static/icons/plus.svg', '/static/icons/clock.svg',
   '/static/icons/users.svg', '/static/icons/dashboard.svg', '/static/icons/logout.svg',
   '/static/icons/close.svg', '/static/icons/mihrab.svg', '/static/icons/empty.svg',
-  // تصاویر اصلی (کاربر خودش گذاشته)
+  // تصاویر اصلی (کاربر گذاشته)
   '/static/images/hero-banner.jpg', '/static/images/memories-bg.jpg',
   '/static/images/offline-bg.jpg', '/static/images/directory-hero.jpg',
   '/static/images/front-bg.jpg', '/static/images/testament-bg.jpg',
   '/static/images/city-silhouette.png', '/static/images/default-avatar.png',
-  // تصاویر رهبران انقلاب (بخش جدید)
+  // تصاویر جدید: آواتار پیش‌فرض شهدا + گالری
+  '/static/images/martyr-default.jpg',
+  '/static/images/strip-01.jpg', '/static/images/strip-02.jpg', '/static/images/strip-03.jpg',
+  '/static/images/strip-04.jpg', '/static/images/strip-05.jpg', '/static/images/strip-06.jpg',
+  // تصاویر رهبران انقلاب
   '/static/images/leaders/khomeini-portrait.jpg', '/static/images/leaders/khamenei-portrait.jpg'
 ];
 
