@@ -201,14 +201,14 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
 /* --- محراب تزئینی صفحه اصلی --- */
 .hero-war { background:linear-gradient(110deg,#f6efdf 0%,#faf7ec 45%,#e4ece5 100%); }
 
-/* --- پس‌زمینه‌های عکسی بخش‌ها (تصاویر واقعی از قالب‌های فارسی + شهدا) --- */
+/* --- پس‌زمینه‌های عکسی بخش‌ها (تصاویر اصلی) --- */
 .hero-war { position:relative; }
 .hero-war::before {
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(110deg, rgba(247,242,231,.62) 0%, rgba(250,248,241,.55) 45%, rgba(231,239,234,.50) 100%),
-    url(../images/hero/home-hero.jpg);
+    linear-gradient(110deg, rgba(247,242,231,.68) 0%, rgba(250,248,241,.62) 45%, rgba(231,239,234,.55) 100%),
+    url(../images/hero-banner.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -219,8 +219,8 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(0deg, rgba(23,63,61,.72), rgba(18,46,43,.65)),
-    url(../images/hero/memories-bg.jpg);
+    linear-gradient(0deg, rgba(23,63,61,.62), rgba(18,46,43,.55)),
+    url(../images/memories-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -232,7 +232,7 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   position:absolute; inset:0;
   background:
     linear-gradient(135deg, rgba(228,236,229,.65) 0%, rgba(244,239,223,.60) 50%, rgba(231,239,234,.60) 100%),
-    url(../images/hero/offline-bg.jpg);
+    url(../images/offline-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -244,7 +244,7 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   position:absolute; inset:0;
   background:
     linear-gradient(120deg, rgba(226,233,223,.65) 0%, rgba(244,239,223,.60) 50%, rgba(231,239,234,.60) 100%),
-    url(../images/hero/directory-hero.jpg);
+    url(../images/directory-hero.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -255,8 +255,8 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(0deg, rgba(252,250,245,.70), rgba(252,250,245,.65)),
-    url(../images/hero/front-bg.jpg);
+    linear-gradient(0deg, rgba(252,250,245,.65), rgba(252,250,245,.60)),
+    url(../images/front-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;
@@ -268,8 +268,8 @@ button, input, select { font:inherit; } a { color:inherit; text-decoration:none;
   content:"";
   position:absolute; inset:0;
   background:
-    linear-gradient(0deg, rgba(252,250,245,.70), rgba(252,250,245,.65)),
-    url(../images/hero/testament-bg.jpg);
+    linear-gradient(0deg, rgba(252,250,245,.65), rgba(252,250,245,.60)),
+    url(../images/testament-bg.jpg);
   background-size:cover;
   background-position:center;
   pointer-events:none;

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shahidnameh-v8';
+const CACHE_NAME = 'shahidnameh-v9';
 const APP_SHELL = [
   '/', '/martyrs/', '/offline/',
   '/static/css/site.css', '/static/css/fonts.css',
@@ -14,14 +14,13 @@ const APP_SHELL = [
   '/static/icons/page.svg', '/static/icons/plus.svg', '/static/icons/clock.svg',
   '/static/icons/users.svg', '/static/icons/dashboard.svg', '/static/icons/logout.svg',
   '/static/icons/close.svg', '/static/icons/mihrab.svg', '/static/icons/empty.svg',
-  '/static/icons/default-avatar.svg', '/static/icons/city-silhouette.svg',
-  '/static/images/hero/home-hero.jpg', '/static/images/hero/memories-bg.jpg',
-  '/static/images/hero/directory-hero.jpg', '/static/images/hero/offline-bg.jpg',
-  '/static/images/hero/front-bg.jpg', '/static/images/hero/testament-bg.jpg',
-  '/static/images/hero/hero-banner.jpg', '/static/images/hero/city-silhouette-bg.jpg',
-  '/static/images/leaders/khomeini-portrait.jpg', '/static/images/leaders/khamenei-portrait.jpg',
-  '/static/images/leaders/khomeini-wide.jpg', '/static/images/leaders/khamenei-wide.jpg',
-  '/static/images/default-avatar.png'
+  // تصاویر اصلی (کاربر خودش گذاشته)
+  '/static/images/hero-banner.jpg', '/static/images/memories-bg.jpg',
+  '/static/images/offline-bg.jpg', '/static/images/directory-hero.jpg',
+  '/static/images/front-bg.jpg', '/static/images/testament-bg.jpg',
+  '/static/images/city-silhouette.png', '/static/images/default-avatar.png',
+  // تصاویر رهبران انقلاب (بخش جدید)
+  '/static/images/leaders/khomeini-portrait.jpg', '/static/images/leaders/khamenei-portrait.jpg'
 ];
 
 const isCacheable = (request, response) => request.method === 'GET' && response && response.ok && new URL(request.url).origin === self.location.origin;
