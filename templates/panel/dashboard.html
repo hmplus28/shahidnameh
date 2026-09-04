@@ -2,7 +2,7 @@
 {% block title %}پیشخوان | پنل مدیریت شهیدنامه{% endblock %}
 {% block content %}
 <header class="panel-head"><div><h1>پیشخوان</h1><p>نمای کلی محتوا و آخرین رویدادها</p></div>
-  {% if perms.martyrs.add_martyr %}<a class="panel-btn" href="{% url 'martyrs:panel_martyr_new' %}">＋ ثبت شهید جدید</a>{% endif %}
+  {% if perms.martyrs.add_martyr %}<a class="panel-btn" href="{% url 'martyrs:panel_martyr_new' %}">{% include "icons/icon.html" with name="plus" size=16 %} ثبت شهید جدید</a>{% endif %}
 </header>
 <section class="stat-cards">
   <article><b>{{ stats.martyrs_published }}</b><span>شهید منتشرشده</span></article>
@@ -27,7 +27,7 @@
     {% for log in recent_logs %}
       <div class="mini-row"><b>{{ log.object_repr|default:"—" }}</b><small>{{ log.user.username }} · {{ log.get_action_flag_display }}</small></div>
     {% empty %}<p class="empty-note">تغییری ثبت نشده است.</p>{% endfor %}
-    <a class="panel-link" href="{% url 'martyrs:panel_logs' %}">مشاهده همه تغییرات →</a>
+    <a class="panel-link" href="{% url 'martyrs:panel_logs' %}">مشاهده همه تغییرات {% include "icons/icon.html" with name="arrow-left" size=14 %}</a>
   </section>
 </div>
 {% endblock %}

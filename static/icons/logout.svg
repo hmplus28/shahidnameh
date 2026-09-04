@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="خروج">
+  <defs>
+    <linearGradient id="logoutGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#a33d3d"/>
+      <stop offset="100%" stop-color="#7a2a2a"/>
+    </linearGradient>
+  </defs>
+  <path d="M10 12 L10 52 Q10 56 14 56 L34 56 Q38 56 38 52 L38 42 L32 42 L32 50 L16 50 L16 14 L32 14 L32 22 L38 22 L38 12 Q38 8 34 8 L14 8 Q10 8 10 12 Z" fill="url(#logoutGrad)" stroke="#5a1f1f" stroke-width="1.2"/>
+  <path d="M28 32 L52 32" stroke="url(#logoutGrad)" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M42 22 L52 32 L42 42" fill="none" stroke="url(#logoutGrad)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -7,7 +7,7 @@
     <h1>{% if is_new %}ثبت شهید جدید{% else %}پرونده {{ martyr.full_name }}{% endif %}</h1>
     {% if not is_new %}
     <p class="head-links">
-      <a href="{% url 'martyrs:detail' martyr.slug %}" target="_blank">مشاهده در سایت ↗</a> ·
+      <a href="{% url 'martyrs:detail' martyr.slug %}" target="_blank">مشاهده در سایت {% include "icons/icon.html" with name="external" size=14 %}</a> ·
       {% if martyr.is_published %}<span class="tag is-ok">منتشرشده</span>{% else %}<span class="tag">پیش‌نویس</span>{% endif %}
       {% if martyr.is_featured %}<span class="tag is-gold">شهید شاخص</span>{% endif %}
     </p>

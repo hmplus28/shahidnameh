@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="هلال و ستاره">
+  <defs>
+    <linearGradient id="csGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ead7aa"/>
+      <stop offset="100%" stop-color="#bd9345"/>
+    </linearGradient>
+  </defs>
+  <path d="M44 32 A20 20 0 1 1 24 12 A16 16 0 1 0 44 32 Z" fill="url(#csGrad)"/>
+  <g transform="translate(46,20)">
+    <path d="M0 -7 L2 -2 L7 0 L2 2 L0 7 L-2 2 L-7 0 L-2 -2 Z" fill="url(#csGrad)"/>
+  </g>
+</svg>

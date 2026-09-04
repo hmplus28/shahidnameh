@@ -1,11 +1,12 @@
 {% extends "panel/base_panel.html" %}
+{% load static %}
 {% block title %}ورود به پنل مدیریت | شهیدنامه{% endblock %}
 {% block body_class %}is-login{% endblock %}
 {% block panel_toggle %}{% endblock %}
 {% block content %}
 <div class="login-wrap">
   <form method="post" class="login-card">
-    <span class="brand-mark" aria-hidden="true"><span></span></span>
+    <span class="brand-mark" aria-hidden="true"><img src="{% static 'icons/icon.svg' %}" alt="" width="56" height="56"></span>
     <h1>پنل مدیریت شهیدنامه</h1>
     <p>برای مدیریت پرونده‌ها وارد حساب کاربری خود شوید.</p>
     {% csrf_token %}

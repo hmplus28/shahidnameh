@@ -17,7 +17,7 @@
     {"src": "/static/icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable"}
   ],
   "shortcuts": [
-    {"name": "فهرست شهدا", "short_name": "جست‌وجو", "url": "/martyrs/", "icons": [{"src": "/static/icons/icon.svg", "sizes": "any", "type": "image/svg+xml"}]},
-    {"name": "مدیریت محتوا", "short_name": "مدیریت", "url": "/admin/", "icons": [{"src": "/static/icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml"}]}
+    {"name": "فهرست شهدا", "short_name": "جست‌وجو", "url": "/martyrs/", "icons": [{"src": "/static/icons/search.svg", "sizes": "any", "type": "image/svg+xml"}]},
+    {"name": "مدیریت محتوا", "short_name": "مدیریت", "url": "/admin/", "icons": [{"src": "/static/icons/dashboard.svg", "sizes": "any", "type": "image/svg+xml"}]}
   ]
 }

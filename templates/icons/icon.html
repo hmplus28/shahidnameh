@@ -1,0 +1,234 @@
+{% load static %}
+{% comment %}آیکون‌های SVG ایرانی — استفاده: {% include "icons/icon.html" with name="tulip" size=32 %}{% endcomment %}
+{% if name == "tulip" %}
+<svg class="icn icn-tulip" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="tulipG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#d45858"/><stop offset="100%" stop-color="#a33d3d"/></linearGradient></defs>
+  <g transform="translate(32,28)"><path d="M0 -22 C-9 -22 -16 -16 -16 -8 C-16 -3 -11 0 -7 1 C-12 2 -16 5 -16 10 C-16 18 -9 22 0 22 C9 22 16 18 16 10 C16 5 12 2 7 1 C11 0 16 -3 16 -8 C16 -16 9 -22 0 -22 Z" fill="url(#tulipG)" stroke="#7a2a2a" stroke-width="1.3"/><path d="M0 -22 L0 22" stroke="#7a2a2a" stroke-width="1" opacity=".5"/><path d="M-10 -11 Q-4 -8 0 -5 Q4 -8 10 -11" stroke="#ead7aa" stroke-width="1" fill="none" opacity=".7"/></g>
+  <path d="M32 50 Q30 56 26 62" stroke="#2d6b3f" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M26 62 Q22 56 17 58 Q20 63 26 62 Z" fill="#2d6b3f"/>
+</svg>
+{% elif name == "mosque" %}
+<svg class="icn icn-mosque" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="mDome" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#c5d6c9"/><stop offset="100%" stop-color="#5d7e6f"/></linearGradient><linearGradient id="mBody" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e4ece5"/><stop offset="100%" stop-color="#9eb9b2"/></linearGradient></defs>
+  <rect x="8" y="46" width="48" height="12" fill="url(#mBody)" stroke="#5d7e6f" stroke-width="1"/>
+  <rect x="18" y="34" width="28" height="14" fill="url(#mBody)" stroke="#5d7e6f" stroke-width="1"/>
+  <path d="M16 34 Q16 18 32 14 Q48 18 48 34 Z" fill="url(#mDome)" stroke="#3d5e4f" stroke-width="1.2"/>
+  <path d="M32 14 L32 8" stroke="#bd9345" stroke-width="1.5"/><circle cx="32" cy="7" r="2" fill="#bd9345"/>
+  <path d="M30 4 A3 3 0 1 0 32 6" fill="none" stroke="#bd9345" stroke-width="1.2"/>
+  <path d="M28 46 Q28 40 32 40 Q36 40 36 46 L36 50 L28 50 Z" fill="#3d5e4f"/>
+  <rect x="10" y="22" width="4" height="24" fill="url(#mBody)" stroke="#5d7e6f" stroke-width="1"/><circle cx="12" cy="20" r="3" fill="url(#mDome)" stroke="#3d5e4f" stroke-width="1"/>
+  <rect x="50" y="22" width="4" height="24" fill="url(#mBody)" stroke="#5d7e6f" stroke-width="1"/><circle cx="52" cy="20" r="3" fill="url(#mDome)" stroke="#3d5e4f" stroke-width="1"/>
+</svg>
+{% elif name == "medal" %}
+<svg class="icn icn-medal" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="mdGold" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ead7aa"/><stop offset="100%" stop-color="#bd9345"/></linearGradient><radialGradient id="mdIn" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#f5e6c4"/><stop offset="100%" stop-color="#bd9345"/></radialGradient></defs>
+  <path d="M22 8 L32 26 L42 8 L38 8 L32 18 L26 8 Z" fill="#a33d3d" stroke="#7a2a2a" stroke-width=".8"/>
+  <circle cx="32" cy="40" r="16" fill="url(#mdGold)" stroke="#8a6a2a" stroke-width="1.5"/>
+  <circle cx="32" cy="40" r="12" fill="url(#mdIn)" stroke="#8a6a2a" stroke-width=".8"/>
+  <g transform="translate(32,40)"><path d="M0 -7 C-4 -7 -6 -4 -6 -2 C-6 0 -3 1 0 1 C3 1 6 0 6 -2 C6 -4 4 -7 0 -7 Z" fill="#a33d3d" stroke="#7a2a2a" stroke-width=".6"/><path d="M0 -7 L0 5" stroke="#7a2a2a" stroke-width=".6" opacity=".6"/><path d="M-4 5 L4 5 L2 8 L-2 8 Z" fill="#2d6b3f"/></g>
+</svg>
+{% elif name == "testament" %}
+<svg class="icn icn-testament" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="ppG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#fffdf5"/><stop offset="100%" stop-color="#f0e6cb"/></linearGradient></defs>
+  <path d="M10 12 Q10 8 14 8 L46 8 Q50 8 50 12 L50 50 Q50 54 46 54 L14 54 Q10 54 10 50 Z" fill="url(#ppG)" stroke="#bd9345" stroke-width="1.5"/>
+  <g stroke="#173f3d" stroke-width="1.3" stroke-linecap="round" fill="none"><path d="M16 18 Q22 16 30 18 Q38 20 44 18"/><path d="M16 24 Q22 22 28 24 Q34 26 44 24"/><path d="M16 30 Q22 28 32 30 Q40 31 44 30"/><path d="M18 36 Q22 34 30 36"/></g>
+  <circle cx="42" cy="42" r="6" fill="#a33d3d" stroke="#7a2a2a" stroke-width="1"/>
+  <g transform="translate(42,42)" fill="#ead7aa"><path d="M0 -3 L1 -1 L3 0 L1 1 L0 3 L-1 1 L-3 0 L-1 -1 Z"/></g>
+</svg>
+{% elif name == "red-crescent" %}
+<svg class="icn icn-red-crescent" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="rcG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#e84545"/><stop offset="100%" stop-color="#a33d3d"/></linearGradient></defs>
+  <rect x="4" y="4" width="56" height="56" rx="10" fill="#fffdf5" stroke="#bd9345" stroke-width="1.5"/>
+  <g transform="translate(32,32)"><path d="M -2 -16 A 16 16 0 1 0 -2 16 A 13 13 0 1 1 -2 -16 Z" fill="url(#rcG)" stroke="#7a2a2a" stroke-width="1.2"/></g>
+  <g transform="translate(32,50)" fill="#bd9345"><path d="M0 -3 L1 -1 L3 0 L1 1 L0 3 L-1 1 L-3 0 L-1 -1 Z"/></g>
+</svg>
+{% elif name == "star-islamic" %}
+<svg class="icn icn-star-islamic" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="sgG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ead7aa"/><stop offset="100%" stop-color="#bd9345"/></linearGradient></defs>
+  <g transform="translate(32,32)">
+    <rect x="-22" y="-22" width="44" height="44" fill="url(#sgG)" stroke="#8a6a2a" stroke-width="1"/>
+    <rect x="-22" y="-22" width="44" height="44" transform="rotate(45)" fill="url(#sgG)" stroke="#8a6a2a" stroke-width="1"/>
+    <circle cx="0" cy="0" r="6" fill="#173f3d" stroke="#bd9345" stroke-width="1.2"/>
+    <path d="M0 -4 C-2 -4 -3 -3 -3 -1 C-3 0 -1 1 0 1 C1 1 3 0 3 -1 C3 -3 2 -4 0 -4 Z" fill="#c75050"/>
+  </g>
+</svg>
+{% elif name == "arrow-left" %}
+<svg class="icn icn-arrow-left" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="alG" x1="100%" y1="0%" x2="0%" y2="0%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <path d="M50 32 L18 32" stroke="url(#alG)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <path d="M30 18 L16 32 L30 46" fill="none" stroke="url(#alG)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="46" cy="32" r="2.5" fill="#bd9345"/>
+</svg>
+{% elif name == "arrow-right" %}
+<svg class="icn icn-arrow-right" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="arG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <path d="M14 32 L46 32" stroke="url(#arG)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+  <path d="M34 18 L48 32 L34 46" fill="none" stroke="url(#arG)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="18" cy="32" r="2.5" fill="#bd9345"/>
+</svg>
+{% elif name == "external" %}
+<svg class="icn icn-external" width="{{ size|default:14 }}" height="{{ size|default:14 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="exG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <path d="M14 24 L14 50 Q14 54 18 54 L44 54 Q48 54 48 50 L48 24" fill="none" stroke="url(#exG)" stroke-width="3" stroke-linecap="round"/>
+  <line x1="32" y1="36" x2="32" y2="6" stroke="url(#exG)" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 14 L32 6 L40 14" fill="none" stroke="url(#exG)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+{% elif name == "play" %}
+<svg class="icn icn-play" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="plG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <circle cx="32" cy="32" r="26" fill="url(#plG)" stroke="#bd9345" stroke-width="2"/>
+  <path d="M40 22 L24 32 L40 42 Z" fill="#ead7aa" stroke="#bd9345" stroke-width="1"/>
+</svg>
+{% elif name == "empty" %}
+<svg class="icn icn-empty" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="emG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ead7aa"/><stop offset="100%" stop-color="#bd9345"/></linearGradient></defs>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="url(#emG)" stroke-width="2" stroke-dasharray="4 3"/>
+  <g transform="translate(32,32)"><g fill="#bd9345"><path d="M0 -14 L2 -8 L8 -6 L2 -4 L0 2 L-2 -4 L-8 -6 L-2 -8 Z"/></g><g fill="#a33d3d"><path d="M0 14 C-3 14 -5 12 -5 9 C-5 8 -2 7 0 7 C2 7 5 8 5 9 C5 12 3 14 0 14 Z"/></g></g>
+</svg>
+{% elif name == "search" %}
+<svg class="icn icn-search" width="{{ size|default:20 }}" height="{{ size|default:20 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="seG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <circle cx="26" cy="26" r="18" fill="none" stroke="url(#seG)" stroke-width="4"/>
+  <line x1="40" y1="40" x2="56" y2="56" stroke="url(#seG)" stroke-width="5" stroke-linecap="round"/>
+</svg>
+{% elif name == "home" %}
+<svg class="icn icn-home" width="{{ size|default:20 }}" height="{{ size|default:20 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="hoG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <path d="M8 30 L32 10 L56 30 L56 52 Q56 56 52 56 L12 56 Q8 56 8 52 Z" fill="url(#hoG)" stroke="#0d2a28" stroke-width="1.5"/>
+  <rect x="27" y="40" width="10" height="16" fill="#bd9345"/>
+  <path d="M24 30 Q24 22 32 19 Q40 22 40 30 Z" fill="#bd9345" stroke="#8a6a2a" stroke-width=".8"/>
+  <path d="M30 13 A3 3 0 1 0 32 16" fill="none" stroke="#bd9345" stroke-width="1"/>
+</svg>
+{% elif name == "offline" %}
+<svg class="icn icn-offline" width="{{ size|default:20 }}" height="{{ size|default:20 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="ofG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <rect x="6" y="6" width="52" height="52" rx="10" fill="none" stroke="url(#ofG)" stroke-width="2"/>
+  <g transform="translate(32,30)"><path d="M -10 -12 A 13 13 0 1 0 -10 12 A 10 10 0 1 1 -10 -12 Z" fill="url(#ofG)" stroke="#0d2a28" stroke-width="1.2"/><line x1="-14" y1="-14" x2="14" y2="14" stroke="#a33d3d" stroke-width="3" stroke-linecap="round"/></g>
+</svg>
+{% elif name == "menu" %}
+<svg class="icn icn-menu" width="{{ size|default:20 }}" height="{{ size|default:20 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="meG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <g stroke="url(#meG)" stroke-width="4" stroke-linecap="round"><line x1="12" y1="22" x2="52" y2="22"/><line x1="12" y1="32" x2="52" y2="32"/><line x1="12" y1="42" x2="52" y2="42"/></g>
+</svg>
+{% elif name == "install" %}
+<svg class="icn icn-install" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="inG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <rect x="6" y="6" width="52" height="52" rx="10" fill="none" stroke="url(#inG)" stroke-width="2"/>
+  <g transform="translate(32,30)" fill="url(#inG)" stroke="#0d2a28" stroke-width="1"><path d="M-4 -12 L4 -12 L4 0 L10 0 L0 12 L-10 0 L-4 0 Z"/></g>
+</svg>
+{% elif name == "signal" %}
+<svg class="icn icn-signal" width="{{ size|default:28 }}" height="{{ size|default:28 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="siG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <g fill="none" stroke="url(#siG)" stroke-width="3" stroke-linecap="round">
+    <path d="M8 40 Q32 16 56 40"/>
+    <path d="M16 46 Q32 30 48 46"/>
+    <path d="M24 52 Q32 44 40 52"/>
+  </g>
+  <line x1="6" y1="6" x2="58" y2="58" stroke="#a33d3d" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
+{% elif name == "wifi-off" %}
+<svg class="icn icn-wifi-off" width="{{ size|default:28 }}" height="{{ size|default:28 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="wfG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <g fill="none" stroke="url(#wfG)" stroke-width="3" stroke-linecap="round">
+    <path d="M8 32 Q32 8 56 32"/>
+    <path d="M16 40 Q32 24 48 40"/>
+    <path d="M24 48 Q32 40 40 48"/>
+  </g>
+  <circle cx="32" cy="54" r="3" fill="url(#wfG)"/>
+  <line x1="6" y1="6" x2="58" y2="58" stroke="#a33d3d" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
+{% elif name == "crescent-star" %}
+<svg class="icn icn-crescent-star" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="csG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ead7aa"/><stop offset="100%" stop-color="#bd9345"/></linearGradient></defs>
+  <path d="M44 32 A20 20 0 1 1 24 12 A16 16 0 1 0 44 32 Z" fill="url(#csG)"/>
+  <g transform="translate(46,20)"><path d="M0 -7 L2 -2 L7 0 L2 2 L0 7 L-2 2 L-7 0 L-2 -2 Z" fill="url(#csG)"/></g>
+</svg>
+{% elif name == "kafiyeh" %}
+<svg class="icn icn-kafiyeh" width="{{ size|default:24 }}" height="{{ size|default:24 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><pattern id="kpPatt" x="0" y="0" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#173f3d"/><path d="M0 4 L8 4 M4 0 L4 8" stroke="#f5f1e8" stroke-width=".7"/><path d="M0 0 L8 8 M8 0 L0 8" stroke="#bd9345" stroke-width=".5" opacity=".7"/></pattern></defs>
+  <path d="M16 22 Q16 12 32 8 Q48 12 48 22 L52 50 Q32 56 12 50 Z" fill="url(#kpPatt)" stroke="#0d2a28" stroke-width="1.2"/>
+  <path d="M22 50 L20 58 M30 50 L29 60 M38 50 L39 60 M44 50 L46 58" stroke="#f5f1e8" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M16 22 Q32 26 48 22" stroke="#bd9345" stroke-width="1.8" fill="none"/>
+</svg>
+{% elif name == "divider" %}
+<svg class="icn icn-divider" width="{{ size|default:120 }}" height="{{ size|default:24 }}" viewBox="0 0 240 48" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="dvG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#bd9345" stop-opacity="0"/><stop offset="50%" stop-color="#bd9345"/><stop offset="100%" stop-color="#bd9345" stop-opacity="0"/></linearGradient></defs>
+  <line x1="20" y1="24" x2="100" y2="24" stroke="url(#dvG)" stroke-width="1.5"/>
+  <line x1="140" y1="24" x2="220" y2="24" stroke="url(#dvG)" stroke-width="1.5"/>
+  <g transform="translate(120,24)" fill="#bd9345">
+    <rect x="-22" y="-3" width="44" height="6" transform="rotate(45)" fill="#bd9345" opacity=".7"/>
+    <rect x="-22" y="-3" width="44" height="6" transform="rotate(-45)" fill="#bd9345" opacity=".7"/>
+    <circle cx="0" cy="0" r="6" fill="#173f3d" stroke="#bd9345" stroke-width="1.5"/>
+    <path d="M0 -3 C-1.5 -3 -3 -2 -3 0 C-3 1 -1.5 1.5 0 1.5 C1.5 1.5 3 1 3 0 C3 -2 1.5 -3 0 -3 Z" fill="#c75050"/>
+  </g>
+  <g transform="translate(100,24)" fill="#bd9345"><path d="M0 -4 L1.5 -1.5 L4 0 L1.5 1.5 L0 4 L-1.5 1.5 L-4 0 L-1.5 -1.5 Z"/></g>
+  <g transform="translate(140,24)" fill="#bd9345"><path d="M0 -4 L1.5 -1.5 L4 0 L1.5 1.5 L0 4 L-1.5 1.5 L-4 0 L-1.5 -1.5 Z"/></g>
+</svg>
+{% elif name == "dashboard" %}
+<svg class="icn icn-dashboard" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="daG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <rect x="8" y="8" width="22" height="22" rx="3" fill="url(#daG)"/>
+  <rect x="34" y="8" width="22" height="14" rx="3" fill="#bd9345"/>
+  <rect x="34" y="26" width="22" height="30" rx="3" fill="url(#daG)"/>
+  <rect x="8" y="34" width="22" height="22" rx="3" fill="url(#daG)"/>
+</svg>
+{% elif name == "list" %}
+<svg class="icn icn-list" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="liG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <g stroke="url(#liG)" stroke-width="4" stroke-linecap="round">
+    <line x1="14" y1="18" x2="50" y2="18"/>
+    <line x1="14" y1="32" x2="50" y2="32"/>
+    <line x1="14" y1="46" x2="50" y2="46"/>
+  </g>
+  <g fill="#bd9345"><circle cx="8" cy="18" r="2.5"/><circle cx="8" cy="32" r="2.5"/><circle cx="8" cy="46" r="2.5"/></g>
+</svg>
+{% elif name == "clock" %}
+<svg class="icn icn-clock" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="clG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <circle cx="32" cy="32" r="22" fill="none" stroke="url(#clG)" stroke-width="3"/>
+  <line x1="32" y1="32" x2="32" y2="14" stroke="url(#clG)" stroke-width="3" stroke-linecap="round"/>
+  <line x1="32" y1="32" x2="44" y2="32" stroke="url(#clG)" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="32" cy="32" r="2.5" fill="#bd9345"/>
+</svg>
+{% elif name == "users" %}
+<svg class="icn icn-users" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="usG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <circle cx="24" cy="22" r="9" fill="url(#usG)"/>
+  <path d="M10 54 Q10 36 24 36 Q38 36 38 54 Z" fill="url(#usG)"/>
+  <circle cx="42" cy="26" r="7" fill="#bd9345"/>
+  <path d="M34 54 Q34 40 44 40 Q54 40 54 54 Z" fill="#bd9345"/>
+</svg>
+{% elif name == "plus" %}
+<svg class="icn icn-plus" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="plG2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <circle cx="32" cy="32" r="24" fill="none" stroke="url(#plG2)" stroke-width="3"/>
+  <g stroke="url(#plG2)" stroke-width="4.5" stroke-linecap="round"><line x1="32" y1="20" x2="32" y2="44"/><line x1="20" y1="32" x2="44" y2="32"/></g>
+</svg>
+{% elif name == "logout" %}
+<svg class="icn icn-logout" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="loG" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#a33d3d"/><stop offset="100%" stop-color="#7a2a2a"/></linearGradient></defs>
+  <path d="M10 12 L10 52 Q10 56 14 56 L34 56 Q38 56 38 52 L38 42 L32 42 L32 50 L16 50 L16 14 L32 14 L32 22 L38 22 L38 12 Q38 8 34 8 L14 8 Q10 8 10 12 Z" fill="url(#loG)"/>
+  <path d="M28 32 L52 32" stroke="url(#loG)" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M42 22 L52 32 L42 42" fill="none" stroke="url(#loG)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+{% elif name == "close" %}
+<svg class="icn icn-close" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="clG2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <line x1="16" y1="16" x2="48" y2="48" stroke="url(#clG2)" stroke-width="5" stroke-linecap="round"/>
+  <line x1="48" y1="16" x2="16" y2="48" stroke="url(#clG2)" stroke-width="5" stroke-linecap="round"/>
+</svg>
+{% elif name == "page" %}
+<svg class="icn icn-page" width="{{ size|default:18 }}" height="{{ size|default:18 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="pgG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#285c56"/><stop offset="100%" stop-color="#173f3d"/></linearGradient></defs>
+  <path d="M14 6 L40 6 L52 18 L52 56 Q52 58 50 58 L14 58 Q12 58 12 56 L12 8 Q12 6 14 6 Z" fill="url(#pgG)"/>
+  <path d="M40 6 L40 18 L52 18" fill="none" stroke="#bd9345" stroke-width="1.5"/>
+  <g stroke="#ead7aa" stroke-width="2" stroke-linecap="round"><line x1="20" y1="28" x2="44" y2="28"/><line x1="20" y1="36" x2="44" y2="36"/><line x1="20" y1="44" x2="36" y2="44"/></g>
+</svg>
+{% elif name == "mihrab" %}
+<svg class="icn icn-mihrab" width="{{ size|default:48 }}" height="{{ size|default:48 }}" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+  <defs><linearGradient id="mhG" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ead7aa"/><stop offset="100%" stop-color="#bd9345"/></linearGradient></defs>
+  <path d="M14 58 L14 22 Q14 8 32 8 Q50 8 50 22 L50 58 Z" fill="none" stroke="url(#mhG)" stroke-width="2.5"/>
+  <path d="M20 22 Q20 12 32 12 Q44 12 44 22 Z" fill="url(#mhG)" opacity=".7"/>
+  <g transform="translate(32,38)"><path d="M0 -10 C-5 -10 -8 -7 -8 -3 C-8 -1 -4 0 0 0 C4 0 8 -1 8 -3 C8 -7 5 -10 0 -10 Z" fill="#a33d3d" stroke="#7a2a2a" stroke-width=".8"/><line x1="0" y1="0" x2="0" y2="10" stroke="#2d6b3f" stroke-width="2"/></g>
+</svg>
+{% endif %}

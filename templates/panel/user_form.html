@@ -6,7 +6,7 @@
     <h1>{% if is_new %}ایجاد کاربر جدید{% else %}ویرایش کاربر «{{ target_user.username }}»{% endif %}</h1>
     <p>نقش «نویسنده» اجازه ثبت و ویرایش محتوا و نقش «مدیر» اجازه کامل حذف و انتشار را می‌دهد.</p>
   </div>
-  <div class="head-actions"><a class="mini-btn" href="{% url 'martyrs:panel_user_list' %}">→ بازگشت به فهرست</a></div>
+  <div class="head-actions"><a class="mini-btn" href="{% url 'martyrs:panel_user_list' %}">{% include "icons/icon.html" with name="arrow-right" size=14 %} بازگشت به فهرست</a></div>
 </div>
 
 <div class="panel-card">

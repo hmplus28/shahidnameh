@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="جستجو">
+  <defs>
+    <linearGradient id="lensGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#285c56"/>
+      <stop offset="100%" stop-color="#173f3d"/>
+    </linearGradient>
+  </defs>
+  <circle cx="26" cy="26" r="18" fill="none" stroke="url(#lensGrad)" stroke-width="4"/>
+  <circle cx="26" cy="26" r="12" fill="none" stroke="#bd9345" stroke-width="1.5" opacity=".7"/>
+  <line x1="40" y1="40" x2="56" y2="56" stroke="url(#lensGrad)" stroke-width="5" stroke-linecap="round"/>
+  <line x1="40" y1="40" x2="56" y2="56" stroke="#bd9345" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>
+  <!-- لاله کوچک درون ذره بین -->
+  <g transform="translate(26,26)">
+    <path d="M0 -6 C-3 -6 -5 -4 -5 -2 C-5 -1 -2 0 0 0 C2 0 5 -1 5 -2 C5 -4 3 -6 0 -6 Z" fill="#a33d3d"/>
+  </g>
+</svg>

@@ -3,7 +3,7 @@
 {% block title %}پرونده شهدا | پنل مدیریت{% endblock %}
 {% block content %}
 <header class="panel-head"><div><h1>پرونده شهدا</h1><p>{{ page_obj.paginator.count }} پرونده ثبت شده است</p></div>
-  {% if can_edit %}<a class="panel-btn" href="{% url 'martyrs:panel_martyr_new' %}">＋ ثبت شهید جدید</a>{% endif %}
+  {% if can_edit %}<a class="panel-btn" href="{% url 'martyrs:panel_martyr_new' %}">{% include "icons/icon.html" with name="plus" size=16 %} ثبت شهید جدید</a>{% endif %}
 </header>
 <form class="panel-filter" method="get">
   <input type="search" name="q" value="{{ query }}" placeholder="جست‌وجوی نام، نام پدر یا یگان" class="panel-input">
@@ -39,7 +39,7 @@
             <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'publish' %}">{% csrf_token %}<button class="mini-btn is-publish">انتشار در سایت</button></form>
           {% endif %}
         {% endif %}
-        <a class="mini-btn is-view" href="{% url 'martyrs:detail' martyr.slug %}" target="_blank">مشاهده ↗</a>
+        <a class="mini-btn is-view" href="{% url 'martyrs:detail' martyr.slug %}" target="_blank">مشاهده {% include "icons/icon.html" with name="external" size=14 %}</a>
       </td>
     </tr>
   {% empty %}<tr><td colspan="6" class="empty-note">پرونده‌ای یافت نشد.</td></tr>{% endfor %}

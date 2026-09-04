@@ -1,5 +1,25 @@
-const CACHE_NAME = 'shahidnameh-v6';
-const APP_SHELL = ['/', '/martyrs/', '/offline/', '/static/css/site.css', '/static/css/fonts.css', '/static/fonts/vazirmatn-arabic.woff2', '/static/fonts/vazirmatn-latin.woff2', '/static/fonts/vazirmatn-latin-ext.woff2', '/static/js/site.js', '/static/manifest.webmanifest', '/static/icons/icon.svg', '/static/icons/icon-maskable.svg', '/static/images/hero-banner.jpg', '/static/images/memories-bg.jpg', '/static/images/offline-bg.jpg', '/static/images/directory-hero.jpg', '/static/images/front-bg.jpg', '/static/images/testament-bg.jpg', '/static/images/city-silhouette.png', '/static/images/default-avatar.png'];
+const CACHE_NAME = 'shahidnameh-v7';
+const APP_SHELL = [
+  '/', '/martyrs/', '/offline/',
+  '/static/css/site.css', '/static/css/fonts.css',
+  '/static/fonts/vazirmatn-arabic.woff2', '/static/fonts/vazirmatn-latin.woff2', '/static/fonts/vazirmatn-latin-ext.woff2',
+  '/static/js/site.js', '/static/manifest.webmanifest',
+  '/static/icons/icon.svg', '/static/icons/icon-maskable.svg',
+  '/static/icons/tulip.svg', '/static/icons/crescent-star.svg', '/static/icons/mosque.svg',
+  '/static/icons/kafiyeh.svg', '/static/icons/medal.svg', '/static/icons/testament.svg',
+  '/static/icons/red-crescent.svg', '/static/icons/star-islamic.svg',
+  '/static/icons/home.svg', '/static/icons/search.svg', '/static/icons/offline.svg',
+  '/static/icons/menu.svg', '/static/icons/install.svg', '/static/icons/play.svg',
+  '/static/icons/external.svg', '/static/icons/arrow-left.svg', '/static/icons/arrow-right.svg',
+  '/static/icons/page.svg', '/static/icons/plus.svg', '/static/icons/clock.svg',
+  '/static/icons/users.svg', '/static/icons/dashboard.svg', '/static/icons/logout.svg',
+  '/static/icons/close.svg', '/static/icons/mihrab.svg', '/static/icons/empty.svg',
+  '/static/icons/default-avatar.svg', '/static/icons/city-silhouette.svg',
+  '/static/images/hero-banner.jpg', '/static/images/memories-bg.jpg',
+  '/static/images/offline-bg.jpg', '/static/images/directory-hero.jpg',
+  '/static/images/front-bg.jpg', '/static/images/testament-bg.jpg',
+  '/static/images/city-silhouette.png', '/static/images/default-avatar.png'
+];
 
 const isCacheable = (request, response) => request.method === 'GET' && response && response.ok && new URL(request.url).origin === self.location.origin;
 const putInCache = async (request, response) => {
@@ -10,7 +30,7 @@ const putInCache = async (request, response) => {
 };
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL).catch((err) => console.warn('Cache addAll partial fail:', err))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {

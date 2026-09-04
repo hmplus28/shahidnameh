@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="مدال افتخار">
+  <defs>
+    <linearGradient id="medalGold" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ead7aa"/>
+      <stop offset="100%" stop-color="#bd9345"/>
+    </linearGradient>
+    <radialGradient id="medalInner" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#f5e6c4"/>
+      <stop offset="100%" stop-color="#bd9345"/>
+    </radialGradient>
+  </defs>
+  <!-- روبان -->
+  <path d="M22 8 L32 26 L42 8 L38 8 L32 18 L26 8 Z" fill="#a33d3d" stroke="#7a2a2a" stroke-width=".8"/>
+  <path d="M22 8 L18 8 L24 28 L28 24 Z" fill="#c75050" stroke="#7a2a2a" stroke-width=".6"/>
+  <path d="M42 8 L46 8 L40 28 L36 24 Z" fill="#c75050" stroke="#7a2a2a" stroke-width=".6"/>
+  <!-- مدال -->
+  <circle cx="32" cy="40" r="16" fill="url(#medalGold)" stroke="#8a6a2a" stroke-width="1.5"/>
+  <circle cx="32" cy="40" r="12" fill="url(#medalInner)" stroke="#8a6a2a" stroke-width=".8"/>
+  <!-- لاله مرکزی -->
+  <g transform="translate(32,40)">
+    <path d="M0 -7 C-4 -7 -6 -4 -6 -2 C-6 0 -3 1 0 1 C3 1 6 0 6 -2 C6 -4 4 -7 0 -7 Z" fill="#a33d3d" stroke="#7a2a2a" stroke-width=".6"/>
+    <path d="M0 -7 L0 5" stroke="#7a2a2a" stroke-width=".6" opacity=".6"/>
+    <path d="M-4 5 L4 5 L2 8 L-2 8 Z" fill="#2d6b3f"/>
+  </g>
+  <!-- ستاره هشت‌پر بالا -->
+  <g transform="translate(32,28)" fill="#8a6a2a">
+    <path d="M0 -3 L1 -1 L3 0 L1 1 L0 3 L-1 1 L-3 0 L-1 -1 Z"/>
+  </g>
+</svg>

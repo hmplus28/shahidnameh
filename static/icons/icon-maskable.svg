@@ -1,5 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="شهیدنامه">
-  <rect width="192" height="192" fill="#173f3d"/>
-  <path d="M96 36c-31 22-46 53-46 84 0 16 6 28 16 36h60c10-8 16-20 16-36 0-31-15-62-46-84Z" fill="none" stroke="#ead7aa" stroke-width="6"/>
-  <path d="M96 63v62M78 98h36" stroke="#bd9345" stroke-width="5" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="bgGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d4a44"/>
+      <stop offset="100%" stop-color="#173f3d"/>
+    </linearGradient>
+    <linearGradient id="goldGradM" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ead7aa"/>
+      <stop offset="100%" stop-color="#bd9345"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" fill="url(#bgGradM)"/>
+  <path d="M96 36c-31 22-46 53-46 84 0 16 6 28 16 36h60c10-8 16-20 16-36 0-31-15-62-46-84Z" fill="none" stroke="url(#goldGradM)" stroke-width="4"/>
+  <g transform="translate(96,98)">
+    <path d="M0 -24 C-9 -24 -16 -17 -16 -8 C-16 -4 -12 -1 -8 0 C-12 1 -16 4 -16 8 C-16 17 -9 24 0 24 C9 24 16 17 16 8 C16 4 12 1 8 0 C12 -1 16 -4 16 -8 C16 -17 9 -24 0 -24 Z" fill="#c75050" stroke="#a33d3d" stroke-width="1.2"/>
+    <path d="M0 -24 L0 24" stroke="#7a2a2a" stroke-width="1.2" opacity=".55"/>
+    <path d="M-10 -11 Q-4 -8 0 -5 Q4 -8 10 -11" stroke="#ead7aa" stroke-width=".8" fill="none" opacity=".75"/>
+  </g>
+  <path d="M96 122 Q94 130 90 138" stroke="#2d6b3f" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <path d="M90 138 Q86 132 80 134 Q83 139 90 138 Z" fill="#2d6b3f"/>
 </svg>

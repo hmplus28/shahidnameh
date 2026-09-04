@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="خالی">
+  <defs>
+    <linearGradient id="emptyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ead7aa"/>
+      <stop offset="100%" stop-color="#bd9345"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="url(#emptyGrad)" stroke-width="2" stroke-dasharray="4 3"/>
+  <g transform="translate(32,32)">
+    <path d="M-10 0 L-2 -8 L6 0 L-2 8 Z" fill="none" stroke="url(#emptyGrad)" stroke-width="2"/>
+    <g fill="#bd9345">
+      <path d="M0 -14 L2 -8 L8 -6 L2 -4 L0 2 L-2 -4 L-8 -6 L-2 -8 Z"/>
+    </g>
+    <g fill="#a33d3d">
+      <path d="M0 14 C-3 14 -5 12 -5 9 C-5 8 -2 7 0 7 C2 7 5 8 5 9 C5 12 3 14 0 14 Z"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="گنبد مسجد">
+  <defs>
+    <linearGradient id="mosqueDome" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#c5d6c9"/>
+      <stop offset="100%" stop-color="#5d7e6f"/>
+    </linearGradient>
+    <linearGradient id="mosqueBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#e4ece5"/>
+      <stop offset="100%" stop-color="#9eb9b2"/>
+    </linearGradient>
+  </defs>
+  <!-- پایه -->
+  <rect x="8" y="46" width="48" height="12" fill="url(#mosqueBody)" stroke="#5d7e6f" stroke-width="1"/>
+  <line x1="8" y1="50" x2="56" y2="50" stroke="#5d7e6f" stroke-width=".5" opacity=".5"/>
+  <line x1="8" y1="54" x2="56" y2="54" stroke="#5d7e6f" stroke-width=".5" opacity=".5"/>
+  <!-- بدنه -->
+  <rect x="18" y="34" width="28" height="14" fill="url(#mosqueBody)" stroke="#5d7e6f" stroke-width="1"/>
+  <!-- گنبد اصلی -->
+  <path d="M16 34 Q16 18 32 14 Q48 18 48 34 Z" fill="url(#mosqueDome)" stroke="#3d5e4f" stroke-width="1.2"/>
+  <path d="M32 14 L32 8" stroke="#bd9345" stroke-width="1.5"/>
+  <circle cx="32" cy="7" r="2" fill="#bd9345"/>
+  <!-- هلال روی گنبد -->
+  <path d="M30 4 A3 3 0 1 0 32 6" fill="none" stroke="#bd9345" stroke-width="1.2"/>
+  <!-- درگاه محراب -->
+  <path d="M28 46 Q28 40 32 40 Q36 40 36 46 L36 50 L28 50 Z" fill="#3d5e4f" stroke="#2d4a3f" stroke-width=".8"/>
+  <!-- مناره‌ها -->
+  <rect x="10" y="22" width="4" height="24" fill="url(#mosqueBody)" stroke="#5d7e6f" stroke-width="1"/>
+  <circle cx="12" cy="20" r="3" fill="url(#mosqueDome)" stroke="#3d5e4f" stroke-width="1"/>
+  <rect x="50" y="22" width="4" height="24" fill="url(#mosqueBody)" stroke="#5d7e6f" stroke-width="1"/>
+  <circle cx="52" cy="20" r="3" fill="url(#mosqueDome)" stroke="#3d5e4f" stroke-width="1"/>
+  <!-- کاشی‌کاری -->
+  <circle cx="32" cy="26" r="2" fill="#bd9345" opacity=".7"/>
+  <path d="M26 32 L38 32" stroke="#bd9345" stroke-width=".8" opacity=".5"/>
+</svg>
