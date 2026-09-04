@@ -1,0 +1,5 @@
+Django>=5.1,<5.3
+Pillow>=10.4,<12
+gunicorn>=23.0,<24
+whitenoise>=6.7,<7
+django-jalali-date==2.0.0

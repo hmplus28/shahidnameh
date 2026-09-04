@@ -1,0 +1,50 @@
+{% extends "panel/base_panel.html" %}
+{% load jalali_extras %}
+{% block title %}پرونده شهدا | پنل مدیریت{% endblock %}
+{% block content %}
+<header class="panel-head"><div><h1>پرونده شهدا</h1><p>{{ page_obj.paginator.count }} پرونده ثبت شده است</p></div>
+  {% if can_edit %}<a class="panel-btn" href="{% url 'martyrs:panel_martyr_new' %}">＋ ثبت شهید جدید</a>{% endif %}
+</header>
+<form class="panel-filter" method="get">
+  <input type="search" name="q" value="{{ query }}" placeholder="جست‌وجوی نام، نام پدر یا یگان" class="panel-input">
+  <select name="status" class="panel-input">
+    <option value="">همه وضعیت‌ها</option>
+    <option value="published"{% if status == 'published' %} selected{% endif %}>منتشرشده</option>
+    <option value="draft"{% if status == 'draft' %} selected{% endif %}>پیش‌نویس</option>
+    <option value="featured"{% if status == 'featured' %} selected{% endif %}>شاخص</option>
+  </select>
+  <button class="panel-btn">اعمال فیلتر</button>
+</form>
+<section class="martyr-table-wrap">
+<table class="martyr-table">
+  <thead><tr><th>شهید</th><th>استان</th><th>تاریخ شهادت</th><th>وضعیت</th><th>شاخص</th><th>عملیات</th></tr></thead>
+  <tbody>
+  {% for martyr in page_obj.object_list %}
+    <tr>
+      <td><a href="{% url 'martyrs:panel_martyr_edit' martyr.pk %}">{{ martyr.full_name }}</a></td>
+      <td>{{ martyr.birth_province|default:"—" }}</td>
+      <td>{% if martyr.martyrdom_date %}{{ martyr.martyrdom_date|jalali_date }}{% else %}—{% endif %}</td>
+      <td>{% if martyr.is_published %}<span class="tag is-ok">منتشرشده</span>{% else %}<span class="tag">پیش‌نویس</span>{% endif %}</td>
+      <td>{% if martyr.is_featured %}<span class="tag is-gold">شاخص</span>{% else %}<span class="tag">—</span>{% endif %}</td>
+      <td class="row-actions">
+        {% if can_edit %}
+          {% if martyr.is_featured %}
+            <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'feature' %}">{% csrf_token %}<button class="mini-btn is-feature">حذف از شاخص‌ها</button></form>
+          {% else %}
+            <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'feature' %}">{% csrf_token %}<button class="mini-btn is-feature">تنظیم به‌عنوان شاخص</button></form>
+          {% endif %}
+          {% if martyr.is_published %}
+            <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'publish' %}">{% csrf_token %}<button class="mini-btn is-publish">تبدیل به پیش‌نویس</button></form>
+          {% else %}
+            <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'publish' %}">{% csrf_token %}<button class="mini-btn is-publish">انتشار در سایت</button></form>
+          {% endif %}
+        {% endif %}
+        <a class="mini-btn is-view" href="{% url 'martyrs:detail' martyr.slug %}" target="_blank">مشاهده ↗</a>
+      </td>
+    </tr>
+  {% empty %}<tr><td colspan="6" class="empty-note">پرونده‌ای یافت نشد.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</section>
+{% if page_obj.has_other_pages %}<nav class="pager">{% if page_obj.has_previous %}<a href="?q={{ query }}&status={{ status }}&page={{ page_obj.previous_page_number }}">قبلی</a>{% endif %}<span>صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a href="?q={{ query }}&status={{ status }}&page={{ page_obj.next_page_number }}">بعدی</a>{% endif %}</nav>{% endif %}
+{% endblock %}

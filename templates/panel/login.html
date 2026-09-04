@@ -1,0 +1,18 @@
+{% extends "panel/base_panel.html" %}
+{% block title %}ورود به پنل مدیریت | شهیدنامه{% endblock %}
+{% block body_class %}is-login{% endblock %}
+{% block panel_toggle %}{% endblock %}
+{% block content %}
+<div class="login-wrap">
+  <form method="post" class="login-card">
+    <span class="brand-mark" aria-hidden="true"><span></span></span>
+    <h1>پنل مدیریت شهیدنامه</h1>
+    <p>برای مدیریت پرونده‌ها وارد حساب کاربری خود شوید.</p>
+    {% csrf_token %}
+    {% if form.errors %}<div class="panel-message is-error">نام کاربری یا گذرواژه نادرست است.</div>{% endif %}
+    <label>نام کاربری{{ form.username }}</label>
+    <label>گذرواژه{{ form.password }}</label>
+    <button type="submit">ورود به پنل</button>
+  </form>
+</div>
+{% endblock %}

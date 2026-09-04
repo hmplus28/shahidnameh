@@ -1,0 +1,77 @@
+{% load static jalali_extras %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#173f3d">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="شهیدنامه">
+    <meta name="description" content="{% block meta_description %}شهیدنامه؛ پلتفرم پاسداشت زندگی، خاطرات و میراث شهدا.{% endblock %}">
+    <meta property="og:site_name" content="شهیدنامه">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}شهیدنامه | میراث ماندگار{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}پلتفرم پاسداشت زندگی، خاطرات و میراث شهدای ایران.{% endblock %}">
+    <meta property="og:locale" content="fa_IR">
+    {% block og_extra %}{% endblock %}
+    <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'icons/icon.svg' %}">
+    <link rel="apple-touch-icon" href="{% static 'icons/icon.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    {% block extra_head %}{% endblock %}
+    <title>{% block title %}شهیدنامه | میراث ماندگار{% endblock %}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">عبور به محتوای اصلی</a>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="{% url 'martyrs:home' %}" aria-label="خانه شهیدنامه">
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span class="brand-copy"><strong>شهیدنامه</strong><small>میراث ماندگار</small></span>
+        </a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation" data-nav-toggle>
+          <span class="visually-hidden">باز و بسته‌کردن منو</span><i></i><i></i><i></i>
+        </button>
+        <div class="nav-overlay" data-nav-close aria-hidden="true"></div>
+        <nav id="primary-navigation" class="primary-nav" aria-label="پیمایش اصلی">
+          <button type="button" class="nav-close" data-nav-close aria-label="بستن منو">✕ بستن</button>
+          <a href="{% url 'martyrs:home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}>خانه</a>
+          <a href="{% url 'martyrs:directory' %}"{% if request.resolver_match.url_name == 'directory' %} aria-current="page"{% endif %}>فهرست شهدا</a>
+          <a href="#about">درباره پلتفرم</a>
+          <a class="admin-link" href="{% url 'martyrs:panel_home' %}">ورود مدیران <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">{% block content %}{% endblock %}</main>
+
+    <section class="pwa-install-card" data-install-card hidden aria-live="polite">
+      <span class="pwa-install-glyph" aria-hidden="true">↓</span>
+      <div><strong>شهیدنامه را نصب کنید</strong><small>دسترسی سریع‌تر و تجربه‌ای شبیه اپلیکیشن</small></div>
+      <button type="button" data-install-app>نصب</button>
+    </section>
+
+    <nav class="app-bottom-nav" aria-label="پیمایش سریع موبایل">
+      <a href="{% url 'martyrs:home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}><span aria-hidden="true">⌂</span><small>خانه</small></a>
+      <a href="{% url 'martyrs:directory' %}"{% if request.resolver_match.url_name == 'directory' or request.resolver_match.url_name == 'detail' %} aria-current="page"{% endif %}><span aria-hidden="true">⌕</span><small>جست‌وجو</small></a>
+      <a href="{% url 'martyrs:offline' %}"{% if request.resolver_match.url_name == 'offline' %} aria-current="page"{% endif %}><span aria-hidden="true">◈</span><small>آفلاین</small></a>
+      <button type="button" aria-label="باز کردن منو" data-nav-toggle-mobile><span aria-hidden="true">☰</span><small>بیشتر</small></button>
+    </nav>
+    <p class="pwa-network-status" data-pwa-status hidden role="status"></p>
+
+    <footer id="about" class="site-footer">
+      <div class="shell footer-grid">
+        <div>
+          <div class="footer-brand"><span class="brand-mark" aria-hidden="true"><span></span></span><strong>شهیدنامه</strong></div>
+          <p>سامانه‌ای برای پاسداشت دقیق و محترمانه زندگی، خاطرات و میراث شهدای ایران.</p>
+        </div>
+        <div class="footer-note"><span class="note-line"></span><p>هر پرونده، روایت یک زندگی است؛ با احترام ثبت کنیم و با امانت حفظ کنیم.</p></div>
+      </div>
+      <div class="shell footer-bottom"><span>© {% jalali_year %} شهیدنامه</span><span class="footer-credit">توسعه توسط <a href="https://daynacode.ir" target="_blank" rel="noopener">تیم توسعه دایناکد</a></span><a href="{% url 'martyrs:offline' %}">دسترسی آفلاین</a></div>
+    </footer>
+    <script src="{% static 'js/site.js' %}" defer></script>
+  </body>
+</html>

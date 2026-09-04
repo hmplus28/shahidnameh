@@ -1,0 +1,33 @@
+{% extends "panel/base_panel.html" %}
+{% block title %}پیشخوان | پنل مدیریت شهیدنامه{% endblock %}
+{% block content %}
+<header class="panel-head"><div><h1>پیشخوان</h1><p>نمای کلی محتوا و آخرین رویدادها</p></div>
+  {% if perms.martyrs.add_martyr %}<a class="panel-btn" href="{% url 'martyrs:panel_martyr_new' %}">＋ ثبت شهید جدید</a>{% endif %}
+</header>
+<section class="stat-cards">
+  <article><b>{{ stats.martyrs_published }}</b><span>شهید منتشرشده</span></article>
+  <article><b>{{ stats.martyrs_total }}</b><span>کل پرونده‌ها</span></article>
+  <article><b>{{ stats.martyrs_featured }}</b><span>شهدای شاخص</span></article>
+  <article><b>{{ stats.memories }}</b><span>خاطرات</span></article>
+  <article><b>{{ stats.images }}</b><span>تصاویر</span></article>
+  <article><b>{{ stats.videos }}</b><span>ویدئوها</span></article>
+</section>
+<div class="panel-columns">
+  <section class="panel-card">
+    <h2>آخرین پرونده‌ها</h2>
+    {% for martyr in recent_martyrs %}
+      <a class="mini-row" href="{% url 'martyrs:panel_martyr_edit' martyr.pk %}">
+        <b>{{ martyr.full_name }}</b>
+        <span>{% if not martyr.is_published %}پیش‌نویس{% elif martyr.is_featured %}شاخص{% else %}منتشرشده{% endif %}</span>
+      </a>
+    {% empty %}<p class="empty-note">هنوز پرونده‌ای ثبت نشده است.</p>{% endfor %}
+  </section>
+  <section class="panel-card">
+    <h2>آخرین تغییرات</h2>
+    {% for log in recent_logs %}
+      <div class="mini-row"><b>{{ log.object_repr|default:"—" }}</b><small>{{ log.user.username }} · {{ log.get_action_flag_display }}</small></div>
+    {% empty %}<p class="empty-note">تغییری ثبت نشده است.</p>{% endfor %}
+    <a class="panel-link" href="{% url 'martyrs:panel_logs' %}">مشاهده همه تغییرات →</a>
+  </section>
+</div>
+{% endblock %}

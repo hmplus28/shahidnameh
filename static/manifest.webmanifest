@@ -1,0 +1,23 @@
+{
+  "name": "شهیدنامه | میراث ماندگار",
+  "short_name": "شهیدنامه",
+  "id": "/",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "portrait-primary",
+  "background_color": "#f5f1e8",
+  "theme_color": "#173f3d",
+  "description": "پلتفرم پاسداشت زندگی، خاطرات و میراث شهدای ایران.",
+  "icons": [
+    {"src": "/static/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"},
+    {"src": "/static/icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "فهرست شهدا", "short_name": "جست‌وجو", "url": "/martyrs/", "icons": [{"src": "/static/icons/icon.svg", "sizes": "any", "type": "image/svg+xml"}]},
+    {"name": "مدیریت محتوا", "short_name": "مدیریت", "url": "/admin/", "icons": [{"src": "/static/icons/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml"}]}
+  ]
+}

@@ -1,0 +1,60 @@
+{% load static %}
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}پنل مدیریت شهیدنامه{% endblock %}</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'icons/icon.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/panel.css' %}">
+    {{ form.media }}
+  </head>
+  <body class="panel-body {% block body_class %}{% endblock %}">
+    {% block panel_toggle %}
+      <button type="button" class="panel-nav-toggle" data-panel-nav aria-label="باز و بسته‌کردن منو">☰ منو</button>
+      <div class="panel-overlay" data-panel-close aria-hidden="true"></div>
+    {% endblock %}
+    <div class="panel-layout">
+      <aside class="panel-sidebar">
+        <a class="panel-brand" href="{% url 'martyrs:panel_home' %}">
+          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <span><strong>شهیدنامه</strong><small>پنل مدیریت</small></span>
+        </a>
+        <nav aria-label="بخش‌های پنل">
+          <a href="{% url 'martyrs:panel_home' %}"{% if request.resolver_match.url_name == 'panel_home' %} class="is-active"{% endif %}>◈ پیشخوان</a>
+          <a href="{% url 'martyrs:panel_martyr_list' %}"{% if request.resolver_match.url_name == 'panel_martyr_list' or request.resolver_match.url_name == 'panel_martyr_edit' or request.resolver_match.url_name == 'panel_martyr_delete' %} class="is-active"{% endif %}>☰ پرونده شهدا</a>
+          {% if perms.martyrs.add_martyr %}<a href="{% url 'martyrs:panel_martyr_new' %}"{% if request.resolver_match.url_name == 'panel_martyr_new' %} class="is-active"{% endif %}>＋ ثبت شهید جدید</a>{% endif %}
+          <a href="{% url 'martyrs:panel_logs' %}"{% if request.resolver_match.url_name == 'panel_logs' %} class="is-active"{% endif %}>⏱ تاریخچه تغییرات</a>
+          {% if request.user.is_superuser %}<a href="{% url 'martyrs:panel_user_list' %}"{% if request.resolver_match.url_name == 'panel_user_list' or request.resolver_match.url_name == 'panel_user_new' or request.resolver_match.url_name == 'panel_user_edit' %} class="is-active"{% endif %}>👤 کاربران و نقش‌ها</a>{% endif %}
+          <div class="panel-nav-divider" aria-hidden="true"></div>
+          <a href="{% url 'martyrs:home' %}" target="_blank" class="panel-nav-site">مشاهده سایت ↗</a>
+          <form method="post" action="{% url 'martyrs:panel_logout' %}">{% csrf_token %}<button type="submit" class="panel-nav-logout">خروج ⏻</button></form>
+        </nav>
+      </aside>
+      <main class="panel-main">
+        {% if messages %}{% for message in messages %}<div class="panel-message is-{{ message.tags }}">{{ message }}</div>{% endfor %}{% endif %}
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    <script>
+      (function () {
+        const sidebar = document.querySelector('.panel-sidebar');
+        function setNav(open) {
+          if (!sidebar) return;
+          sidebar.classList.toggle('is-open', open);
+          document.body.classList.toggle('panel-nav-open', open);
+        }
+        document.querySelectorAll('[data-panel-nav]').forEach((btn) =>
+          btn.addEventListener('click', () => setNav(!sidebar.classList.contains('is-open')))
+        );
+        document.querySelectorAll('[data-panel-close]').forEach((el) =>
+          el.addEventListener('click', () => setNav(false))
+        );
+        if (sidebar) sidebar.querySelectorAll('nav a').forEach((link) =>
+          link.addEventListener('click', () => setNav(false))
+        );
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+html,body { direction:rtl; text-align:right; font-family:Tahoma,"Vazirmatn",sans-serif; }
+#header { background:#173f3d; color:#fff; } #header a:link,#header a:visited { color:#fff; }
+#branding h1 { margin-right:0; } #user-tools { float:left; } .view-site { margin-right:14px; font-size:11px; color:#ead7aa!important; }
+#content { padding:24px 28px; } .aligned label { float:right; padding-left:10px; padding-right:0; } .aligned .form-row div { margin-right:170px; margin-left:0; }
+fieldset .fieldBox { float:right; margin-left:20px; margin-right:0; } .submit-row { text-align:left; } .selector { float:right; }
+@media(max-width:767px) { #user-tools { float:none; } .aligned .form-row div { margin-right:0; } }

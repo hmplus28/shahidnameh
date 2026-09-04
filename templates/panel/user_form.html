@@ -1,0 +1,29 @@
+{% extends "panel/base_panel.html" %}
+{% block title %}{% if is_new %}کاربر جدید{% else %}ویرایش {{ target_user.username }}{% endif %} | پنل مدیریت شهیدنامه{% endblock %}
+{% block content %}
+<div class="panel-head">
+  <div>
+    <h1>{% if is_new %}ایجاد کاربر جدید{% else %}ویرایش کاربر «{{ target_user.username }}»{% endif %}</h1>
+    <p>نقش «نویسنده» اجازه ثبت و ویرایش محتوا و نقش «مدیر» اجازه کامل حذف و انتشار را می‌دهد.</p>
+  </div>
+  <div class="head-actions"><a class="mini-btn" href="{% url 'martyrs:panel_user_list' %}">→ بازگشت به فهرست</a></div>
+</div>
+
+<div class="panel-card">
+  <form method="post">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="panel-message is-error">{{ form.non_field_errors }}</div>{% endif %}
+    <div class="form-grid">
+      {% for field in form %}
+      <div class="field">
+        <span>{{ field.label }}{% if field.field.required %} *{% endif %}</span>
+        {{ field }}
+        {% if field.help_text %}<small style="display:block;color:#7b8a80;font-size:11px;margin-top:4px;">{{ field.help_text }}</small>{% endif %}
+        {% for error in field.errors %}<small style="display:block;color:#b04a3c;font-size:11.5px;">{{ error }}</small>{% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="confirm-actions"><button type="submit" class="panel-btn">{% if is_new %}ایجاد کاربر{% else %}ذخیره تغییرات{% endif %}</button></div>
+  </form>
+</div>
+{% endblock %}

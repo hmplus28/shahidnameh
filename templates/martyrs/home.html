@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load jalali_tags static %}
+{% block title %}شهیدنامه | میراث ماندگار{% endblock %}
+{% block content %}
+<section class="hero hero-war kafiyeh-bg">
+  <div class="hero-ornament hero-ornament-one" aria-hidden="true"></div><div class="hero-ornament hero-ornament-two" aria-hidden="true"></div>
+  <div class="hero-war-silhouette" aria-hidden="true">
+    <img src="{% static 'images/city-silhouette.png' %}" alt="" width="1200" height="180">
+  </div>
+  <div class="shell hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">بایگانی زنده یاد و نام</p>
+      <h1>روایت‌ها را با<br><em>امانت و احترام</em> نگه می‌داریم.</h1>
+      <p class="hero-intro">شهیدنامه بستری یکپارچه برای ثبت زندگی، اندیشه‌ها، خاطرات و اسناد رسانه‌ای شهداست؛ تا هر نام، دریچه‌ای به یک زندگی روشن باشد.</p>
+      <form class="hero-search" action="{% url 'martyrs:directory' %}" method="get" role="search">
+        <label class="visually-hidden" for="quick-search">جست‌وجوی شهید</label>
+        <input id="quick-search" name="q" placeholder="نام یا نام خانوادگی شهید را بنویسید" autocomplete="off">
+        <button type="submit">جست‌وجو <span aria-hidden="true">←</span></button>
+      </form>
+      <div class="hero-anchors"><a href="{% url 'martyrs:directory' %}">مشاهده فهرست شهدا <span>←</span></a></div>
+    </div>
+    <div class="hero-visual" aria-label="یادمان شهدا">
+      <div class="visual-card card-top"><span>روایت</span><b>خاطرات همرزمان</b><i></i></div>
+      <div class="visual-card card-bottom"><span>میراث</span><b>وصیت‌نامه</b><i></i></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true">✦ ✦ ✦</div>
+
+<section class="stats-band stats-band-war" aria-label="آمار محتوا">
+  <div class="shell stats-grid">
+    <div class="stat"><strong>{{ stats.martyrs }}</strong><span>پرونده شهید</span></div>
+    <div class="stat"><strong>{{ stats.memories }}</strong><span>خاطره ثبت‌شده</span></div>
+    <div class="stat"><strong>{{ stats.provinces }}</strong><span>استان در روایت‌ها</span></div>
+    <div class="stats-copy"><span class="stats-tulip" aria-hidden="true">❁</span></div>
+  </div>
+</section>
+
+<section class="section shell feature-section">
+  <div class="section-heading heading-frame"><div><p class="eyebrow">چهره‌های ماندگار</p><h2>شهدای شاخص</h2></div><a class="text-link" href="{% url 'martyrs:directory' %}">همه شهدا <span>←</span></a></div>
+  <div class="martyr-cards">
+    {% for martyr in featured_martyrs %}
+      <article class="martyr-card martyr-card-ornate"><div class="portrait portrait-{{ forloop.counter }}">{% if martyr.profile_image %}<img class="portrait-img" src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}">{% else %}<img class="portrait-img portrait-default" src="{% static 'images/default-avatar.png' %}" alt="{{ martyr.full_name }}">{% endif %}<i class="portrait-tulip" aria-hidden="true">❁</i></div><div class="martyr-card-body"><p><span class="card-kafiyeh" aria-hidden="true"></span>شهید شاخص</p><h3>{{ martyr.full_name }}</h3><dl>{% if martyr.birth_place_full %}<div><dt>محل تولد</dt><dd>{{ martyr.birth_place_full }}</dd></div>{% endif %}{% if martyr.division or martyr.brigade %}<div><dt>یگان</dt><dd>{{ martyr.division|default:martyr.brigade }}</dd></div>{% endif %}{% if martyr.martyrdom_date %}<div><dt>تاریخ شهادت</dt><dd>{{ martyr.martyrdom_date|to_jalali:"%Y/%m/%d" }}</dd></div>{% endif %}</dl><a href="{{ martyr.get_absolute_url }}">مشاهده پرونده <span>←</span></a></div></article>
+    {% empty %}
+      <div class="empty-panel wide-empty"><span class="empty-symbol">✦</span><h3>پرونده‌های شاخص اینجا نمایش داده می‌شوند</h3><p>پس از افزودن شهدا و انتخاب گزینه «شهید شاخص» در پنل مدیریت، این بخش تکمیل خواهد شد.</p><a class="button button-dark" href="/admin/">ورود به پنل مدیریت</a></div>
+    {% endfor %}
+  </div>
+</section>
+
+<div class="section-divider" aria-hidden="true">✦ ✦ ✦</div>
+
+<section class="memory-section"><div class="shell memory-layout"><div class="memory-intro"><p class="eyebrow">حافظه جمعی</p><h2 class="heading-frame centered">آخرین خاطرات</h2><p>روایت‌هایی که از زبان خانواده، دوستان و همرزمان ثبت شده‌اند؛ برای نزدیک‌تر شدن به حقیقت یک زندگی.</p><a class="button button-light" href="{% url 'martyrs:directory' %}">جست‌وجو در روایت‌ها <span>←</span></a></div><div class="memory-stack">{% for memory in latest_memories %}<a class="memory-card" href="{{ memory.martyr.get_absolute_url }}#panel-memories"><div class="memory-top"><span>{{ memory.get_category_display }}</span><time>{% if memory.recorded_at %}{{ memory.recorded_at|to_jalali:"%Y/%m/%d" }}{% endif %}</time></div><blockquote>«{{ memory.text|truncatechars:180 }}»</blockquote><div class="memory-by"><span>{{ memory.narrator }}</span>برای شهید {{ memory.martyr.full_name }}</div></a>{% empty %}<div class="memory-empty"><span>✦</span><p>با ثبت نخستین خاطره، روایت آن در این بخش دیده خواهد شد.</p></div>{% endfor %}</div></div></section>
+
+<div class="section-divider" aria-hidden="true">✦ ✦ ✦</div>
+
+<section class="section shell values-section values-section-war">
+  <div class="section-heading centered"><p class="eyebrow">برای پاسداشت بهتر</p><h2 class="heading-frame centered">یک پرونده، فراتر از یک نام</h2></div>
+  <div class="value-grid">
+    <article class="value-card-ornate"><span class="value-icon value-icon-mosque" aria-hidden="true">🕌</span><h3>زندگی‌نامه دقیق</h3><p>اطلاعات هویتی، تحصیلی و مسیر زندگی هر شهید در قالب پرونده‌ای منسجم نگهداری می‌شود.</p></article>
+    <article class="value-card-ornate"><span class="value-icon value-icon-front" aria-hidden="true">🎖</span><h3>حافظه و روایت</h3><p>خاطرات خانواده، همرزمان، دوستان و رؤیاها کنار هم، تصویری انسانی‌تر از یک زندگی می‌سازند.</p></article>
+    <article class="value-card-ornate"><span class="value-icon value-icon-testament" aria-hidden="true">📜</span><h3>میراث رسانه‌ای</h3><p>تصاویر، ویدئوها، دست‌نوشته‌ها و وصیت‌نامه‌ها به شیوه‌ای قابل جست‌وجو و ماندگار سامان می‌گیرند.</p></article>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "admin/base.html" %}
+{% load static %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/admin-rtl.css' %}">{% endblock %}
+{% block title %}{{ title }} | مدیریت شهیدنامه{% endblock %}
+{% block branding %}<h1 id="site-name"><a href="{% url 'admin:index' %}">مدیریت شهیدنامه</a></h1>{% endblock %}
+{% block nav-global %}<a class="view-site" href="{% url 'martyrs:home' %}">مشاهده وب‌سایت</a>{% endblock %}

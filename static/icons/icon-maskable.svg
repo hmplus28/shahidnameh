@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-label="شهیدنامه">
+  <rect width="192" height="192" fill="#173f3d"/>
+  <path d="M96 36c-31 22-46 53-46 84 0 16 6 28 16 36h60c10-8 16-20 16-36 0-31-15-62-46-84Z" fill="none" stroke="#ead7aa" stroke-width="6"/>
+  <path d="M96 63v62M78 98h36" stroke="#bd9345" stroke-width="5" stroke-linecap="round"/>
+</svg>

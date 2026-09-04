@@ -1,0 +1,126 @@
+{% extends "panel/base_panel.html" %}
+{% load static %}
+{% block title %}{% if is_new %}ثبت شهید{% else %}ویرایش {{ martyr.full_name }}{% endif %} | پنل مدیریت{% endblock %}
+{% block content %}
+<header class="panel-head">
+  <div>
+    <h1>{% if is_new %}ثبت شهید جدید{% else %}پرونده {{ martyr.full_name }}{% endif %}</h1>
+    {% if not is_new %}
+    <p class="head-links">
+      <a href="{% url 'martyrs:detail' martyr.slug %}" target="_blank">مشاهده در سایت ↗</a> ·
+      {% if martyr.is_published %}<span class="tag is-ok">منتشرشده</span>{% else %}<span class="tag">پیش‌نویس</span>{% endif %}
+      {% if martyr.is_featured %}<span class="tag is-gold">شهید شاخص</span>{% endif %}
+    </p>
+    {% endif %}
+  </div>
+  <div class="head-actions">
+    {% if can_edit and not is_new %}
+      <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'publish' %}">{% csrf_token %}
+        <button class="mini-btn is-publish">{% if martyr.is_published %}تبدیل به پیش‌نویس{% else %}انتشار در سایت{% endif %}</button>
+      </form>
+      <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'feature' %}">{% csrf_token %}
+        <button class="mini-btn is-feature">{% if martyr.is_featured %}حذف از شاخص‌ها{% else %}تنظیم به‌عنوان شاخص{% endif %}</button>
+      </form>
+      <a class="mini-btn is-danger" href="{% url 'martyrs:panel_martyr_delete' martyr.pk %}">حذف پرونده</a>
+    {% endif %}
+  </div>
+</header>
+
+{% if readonly %}<div class="panel-message">نقش شما «مشاهده‌گر» است؛ فقط می‌توانید اطلاعات را ببینید.</div>{% endif %}
+
+<form method="post" enctype="multipart/form-data" data-autosave="{% if is_new %}new{% else %}{{ martyr.pk }}{% endif %}">
+  {% csrf_token %}
+  {% for group_title, fields in field_groups %}
+    <section class="panel-card">
+      <h2>{{ group_title }}</h2>
+      <div class="form-grid">
+        {% for item in fields %}
+          <label class="field {% if item.wide %}field-wide{% endif %} {% if item.field.field.widget.input_type == 'checkbox' or item.field.is_checkbox %}field-check{% endif %}">
+            <span>{{ item.field.label }}</span>{{ item.field }}{{ item.field.errors }}
+          </label>
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+  <section class="panel-card publish-card">
+    <div class="form-grid">
+      {{ form.is_published.errors }}<label class="field-check"><span>انتشار در سایت</span>{{ form.is_published }}</label>
+      {{ form.is_featured.errors }}<label class="field-check"><span>شهید شاخص</span>{{ form.is_featured }}</label>
+    </div>
+    <p class="autosave-status" data-autosave-status hidden role="status" aria-live="polite"></p>
+    {% if can_edit %}<button type="submit" class="panel-btn">ذخیره تغییرات</button>{% endif %}
+  </section>
+</form>
+<script src="{% static 'js/panel-autosave.js' %}" defer></script>
+
+{% if not is_new %}
+<section class="panel-columns">
+  <section class="panel-card">
+    <h2>بخش‌های سفارشی ({{ sections|length }})</h2>
+    {% for section in sections %}
+      <div class="media-row"><b>{{ section.title }}</b><small>ترتیب: {{ section.sort_order }}</small><p>{{ section.content|truncatechars:90 }}</p>
+        {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_section_delete' section.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
+      </div>
+    {% empty %}<p class="empty-note">بخش سفارشی ثبت نشده است.</p>{% endfor %}
+    {% if can_edit %}
+    <form method="post" action="{% url 'martyrs:panel_section_add' martyr.pk %}" class="inline-form">{% csrf_token %}{{ section_form.title.label_tag }}{{ section_form.title }}{{ section_form.content }}{{ section_form.sort_order }}<button class="panel-btn">افزودن بخش</button></form>
+    {% endif %}
+  </section>
+  <section class="panel-card">
+    <h2>خاطرات ({{ memories|length }})</h2>
+    {% for memory in memories %}
+      <div class="media-row"><b>{{ memory.narrator }}</b><small>{{ memory.get_category_display }}</small><p>{{ memory.text|truncatechars:90 }}</p>
+        {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_memory_delete' memory.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
+      </div>
+    {% empty %}<p class="empty-note">خاطره‌ای ثبت نشده است.</p>{% endfor %}
+    {% if can_edit %}
+    <form method="post" action="{% url 'martyrs:panel_memory_add' martyr.pk %}" class="inline-form">{% csrf_token %}{{ memory_form.category.label_tag }}{{ memory_form.category }}{{ memory_form.narrator.label_tag }}{{ memory_form.narrator }}{{ memory_form.text }}{{ memory_form.recorded_at }}<button class="panel-btn">افزودن خاطره</button></form>
+    {% endif %}
+  </section>
+  <section class="panel-card">
+    <h2>تصاویر ({{ images|length }})</h2>
+    {% for image in images %}
+      <div class="media-row media-row-img">{% if image.image %}<img src="{{ image.image.url }}" alt="{{ image.title }}">{% endif %}<b>{{ image.title|default:"بدون عنوان" }}</b>
+        {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_image_delete' image.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
+      </div>
+    {% empty %}<p class="empty-note">تصویری ثبت نشده است.</p>{% endfor %}
+    {% if can_edit %}
+    <form method="post" action="{% url 'martyrs:panel_image_add' martyr.pk %}" enctype="multipart/form-data" class="inline-form">{% csrf_token %}{{ image_form.image }}{{ image_form.title }}<button class="panel-btn">بارگذاری تصویر</button></form>
+    {% endif %}
+  </section>
+  <section class="panel-card">
+    <h2>ویدئوها ({{ videos|length }})</h2>
+    {% for video in videos %}
+      <div class="media-row"><b>{{ video.title }}</b><small>{% if video.video_file %}فایل{% elif video.external_url %}پیوند خارجی{% endif %}</small>
+        {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_video_delete' video.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
+      </div>
+    {% empty %}<p class="empty-note">ویدئویی ثبت نشده است.</p>{% endfor %}
+    {% if can_edit %}
+    <form method="post" action="{% url 'martyrs:panel_video_add' martyr.pk %}" enctype="multipart/form-data" class="inline-form">{% csrf_token %}{{ video_form.title }}{{ video_form.video_file }}{{ video_form.external_url }}<button class="panel-btn">افزودن ویدئو</button></form>
+    {% endif %}
+  </section>
+  <section class="panel-card">
+    <h2>سوابق مجروحیت ({{ injuries|length }})</h2>
+    {% for injury in injuries %}
+      <div class="media-row"><b>{% if injury.injury_date %}{{ injury.injury_date|date:"Y/m/d" }}{% else %}بدون تاریخ{% endif %}</b><p>{{ injury.description|truncatechars:90 }}</p>
+        {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_injury_delete' injury.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
+      </div>
+    {% empty %}<p class="empty-note">مجروحیتی ثبت نشده است.</p>{% endfor %}
+    {% if can_edit %}
+    <form method="post" action="{% url 'martyrs:panel_injury_add' martyr.pk %}" class="inline-form">{% csrf_token %}{{ injury_form.injury_date.label_tag }}{{ injury_form.injury_date }}{{ injury_form.description }}<button class="panel-btn">افزودن مجروحیت</button></form>
+    {% endif %}
+  </section>
+  <section class="panel-card">
+    <h2>همرزمان شهید ({{ comrades|length }})</h2>
+    {% for comrade in comrades %}
+      <div class="media-row"><b>{{ comrade.full_name }}</b><small>{{ comrade.service_place }}</small><p>{{ comrade.memories|truncatechars:90 }}</p>
+        {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_comrade_delete' comrade.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
+      </div>
+    {% empty %}<p class="empty-note">همرزمی ثبت نشده است.</p>{% endfor %}
+    {% if can_edit %}
+    <form method="post" action="{% url 'martyrs:panel_comrade_add' martyr.pk %}" class="inline-form">{% csrf_token %}{{ comrade_form.full_name.label_tag }}{{ comrade_form.full_name }}{{ comrade_form.service_place.label_tag }}{{ comrade_form.service_place }}{{ comrade_form.memories }}<button class="panel-btn">افزودن همرزم</button></form>
+    {% endif %}
+  </section>
+</section>
+{% endif %}
+{% endblock %}

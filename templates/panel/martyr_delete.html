@@ -1,0 +1,12 @@
+{% extends "panel/base_panel.html" %}
+{% block title %}حذف پرونده | پنل مدیریت{% endblock %}
+{% block content %}
+<header class="panel-head"><div><h1>حذف پرونده</h1></div></header>
+<section class="panel-card">
+  <p>آیا از حذف دائمی پرونده <b>{{ martyr.full_name }}</b> همراه با همه خاطرات، تصاویر و ویدئوهای آن مطمئن هستید؟ این عمل بازگشت‌پذیر نیست.</p>
+  <form method="post" class="confirm-actions">{% csrf_token %}
+    <button type="submit" class="panel-btn is-danger">بله، حذف کن</button>
+    <a class="mini-btn" href="{% url 'martyrs:panel_martyr_edit' martyr.pk %}">انصراف</a>
+  </form>
+</section>
+{% endblock %}
