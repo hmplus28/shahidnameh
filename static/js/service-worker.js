@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shahidnameh-v10';
+const CACHE_NAME = 'shahidnameh-v11';
 const APP_SHELL = [
   '/', '/martyrs/', '/offline/',
   '/static/css/site.css', '/static/css/fonts.css',

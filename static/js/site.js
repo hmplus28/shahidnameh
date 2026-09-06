@@ -4,15 +4,15 @@
   const navigation = document.getElementById('primary-navigation');
   function setNavigation(open) {
     if (!navigation) return;
-    navigation.classList.toggle('is-open', open);
     document.body.classList.toggle('nav-open', open);
     if (navToggle) navToggle.setAttribute('aria-expanded', String(open));
+    if (mobileNavToggle) mobileNavToggle.setAttribute('aria-expanded', String(open));
   }
   function toggleNavigation() {
-    setNavigation(navigation && !navigation.classList.contains('is-open'));
+    setNavigation(!document.body.classList.contains('nav-open'));
   }
-  if (navToggle && navigation) navToggle.addEventListener('click', toggleNavigation);
-  if (mobileNavToggle && navigation) mobileNavToggle.addEventListener('click', toggleNavigation);
+  if (navToggle) navToggle.addEventListener('click', toggleNavigation);
+  if (mobileNavToggle) mobileNavToggle.addEventListener('click', toggleNavigation);
   document.querySelectorAll('[data-nav-close]').forEach((el) => el.addEventListener('click', () => setNavigation(false)));
   if (navigation) navigation.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setNavigation(false)));
 
