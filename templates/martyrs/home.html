@@ -4,10 +4,48 @@
 {% block content %}
 <div class="page-bg page-bg-home">
 
+<!-- Hero جدید -->
+<section class="hero-new">
+  <div class="hero-new-bg" aria-hidden="true">
+    <img src="{% static 'images/bg/bg-home.jpg' %}" alt="" loading="eager">
+  </div>
+  <div class="hero-new-overlay" aria-hidden="true"></div>
+  <div class="shell hero-new-inner">
+    <div class="hero-new-content">
+      <span class="hero-new-tag">{% include "icons/icon.html" with name="crescent-star" size=18 %} بایگانی زنده یاد و نام</span>
+      <h1>روایت‌های ماندگار<br><em>شهدای راه</em></h1>
+      <p>پلتفرمی برای پاسداشت زندگی، خاطرات و میراث شهدای ایران؛ هر نام، دریچه‌ای به یک زندگی روشن.</p>
+      <form class="hero-new-search" action="{% url 'martyrs:directory' %}" method="get" role="search">
+        <label class="visually-hidden" for="q">جست‌وجوی شهید</label>
+        <input id="q" name="q" placeholder="نام شهید را بنویسید..." autocomplete="off">
+        <button type="submit">جست‌وجو</button>
+      </form>
+    </div>
+    <div class="hero-new-stats">
+      <div class="hero-stat">
+        <strong>{{ stats.martyrs|fa }}</strong>
+        <span>پرونده شهید</span>
+      </div>
+      <div class="hero-stat">
+        <strong>{{ stats.memories|fa }}</strong>
+        <span>خاطره ثبت‌شده</span>
+      </div>
+      <div class="hero-stat">
+        <strong>{{ stats.provinces|fa }}</strong>
+        <span>استان</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- بخش ۱: شهدای شاخص -->
 <section class="shell home-section">
   <div class="section-header">
-    <div><p class="eyebrow">چهره‌های ماندگار</p><h2>شهدای شاخص</h2></div>
-    <a class="text-link" href="{% url 'martyrs:directory' %}">همه شهدا ←</a>
+    <div>
+      <p class="eyebrow">چهره‌های ماندگار</p>
+      <h2>شهدای شاخص</h2>
+    </div>
+    <a class="text-link" href="{% url 'martyrs:directory' %}?featured=1">همه شهدا ←</a>
   </div>
   <div class="hs" data-hs>
     {% for martyr in featured_martyrs %}
@@ -34,29 +72,71 @@
   </div>
 </section>
 
-<section class="shell home-section">
+<!-- بخش ۲: آخرین روایت‌ها (ادغام شهدا و خاطرات) -->
+<section class="shell home-section recent-stories">
   <div class="section-header">
-    <div><h2>آخرین خاطرات</h2></div>
+    <div>
+      <p class="eyebrow">آخرین به‌روزرسانی‌ها</p>
+      <h2>روایت‌های تازه</h2>
+    </div>
   </div>
-  <div class="hs" data-hs>
-    {% for memory in latest_memories %}
-      <a class="memory-slide" href="{{ memory.martyr.get_absolute_url }}#panel-memories">
-        <div class="memory-slide-top">
-          <span>{{ memory.get_category_display }}</span>
-          <time>{% if memory.recorded_at %}{{ memory.recorded_at|jalali_date:"%Y/%m/%d" }}{% endif %}</time>
+
+  <div class="stories-tabs" role="tablist">
+    <button class="stories-tab is-active" role="tab" data-stories-tab="martyrs">آخرین شهدا</button>
+    <button class="stories-tab" role="tab" data-stories-tab="memories">آخرین خاطرات</button>
+  </div>
+
+  <div class="stories-panel" data-stories-panel="martyrs">
+    <div class="stories-grid">
+      {% for martyr in recent_martyrs %}
+        <a class="story-card story-card-martyr" href="{{ martyr.get_absolute_url }}">
+          <div class="story-card-img">
+            {% if martyr.profile_image %}
+              <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+            {% endif %}
+          </div>
+          <div class="story-card-body">
+            <span class="story-card-tag">شهید</span>
+            <h3>{{ martyr.full_name }}</h3>
+            {% if martyr.martyrdom_date %}
+              <p class="story-card-meta">شهادت: {{ martyr.martyrdom_date|jalali_date:"%Y/%m/%d" }}</p>
+            {% endif %}
+            {% if martyr.birth_city %}
+              <p class="story-card-meta">{{ martyr.birth_city }}</p>
+            {% endif %}
+          </div>
+        </a>
+      {% empty %}
+        <div class="empty-panel">
+          <span class="empty-symbol">{% include "icons/icon.html" with name="star-islamic" size=24 %}</span>
+          <p>هنوز شهیدی ثبت نشده است.</p>
         </div>
-        <blockquote>«{{ memory.text|truncatechars:150 }}»</blockquote>
-        <div class="memory-slide-by">
-          <span>{{ memory.narrator }}</span>
-          <small>برای شهید {{ memory.martyr.full_name }}</small>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="stories-panel" data-stories-panel="memories" hidden>
+    <div class="stories-grid">
+      {% for memory in latest_memories %}
+        <a class="story-card story-card-memory" href="{{ memory.martyr.get_absolute_url }}#panel-memories">
+          <div class="story-card-body">
+            <span class="story-card-tag story-card-tag-memory">{{ memory.get_category_display }}</span>
+            <blockquote>«{{ memory.text|truncatechars:140 }}»</blockquote>
+            <div class="story-card-foot">
+              <span>{{ memory.narrator }}</span>
+              <small>برای شهید {{ memory.martyr.full_name }}</small>
+            </div>
+          </div>
+        </a>
+      {% empty %}
+        <div class="empty-panel">
+          <span class="empty-symbol">{% include "icons/icon.html" with name="star-islamic" size=24 %}</span>
+          <p>با ثبت نخستین خاطره، روایت آن در این بخش دیده خواهد شد.</p>
         </div>
-      </a>
-    {% empty %}
-      <div class="empty-panel">
-        <span class="empty-symbol">{% include "icons/icon.html" with name="star-islamic" size=24 %}</span>
-        <p>با ثبت نخستین خاطره، روایت آن در این بخش دیده خواهد شد.</p>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
   </div>
 </section>
 

@@ -20,7 +20,8 @@ def home(request):
     published = Martyr.objects.filter(is_published=True)
     context = {
         "featured_martyrs": published.filter(is_featured=True)[:10],
-        "latest_memories": Memory.objects.select_related("martyr").filter(martyr__is_published=True).order_by("-created_at")[:10],
+        "recent_martyrs": published.exclude(martyrdom_date=None).order_by("-martyrdom_date")[:8],
+        "latest_memories": Memory.objects.select_related("martyr").filter(martyr__is_published=True).order_by("-created_at")[:6],
         "stats": {
             "martyrs": published.count(),
             "memories": Memory.objects.filter(martyr__is_published=True).count(),
