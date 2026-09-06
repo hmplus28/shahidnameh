@@ -252,3 +252,32 @@ class MartyrVideo(models.Model):
 
     def __str__(self):
         return f"{self.title} | {self.martyr.full_name}"
+
+
+class SiteSettings(models.Model):
+    """تنظیمات عمومی سایت"""
+    music_url = models.URLField("آدرس موزیک پس‌زمینه", blank=True, default="")
+    music_file = models.FileField("فایل موزیک", upload_to="music/", blank=True)
+    music_enabled = models.BooleanField("فعال‌سازی موزیک پس‌زمینه", default=False)
+
+    class Meta:
+        verbose_name = "تنظیمات سایت"
+        verbose_name_plural = "تنظیمات سایت"
+
+    def __str__(self):
+        return "تنظیمات سایت"
+
+    @property
+    def music_source(self):
+        if self.music_file:
+            return self.music_file.url
+        return self.music_url
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj

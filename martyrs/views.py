@@ -8,18 +8,19 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.templatetags.static import static
 
 from .forms import MartyrDirectoryFilterForm
-from .models import Martyr, Memory
+from .models import Martyr, Memory, SiteSettings
 
 
 def home(request):
     quick_query = request.GET.get("q", "").strip()
     if quick_query:
-        return redirect(f"{redirect('martyrs:directory').url}?q={quick_query}")
+        from django.urls import reverse
+        return redirect(f"{reverse('martyrs:directory')}?q={quick_query}")
 
     published = Martyr.objects.filter(is_published=True)
     context = {
-        "featured_martyrs": published.filter(is_featured=True)[:3],
-        "latest_memories": Memory.objects.select_related("martyr").filter(martyr__is_published=True).order_by("-created_at")[:3],
+        "featured_martyrs": published.filter(is_featured=True)[:10],
+        "latest_memories": Memory.objects.select_related("martyr").filter(martyr__is_published=True).order_by("-created_at")[:10],
         "stats": {
             "martyrs": published.count(),
             "memories": Memory.objects.filter(martyr__is_published=True).count(),
@@ -68,9 +69,13 @@ def _filtered_martyrs(request, provinces, units):
 def martyr_directory(request):
     provinces, units = _filter_options()
     martyrs, filter_form = _filtered_martyrs(request, provinces, units)
+    published = Martyr.objects.filter(is_published=True)
     context = {
         "martyrs": martyrs.filter(is_published=True),
         "filter_form": filter_form,
+        "featured_martyrs": published.filter(is_featured=True),
+        "latest_martyrs": published.order_by("-created_at"),
+        "recent_martyrs": published.exclude(martyrdom_date=None).order_by("-martyrdom_date"),
     }
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         return render(request, "martyrs/partials/martyr_results.html", context)
@@ -127,3 +132,7 @@ def robots_txt(request):
     sitemap_url = request.build_absolute_uri("/sitemap.xml")
     lines = ["User-agent: *", "Disallow: /admin/", "Disallow: /media/", f"Sitemap: {sitemap_url}"]
     return HttpResponse("\n".join(lines), content_type="text/plain; charset=utf-8")
+
+
+def ziyaratnama(request):
+    return render(request, "martyrs/ziyaratnama.html")

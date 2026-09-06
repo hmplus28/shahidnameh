@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from jalali_date import date2jalali
 from jalali_date.admin import ModelAdminJalaliMixin, TabularInlineJalaliMixin
 
-from .models import ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory
+from .models import ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteSettings
 
 ACTION_FLAGS = {1: "افزودن", 2: "ویرایش", 3: "حذف"}
 
@@ -192,3 +192,11 @@ class MartyrVideoAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
     @admin.display(boolean=True, description="فایل یا پیوند")
     def has_source(self, obj):
         return bool(obj.video_file or obj.external_url)
+
+
+@admin.register(SiteSettings)
+class SiteSettingsAdmin(admin.ModelAdmin):
+    list_display = ("music_enabled", "music_url")
+    fieldsets = (
+        ("موزیک پس‌زمینه", {"fields": ("music_enabled", "music_url")}),
+    )

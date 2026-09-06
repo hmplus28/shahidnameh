@@ -2,7 +2,7 @@ from django import forms
 from jalali_date.fields import JalaliDateField
 from jalali_date.widgets import AdminJalaliDateWidget
 
-from .models import ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory
+from .models import ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteSettings
 
 
 class MartyrSectionForm(forms.ModelForm):
@@ -195,3 +195,18 @@ class PanelUserForm(forms.Form):
         if query.exists():
             raise forms.ValidationError("این نام کاربری قبلاً ثبت شده است.")
         return username
+
+
+class SiteSettingsForm(forms.ModelForm):
+    class Meta:
+        model = SiteSettings
+        fields = ("music_enabled", "music_url", "music_file")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            css = field.widget.attrs.get("class", "")
+            field.widget.attrs["class"] = f"{css} panel-input".strip()
+        self.fields["music_enabled"].widget.attrs["class"] = "panel-check"
+        self.fields["music_url"].widget.attrs["placeholder"] = "لینک مستقیم فایل MP3"
+        self.fields["music_file"].widget.attrs["accept"] = "audio/*"

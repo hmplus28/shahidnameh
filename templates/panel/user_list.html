@@ -6,35 +6,39 @@
     <h1>کاربران و نقش‌ها</h1>
     <p>ساخت حساب نویسنده و مدیر محتوا و مدیریت دسترسی آن‌ها.</p>
   </div>
-  <div class="head-actions"><a class="panel-btn" href="{% url 'martyrs:panel_user_new' %}">{% include "icons/icon.html" with name="plus" size=16 %} کاربر جدید</a></div>
+  <a class="panel-btn" href="{% url 'martyrs:panel_user_new' %}">{% include "icons/icon.html" with name="plus" size=16 %} کاربر جدید</a>
 </div>
 
-<div class="martyr-table-wrap">
-<table class="martyr-table">
-  <thead><tr><th>نام کاربری</th><th>نام</th><th>نقش</th><th>وضعیت</th><th>عملیات</th></tr></thead>
-  <tbody>
-    {% for item in users %}
-    {% with user=item.obj role=item.role.0 role_class=item.role.1 %}
-    <tr>
-      <td><a href="{% url 'martyrs:panel_user_edit' pk=user.pk %}">{{ user.username }}</a>{% if user.is_superuser %} <span class="tag is-gold">مدیر کل</span>{% endif %}</td>
-      <td>{{ user.get_full_name|default:"—" }}</td>
-      <td>{% if role %}<span class="tag {{ role_class }}">{{ role }}</span>{% else %}<span class="tag">—</span>{% endif %}</td>
-      <td>{% if user.is_active %}<span class="tag is-ok">فعال</span>{% else %}<span class="tag is-danger-tag">غیرفعال</span>{% endif %}</td>
-      <td>
-        <div class="row-actions">
-          <a class="mini-btn is-view" href="{% url 'martyrs:panel_user_edit' pk=user.pk %}">ویرایش</a>
-          {% if user.pk != request.user.pk and not user.is_superuser %}
-            <form method="post" action="{% url 'martyrs:panel_user_toggle' pk=user.pk %}">{% csrf_token %}<button type="submit" class="mini-btn">{% if user.is_active %}غیرفعال‌سازی{% else %}فعال‌سازی{% endif %}</button></form>
-            <form method="post" action="{% url 'martyrs:panel_user_delete' pk=user.pk %}">{% csrf_token %}<button type="submit" class="mini-btn is-danger">حذف</button></form>
-          {% endif %}
-        </div>
-      </td>
-    </tr>
-    {% endwith %}
-    {% empty %}
-    <tr><td colspan="5">هنوز کاربری ثبت نشده است.</td></tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="user-cards">
+  {% for item in users %}
+  {% with user=item.obj role=item.role.0 role_class=item.role.1 %}
+  <div class="user-card">
+    <div class="user-card-header">
+      <div class="user-card-name">
+        <h3>{{ user.username }}</h3>
+        <small>{{ user.get_full_name|default:"—" }}</small>
+      </div>
+      <div class="user-card-tags">
+        {% if user.is_superuser %}<span class="tag is-gold">مدیر کل</span>{% endif %}
+        {% if user.is_active %}<span class="tag is-ok">فعال</span>{% else %}<span class="tag is-danger-tag">غیرفعال</span>{% endif %}
+      </div>
+    </div>
+    {% if role %}
+    <div class="user-card-role">
+      <span class="tag {{ role_class }}">{{ role }}</span>
+    </div>
+    {% endif %}
+    <div class="user-card-actions">
+      <a class="icon-action" href="{% url 'martyrs:panel_user_edit' pk=user.pk %}" title="ویرایش">{% include "icons/icon.html" with name="list" size=18 %}</a>
+      {% if user.pk != request.user.pk and not user.is_superuser %}
+        <form method="post" action="{% url 'martyrs:panel_user_toggle' pk=user.pk %}" class="icon-action-form">{% csrf_token %}<button type="submit" class="icon-action {% if user.is_active %}is-danger{% endif %}" title="{% if user.is_active %}غیرفعال‌سازی{% else %}فعال‌سازی{% endif %}">{% include "icons/icon.html" with name="close" size=18 %}</button></form>
+        <form method="post" action="{% url 'martyrs:panel_user_delete' pk=user.pk %}" class="icon-action-form">{% csrf_token %}<button type="submit" class="icon-action is-danger" title="حذف">{% include "icons/icon.html" with name="logout" size=18 %}</button></form>
+      {% endif %}
+    </div>
+  </div>
+  {% endwith %}
+  {% empty %}
+  <div class="empty-note">هنوز کاربری ثبت نشده است.</div>
+  {% endfor %}
 </div>
 {% endblock %}

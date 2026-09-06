@@ -1,16 +1,17 @@
 {% extends "panel/base_panel.html" %}
+{% load jalali_extras %}
 {% block title %}پیشخوان | پنل مدیریت شهیدنامه{% endblock %}
 {% block content %}
 <header class="panel-head"><div><h1>پیشخوان</h1><p>نمای کلی محتوا و آخرین رویدادها</p></div>
   {% if perms.martyrs.add_martyr %}<a class="panel-btn" href="{% url 'martyrs:panel_martyr_new' %}">{% include "icons/icon.html" with name="plus" size=16 %} ثبت شهید جدید</a>{% endif %}
 </header>
 <section class="stat-cards">
-  <article><b>{{ stats.martyrs_published }}</b><span>شهید منتشرشده</span></article>
-  <article><b>{{ stats.martyrs_total }}</b><span>کل پرونده‌ها</span></article>
-  <article><b>{{ stats.martyrs_featured }}</b><span>شهدای شاخص</span></article>
-  <article><b>{{ stats.memories }}</b><span>خاطرات</span></article>
-  <article><b>{{ stats.images }}</b><span>تصاویر</span></article>
-  <article><b>{{ stats.videos }}</b><span>ویدئوها</span></article>
+  <article><b>{{ stats.martyrs_published|fa }}</b><span>شهید منتشرشده</span></article>
+  <article><b>{{ stats.martyrs_total|fa }}</b><span>کل پرونده‌ها</span></article>
+  <article><b>{{ stats.martyrs_featured|fa }}</b><span>شهدای شاخص</span></article>
+  <article><b>{{ stats.memories|fa }}</b><span>خاطرات</span></article>
+  <article><b>{{ stats.images|fa }}</b><span>تصاویر</span></article>
+  <article><b>{{ stats.videos|fa }}</b><span>ویدئوها</span></article>
 </section>
 <div class="panel-columns">
   <section class="panel-card">

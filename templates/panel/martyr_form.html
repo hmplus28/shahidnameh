@@ -1,5 +1,5 @@
 {% extends "panel/base_panel.html" %}
-{% load static %}
+{% load static jalali_extras %}
 {% block title %}{% if is_new %}ثبت شهید{% else %}ویرایش {{ martyr.full_name }}{% endif %} | پنل مدیریت{% endblock %}
 {% block content %}
 <header class="panel-head">
@@ -56,9 +56,9 @@
 {% if not is_new %}
 <section class="panel-columns">
   <section class="panel-card">
-    <h2>بخش‌های سفارشی ({{ sections|length }})</h2>
+    <h2>بخش‌های سفارشی ({{ sections|length|fa }})</h2>
     {% for section in sections %}
-      <div class="media-row"><b>{{ section.title }}</b><small>ترتیب: {{ section.sort_order }}</small><p>{{ section.content|truncatechars:90 }}</p>
+      <div class="media-row"><b>{{ section.title }}</b><small>ترتیب: {{ section.sort_order|fa }}</small><p>{{ section.content|truncatechars:90 }}</p>
         {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_section_delete' section.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
       </div>
     {% empty %}<p class="empty-note">بخش سفارشی ثبت نشده است.</p>{% endfor %}
@@ -67,7 +67,7 @@
     {% endif %}
   </section>
   <section class="panel-card">
-    <h2>خاطرات ({{ memories|length }})</h2>
+    <h2>خاطرات ({{ memories|length|fa }})</h2>
     {% for memory in memories %}
       <div class="media-row"><b>{{ memory.narrator }}</b><small>{{ memory.get_category_display }}</small><p>{{ memory.text|truncatechars:90 }}</p>
         {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_memory_delete' memory.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
@@ -78,7 +78,7 @@
     {% endif %}
   </section>
   <section class="panel-card">
-    <h2>تصاویر ({{ images|length }})</h2>
+    <h2>تصاویر ({{ images|length|fa }})</h2>
     {% for image in images %}
       <div class="media-row media-row-img">{% if image.image %}<img src="{{ image.image.url }}" alt="{{ image.title }}">{% endif %}<b>{{ image.title|default:"بدون عنوان" }}</b>
         {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_image_delete' image.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
@@ -89,7 +89,7 @@
     {% endif %}
   </section>
   <section class="panel-card">
-    <h2>ویدئوها ({{ videos|length }})</h2>
+    <h2>ویدئوها ({{ videos|length|fa }})</h2>
     {% for video in videos %}
       <div class="media-row"><b>{{ video.title }}</b><small>{% if video.video_file %}فایل{% elif video.external_url %}پیوند خارجی{% endif %}</small>
         {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_video_delete' video.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
@@ -100,7 +100,7 @@
     {% endif %}
   </section>
   <section class="panel-card">
-    <h2>سوابق مجروحیت ({{ injuries|length }})</h2>
+    <h2>سوابق مجروحیت ({{ injuries|length|fa }})</h2>
     {% for injury in injuries %}
       <div class="media-row"><b>{% if injury.injury_date %}{{ injury.injury_date|date:"Y/m/d" }}{% else %}بدون تاریخ{% endif %}</b><p>{{ injury.description|truncatechars:90 }}</p>
         {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_injury_delete' injury.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}
@@ -111,7 +111,7 @@
     {% endif %}
   </section>
   <section class="panel-card">
-    <h2>همرزمان شهید ({{ comrades|length }})</h2>
+    <h2>همرزمان شهید ({{ comrades|length|fa }})</h2>
     {% for comrade in comrades %}
       <div class="media-row"><b>{{ comrade.full_name }}</b><small>{{ comrade.service_place }}</small><p>{{ comrade.memories|truncatechars:90 }}</p>
         {% if can_edit %}<form method="post" action="{% url 'martyrs:panel_comrade_delete' comrade.pk %}">{% csrf_token %}<button class="mini-btn is-danger">حذف</button></form>{% endif %}

@@ -1,30 +1,14 @@
-const CACHE_NAME = 'shahidnameh-v11';
+const CACHE_NAME = 'shahidnameh-v12';
 const APP_SHELL = [
-  '/', '/martyrs/', '/offline/',
+  '/', '/martyrs/',
   '/static/css/site.css', '/static/css/fonts.css',
   '/static/fonts/vazirmatn-arabic.woff2', '/static/fonts/vazirmatn-latin.woff2', '/static/fonts/vazirmatn-latin-ext.woff2',
   '/static/js/site.js', '/static/manifest.webmanifest',
-  '/static/icons/icon.svg', '/static/icons/icon-maskable.svg',
-  '/static/icons/tulip.svg', '/static/icons/crescent-star.svg', '/static/icons/mosque.svg',
-  '/static/icons/kafiyeh.svg', '/static/icons/medal.svg', '/static/icons/testament.svg',
-  '/static/icons/red-crescent.svg', '/static/icons/star-islamic.svg',
-  '/static/icons/home.svg', '/static/icons/search.svg', '/static/icons/offline.svg',
-  '/static/icons/menu.svg', '/static/icons/install.svg', '/static/icons/play.svg',
-  '/static/icons/external.svg', '/static/icons/arrow-left.svg', '/static/icons/arrow-right.svg',
-  '/static/icons/page.svg', '/static/icons/plus.svg', '/static/icons/clock.svg',
-  '/static/icons/users.svg', '/static/icons/dashboard.svg', '/static/icons/logout.svg',
-  '/static/icons/close.svg', '/static/icons/mihrab.svg', '/static/icons/empty.svg',
-  // تصاویر اصلی (کاربر گذاشته)
-  '/static/images/hero-banner.jpg', '/static/images/memories-bg.jpg',
-  '/static/images/offline-bg.jpg', '/static/images/directory-hero.jpg',
-  '/static/images/front-bg.jpg', '/static/images/testament-bg.jpg',
-  '/static/images/city-silhouette.png', '/static/images/default-avatar.png',
-  // تصاویر جدید: آواتار پیش‌فرض شهدا + گالری
+  '/static/icons/icon.svg',
   '/static/images/martyr-default.jpg',
-  '/static/images/strip-01.jpg', '/static/images/strip-02.jpg', '/static/images/strip-03.jpg',
-  '/static/images/strip-04.jpg', '/static/images/strip-05.jpg', '/static/images/strip-06.jpg',
-  // تصاویر رهبران انقلاب
-  '/static/images/leaders/khomeini-portrait.jpg', '/static/images/leaders/khamenei-portrait.jpg'
+  '/static/images/bg/logo-main.jpg', '/static/images/bg/quran-header.png',
+  '/static/images/bg/tulip-icon.jpg', '/static/images/bg/home-icon.jpg',
+  '/static/images/bg/bg-home.jpg', '/static/images/bg/bg-directory.jpg', '/static/images/bg/bg-login.jpg'
 ];
 
 const isCacheable = (request, response) => request.method === 'GET' && response && response.ok && new URL(request.url).origin === self.location.origin;
@@ -51,7 +35,7 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
   if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).then((response) => putInCache(request, response)).catch(async () => (await caches.match(request)) || (await caches.match('/offline/'))));
+    event.respondWith(fetch(request).then((response) => putInCache(request, response)).catch(async () => (await caches.match(request))));
     return;
   }
   if (new URL(request.url).origin !== self.location.origin) return;

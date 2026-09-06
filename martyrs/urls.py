@@ -15,7 +15,7 @@ urlpatterns = [
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),
     path("martyrs/", views.martyr_directory, name="directory"),
     path("martyrs/<str:slug>/", views.martyr_detail, name="detail"),
-    path("offline/", views.offline, name="offline"),
+    path("ziyaratnama/", views.ziyaratnama, name="ziyaratnama"),
     path("panel/login/", panel_views.PanelLoginView.as_view(), name="panel_login"),
     path("panel/logout/", auth_views.LogoutView.as_view(next_page="martyrs:panel_login"), name="panel_logout"),
     path("panel/", panel_views.panel_home, name="panel_home"),
@@ -42,4 +42,6 @@ urlpatterns = [
     path("panel/users/<int:pk>/", panel_views.user_edit, name="panel_user_edit"),
     path("panel/users/<int:pk>/active-toggle/", panel_views.user_toggle_active, name="panel_user_toggle"),
     path("panel/users/<int:pk>/delete/", panel_views.user_delete, name="panel_user_delete"),
+    path("panel/settings/", panel_views.site_settings, name="panel_site_settings"),
+    path("panel/clear-sw/", panel_views.clear_service_worker, name="panel_clear_sw"),
 ]

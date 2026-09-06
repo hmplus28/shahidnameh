@@ -1,21 +1,32 @@
 (function () {
-  const navToggle = document.querySelector('[data-nav-toggle]');
-  const mobileNavToggle = document.querySelector('[data-nav-toggle-mobile]');
-  const navigation = document.getElementById('primary-navigation');
-  function setNavigation(open) {
-    if (!navigation) return;
-    document.body.classList.toggle('nav-open', open);
-    if (navToggle) navToggle.setAttribute('aria-expanded', String(open));
-    if (mobileNavToggle) mobileNavToggle.setAttribute('aria-expanded', String(open));
-  }
-  function toggleNavigation() {
-    setNavigation(!document.body.classList.contains('nav-open'));
-  }
-  if (navToggle) navToggle.addEventListener('click', toggleNavigation);
-  if (mobileNavToggle) mobileNavToggle.addEventListener('click', toggleNavigation);
-  document.querySelectorAll('[data-nav-close]').forEach((el) => el.addEventListener('click', () => setNavigation(false)));
-  if (navigation) navigation.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setNavigation(false)));
+  /* More Sheet */
+  const moreToggle = document.querySelector('[data-more-toggle]');
+  const moreSheet = document.querySelector('[data-more-sheet]');
+  function openMore() { if (moreSheet) { moreSheet.hidden = false; document.body.style.overflow = 'hidden'; } }
+  function closeMore() { if (moreSheet) { moreSheet.hidden = true; document.body.style.overflow = ''; } }
+  if (moreToggle) moreToggle.addEventListener('click', openMore);
+  document.querySelectorAll('[data-more-close]').forEach((el) => el.addEventListener('click', closeMore));
 
+  /* Toggle Slider Expand/Collapse */
+  document.querySelectorAll('[data-toggle-slider]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const sliderId = btn.dataset.toggleSlider;
+      const slider = document.querySelector(`[data-slider-id="${sliderId}"]`);
+      if (!slider) return;
+      const isExpanded = slider.classList.toggle('is-expanded');
+      btn.textContent = isExpanded ? 'بستن ←' : 'مشاهده همه ←';
+    });
+  });
+
+  /* Search Popup */
+  const searchToggle = document.querySelector('[data-search-toggle]');
+  const searchPopup = document.querySelector('[data-search-popup]');
+  function openSearch() { if (searchPopup) { searchPopup.hidden = false; document.body.style.overflow = 'hidden'; } }
+  function closeSearch() { if (searchPopup) { searchPopup.hidden = true; document.body.style.overflow = ''; } }
+  if (searchToggle) searchToggle.addEventListener('click', openSearch);
+  document.querySelectorAll('[data-search-close]').forEach((el) => el.addEventListener('click', closeSearch));
+
+  /* Tabs */
   const tabs = Array.from(document.querySelectorAll('[data-tab-target]'));
   const panels = Array.from(document.querySelectorAll('[data-tab-panel]'));
   function activateTab(tab) {
@@ -40,6 +51,7 @@
     requestAnimationFrame(() => hashTab.scrollIntoView({ block: 'start', behavior: 'smooth' }));
   }
 
+  /* Memory Filter */
   const memoryButtons = Array.from(document.querySelectorAll('[data-memory-filter]'));
   const memoryCards = Array.from(document.querySelectorAll('[data-memory-category]'));
   memoryButtons.forEach((button) => button.addEventListener('click', () => {
@@ -48,6 +60,7 @@
     memoryCards.forEach((card) => { card.hidden = category !== 'all' && card.dataset.memoryCategory !== category; });
   }));
 
+  /* Async Filter */
   const filterForm = document.querySelector('[data-async-filter]');
   const resultRegion = document.getElementById('martyr-results');
   const filterStatus = document.getElementById('filter-status');
@@ -58,46 +71,93 @@
     const url = `${filterForm.action}?${parameters.toString()}`;
     resultRegion.setAttribute('aria-busy', 'true');
     resultRegion.classList.add('is-loading');
-    if (filterStatus) filterStatus.textContent = 'در حال به‌روزرسانی نتایج…';
     try {
       const response = await fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
       if (!response.ok) throw new Error('request failed');
       resultRegion.innerHTML = await response.text();
       window.history.replaceState({}, '', url);
-      if (filterStatus) filterStatus.textContent = 'نتایج بدون بارگذاری مجدد به‌روزرسانی شد.';
     } catch (_) { filterForm.submit(); }
     finally { resultRegion.removeAttribute('aria-busy'); resultRegion.classList.remove('is-loading'); }
   }
   if (filterForm) {
     filterForm.addEventListener('submit', (event) => { event.preventDefault(); refreshResults(); });
-    filterForm.querySelectorAll('select,input[type="date"]').forEach((field) => field.addEventListener('change', refreshResults));
+    filterForm.querySelectorAll('select').forEach((field) => field.addEventListener('change', refreshResults));
     filterForm.querySelectorAll('input[type="text"]').forEach((field) => field.addEventListener('input', () => { window.clearTimeout(timer); timer = window.setTimeout(refreshResults, 380); }));
-    const reset = document.querySelector('[data-filter-reset]');
-    if (reset) reset.addEventListener('click', () => { filterForm.reset(); refreshResults(); });
   }
 
+  /* PWA Install */
   const installCard = document.querySelector('[data-install-card]');
-  const installButton = document.querySelector('[data-install-app]');
+  const sheetInstallBtns = document.querySelectorAll('[data-install-app]');
   const connectionStatus = document.querySelector('[data-pwa-status]');
   let deferredInstallPrompt;
+
+  // Check if PWA is already installed
+  const isPWAInstalled = localStorage.getItem('pwaInstalled') === 'true';
+  
+  // Check if popup was shown today
+  function shouldShowInstallPopup() {
+    const lastShown = localStorage.getItem('pwaPopupLastShown');
+    if (!lastShown) return true;
+    
+    const lastDate = new Date(lastShown);
+    const today = new Date();
+    const diffTime = Math.abs(today - lastDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    return diffDays >= 1;
+  }
+
+  // Function to show install popup
+  function showInstallPopup() {
+    if (installCard && !isPWAInstalled && shouldShowInstallPopup()) {
+      installCard.hidden = false;
+      localStorage.setItem('pwaPopupLastShown', new Date().toISOString());
+    }
+  }
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
-    if (installCard) installCard.hidden = false;
-  });
-  if (installButton) installButton.addEventListener('click', async () => {
-    if (!deferredInstallPrompt) return;
-    await deferredInstallPrompt.prompt();
-    const choice = await deferredInstallPrompt.userChoice;
-    if (choice.outcome === 'accepted' && installCard) installCard.hidden = true;
-    deferredInstallPrompt = null;
-  });
-  window.addEventListener('appinstalled', () => {
-    deferredInstallPrompt = null;
-    if (installCard) installCard.hidden = true;
+    sheetInstallBtns.forEach((btn) => { btn.style.display = ''; });
+    showInstallPopup();
   });
 
+  function handleInstallClick() {
+    if (deferredInstallPrompt) {
+      const prompt = deferredInstallPrompt;
+      prompt.prompt().then(() => prompt.userChoice).then((choice) => {
+        if (choice && choice.outcome === 'accepted') {
+          localStorage.setItem('pwaInstalled', 'true');
+          if (installCard) installCard.hidden = true;
+          sheetInstallBtns.forEach((btn) => { btn.style.display = 'none'; });
+        }
+        deferredInstallPrompt = null;
+      });
+    } else {
+      if (installCard) installCard.hidden = true;
+    }
+  }
+  sheetInstallBtns.forEach((btn) => btn.addEventListener('click', handleInstallClick));
+
+  const installCloseBtns = document.querySelectorAll('[data-install-close]');
+  installCloseBtns.forEach((btn) => btn.addEventListener('click', () => {
+    if (installCard) installCard.hidden = true;
+  }));
+  
+  window.addEventListener('appinstalled', () => {
+    localStorage.setItem('pwaInstalled', 'true');
+    deferredInstallPrompt = null;
+    if (installCard) installCard.hidden = true;
+    sheetInstallBtns.forEach((btn) => { btn.style.display = 'none'; });
+  });
+
+  // Hide install UI if already installed
+  if (isPWAInstalled) {
+    if (installCard) installCard.hidden = true;
+    sheetInstallBtns.forEach((btn) => { btn.style.display = 'none'; });
+  }
+
+  /* Network Status */
   function updateNetworkStatus() {
     if (!connectionStatus) return;
     const online = navigator.onLine;
@@ -109,6 +169,51 @@
   window.addEventListener('offline', updateNetworkStatus);
   updateNetworkStatus();
 
+  /* Background Music */
+  const musicControl = document.querySelector('[data-bg-music]');
+  const musicToggle = document.querySelector('[data-music-toggle]');
+  const bgMusic = document.getElementById('bg-music');
+  const playIcon = musicToggle ? musicToggle.querySelector('.play-icon') : null;
+  const stopIcon = musicToggle ? musicToggle.querySelector('.stop-icon') : null;
+  let musicPlaying = sessionStorage.getItem('musicPlaying') === 'true';
+
+  function updateMusicState() {
+    if (!musicToggle || !bgMusic) return;
+    musicToggle.classList.toggle('is-playing', musicPlaying);
+    if (playIcon) playIcon.style.display = musicPlaying ? 'none' : 'block';
+    if (stopIcon) stopIcon.style.display = musicPlaying ? 'block' : 'none';
+    sessionStorage.setItem('musicPlaying', musicPlaying);
+    if (musicPlaying) {
+      bgMusic.play().catch(() => { musicPlaying = false; updateMusicState(); });
+    } else {
+      bgMusic.pause();
+    }
+  }
+
+  if (musicToggle && bgMusic) {
+    if (musicControl) musicControl.hidden = false;
+    musicToggle.addEventListener('click', () => {
+      musicPlaying = !musicPlaying;
+      updateMusicState();
+    });
+    if (musicPlaying) updateMusicState();
+  }
+
+  /* Ziyaratnama Fullscreen */
+  const fullscreenToggle = document.querySelector('[data-fullscreen-toggle]');
+  if (fullscreenToggle) {
+    fullscreenToggle.addEventListener('click', () => {
+      const videoContainer = document.querySelector('.ziyaratnama-video');
+      if (!videoContainer) return;
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        videoContainer.requestFullscreen().catch(() => {});
+      }
+    });
+  }
+
+  /* Service Worker */
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('/service-worker.js', { scope: '/' }).catch(() => undefined));
   }

@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model, views as auth_views
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 
@@ -524,3 +525,44 @@ def user_delete(request, pk):
         target.delete()
         messages.success(request, f"کاربر «{name}» حذف شد.")
     return redirect("martyrs:panel_user_list")
+
+
+@panel_access
+@superuser_only
+def site_settings(request):
+    from .models import SiteSettings
+    from .panel_forms import SiteSettingsForm
+
+    obj = SiteSettings.load()
+    if request.method == "POST":
+        form = SiteSettingsForm(request.POST, request.FILES, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "تنظیمات سایت ذخیره شد.")
+            return redirect("martyrs:panel_site_settings")
+    else:
+        form = SiteSettingsForm(instance=obj)
+    return render(request, "panel/site_settings.html", {"form": form})
+
+
+@panel_access
+@superuser_only
+def clear_service_worker(request):
+    js = """
+(function(){
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(function(regs){
+      regs.forEach(function(r){ r.unregister(); });
+    });
+  }
+  if('caches' in window){
+    caches.keys().then(function(names){
+      names.forEach(function(n){ caches.delete(n); });
+    });
+  }
+  document.open();
+  document.write('<html lang="fa" dir="rtl"><head><meta charset="utf-8"><title>پاک‌سازی</title></head><body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif;background:#f3f6f1;color:#173f3d;text-align:center"><div><h1>✅ سرویس‌ورکر و کش پاک شد</h1><p>صفحه را ببندید و دوباره سایت را باز کنید.</p></div></body></html>');
+  document.close();
+})();
+"""
+    return HttpResponse(js, content_type="application/javascript; charset=utf-8")

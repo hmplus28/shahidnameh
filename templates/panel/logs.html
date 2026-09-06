@@ -2,23 +2,41 @@
 {% load jalali_extras %}
 {% block title %}تاریخچه تغییرات | پنل مدیریت{% endblock %}
 {% block content %}
-<header class="panel-head"><div><h1>تاریخچه تغییرات</h1><p>ثبت همه افزودن‌ها، ویرایش‌ها و حذف‌های محتوا</p></div></header>
-<section class="martyr-table-wrap">
-<table class="martyr-table">
-  <thead><tr><th>زمان</th><th>کاربر</th><th>بخش</th><th>موضوع</th><th>عملیات</th><th>توضیح</th></tr></thead>
-  <tbody>
+<header class="panel-head">
+  <div>
+    <h1>تاریخچه تغییرات</h1>
+    <p>ثبت همه افزودن‌ها، ویرایش‌ها و حذف‌های محتوا</p>
+  </div>
+</header>
+
+<div class="log-cards">
   {% for log in page_obj.object_list %}
-    <tr>
-      <td>{{ log.action_time|jalali_datetime }}</td>
-      <td>{{ log.user.get_full_name|default:log.user.username }}</td>
-      <td>{{ log.content_type.name }}</td>
-      <td>{{ log.object_repr|default:"—" }}</td>
-      <td>{% if log.action_flag == 1 %}<span class="tag is-ok">افزودن</span>{% elif log.action_flag == 2 %}<span class="tag">ویرایش</span>{% else %}<span class="tag is-danger-tag">حذف</span>{% endif %}</td>
-      <td>{{ log.change_message|default:"—" }}</td>
-    </tr>
-  {% empty %}<tr><td colspan="6" class="empty-note">تغییری ثبت نشده است.</td></tr>{% endfor %}
-  </tbody>
-</table>
-</section>
-{% if page_obj.has_other_pages %}<nav class="pager">{% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">قبلی</a>{% endif %}<span>صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span>{% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">بعدی</a>{% endif %}</nav>{% endif %}
+  <div class="log-card">
+    <div class="log-card-header">
+      <span class="log-card-action">
+        {% if log.action_flag == 1 %}<span class="tag is-ok">افزودن</span>{% elif log.action_flag == 2 %}<span class="tag">ویرایش</span>{% else %}<span class="tag is-danger-tag">حذف</span>{% endif %}
+      </span>
+      <span class="log-card-time">{{ log.action_time|jalali_datetime }}</span>
+    </div>
+    <div class="log-card-body">
+      <h3>{{ log.object_repr|default:"—" }}</h3>
+      <small>{{ log.content_type.name }}</small>
+    </div>
+    <div class="log-card-footer">
+      <span class="log-card-user">{{ log.user.get_full_name|default:log.user.username }}</span>
+      {% if log.change_message %}<span class="log-card-msg">{{ log.change_message }}</span>{% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <div class="empty-note">تغییری ثبت نشده است.</div>
+  {% endfor %}
+</div>
+
+{% if page_obj.has_other_pages %}
+<nav class="pager">
+  {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">قبلی</a>{% endif %}
+  <span>صفحه {{ page_obj.number|fa }} از {{ page_obj.paginator.num_pages|fa }}</span>
+  {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">بعدی</a>{% endif %}
+</nav>
+{% endif %}
 {% endblock %}

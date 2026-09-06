@@ -1,39 +1,95 @@
 {% extends "base.html" %}
-{% load jalali_tags static %}
-{% block extra_head %}{{ filter_form.media }}{% endblock %}
+{% load jalali_extras static %}
 {% block title %}فهرست شهدا | شهیدنامه{% endblock %}
 {% block content %}
-<section class="page-hero page-hero-war">
-  <div class="page-hero-bg" aria-hidden="true">
-    <img src="{% static 'images/city-silhouette.png' %}" alt="" width="1200" height="180">
+<div class="page-bg page-bg-directory">
+
+<section class="shell home-section">
+  <div class="section-header">
+    <div><p class="eyebrow">چهره‌های ماندگار</p><h2>شهدای شاخص</h2></div>
+    <button type="button" class="text-link" data-toggle-slider="featured">مشاهده همه ←</button>
   </div>
-  <div class="shell">
-    <div class="page-hero-content">
-      <div class="page-hero-icon" aria-hidden="true">{% include "icons/icon.html" with name="crescent-star" size=28 %}</div>
-      <p class="eyebrow">جست‌وجو و مرور</p>
-      <h1>فهرست شهدا</h1>
-      <p>نام‌ها، روایت‌ها و نشانه‌های هر زندگی را با جست‌وجوی دقیق پیدا کنید.</p>
-      <div class="page-hero-decor" aria-hidden="true">
-        {% include "icons/icon.html" with name="star-islamic" size=18 %}
-        <span class="hero-decor-line"></span>
-        {% include "icons/icon.html" with name="star-islamic" size=18 %}
+  <div class="hs" data-hs data-slider-id="featured">
+    {% for martyr in featured_martyrs %}
+      <a class="hs-card" href="{{ martyr.get_absolute_url }}">
+        <div class="hs-card-img">
+          {% if martyr.profile_image %}
+            <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
+          {% else %}
+            <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+          {% endif %}
+        </div>
+        <div class="hs-card-body">
+          <h3>{{ martyr.full_name }}</h3>
+          {% if martyr.martyrdom_date %}<time>{{ martyr.martyrdom_date|jalali_date:"%Y/%m/%d" }}</time>{% endif %}
+        </div>
+      </a>
+    {% empty %}
+      <div class="empty-panel">
+        <span class="empty-symbol">{% include "icons/icon.html" with name="star-islamic" size=32 %}</span>
+        <h3>پرونده‌ای ثبت نشده</h3>
       </div>
-    </div>
+    {% endfor %}
   </div>
 </section>
-<section class="directory shell">
-  <aside class="filter-panel"><div class="filter-title"><div><span class="section-kicker">یافتن روایت</span><h2>فیلترها</h2></div><button type="button" class="filter-reset" data-filter-reset>پاک کردن</button></div>
-    <form id="directory-filter" action="{% url 'martyrs:directory' %}" method="get" data-async-filter>
-      <div class="filter-field wide"><label for="{{ filter_form.q.id_for_label }}">{{ filter_form.q.label }}</label>{{ filter_form.q }}</div>
-      <div class="filter-field"><label for="{{ filter_form.province.id_for_label }}">{{ filter_form.province.label }}</label>{{ filter_form.province }}</div>
-      <div class="filter-field"><label for="{{ filter_form.city.id_for_label }}">{{ filter_form.city.label }}</label>{{ filter_form.city }}</div>
-      <div class="filter-field wide"><label for="{{ filter_form.unit.id_for_label }}">{{ filter_form.unit.label }}</label>{{ filter_form.unit }}</div>
-      <div class="filter-row"><div class="filter-field"><label for="{{ filter_form.martyrdom_from.id_for_label }}">{{ filter_form.martyrdom_from.label }}</label>{{ filter_form.martyrdom_from }}{{ filter_form.martyrdom_from.errors }}</div><div class="filter-field"><label for="{{ filter_form.martyrdom_to.id_for_label }}">{{ filter_form.martyrdom_to.label }}</label>{{ filter_form.martyrdom_to }}{{ filter_form.martyrdom_to.errors }}</div></div>
-      <div class="filter-field wide"><label for="{{ filter_form.will.id_for_label }}">{{ filter_form.will.label }}</label>{{ filter_form.will }}</div>
-      <div class="filter-field wide"><label for="{{ filter_form.memory.id_for_label }}">{{ filter_form.memory.label }}</label>{{ filter_form.memory }}</div>
-      <button class="button button-dark filter-submit" type="submit">اعمال فیلترها {% include "icons/icon.html" with name="arrow-left" size=14 %}</button>
-    </form>
-  </aside>
-  <div class="directory-results-wrap"><div class="results-intro"><p class="eyebrow">نتیجه جست‌وجو</p><h2>پرونده‌های یافت‌شده</h2></div><p id="filter-status" class="filter-status" aria-live="polite"></p><div id="martyr-results" aria-live="polite">{% include "martyrs/partials/martyr_results.html" %}</div></div>
+
+<section class="shell home-section">
+  <div class="section-header">
+    <div><p class="eyebrow">تازه‌ترین‌ها</p><h2>آخرین شهدا</h2></div>
+    <button type="button" class="text-link" data-toggle-slider="latest">مشاهده همه ←</button>
+  </div>
+  <div class="hs" data-hs data-slider-id="latest">
+    {% for martyr in latest_martyrs %}
+      <a class="hs-card" href="{{ martyr.get_absolute_url }}">
+        <div class="hs-card-img">
+          {% if martyr.profile_image %}
+            <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
+          {% else %}
+            <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+          {% endif %}
+        </div>
+        <div class="hs-card-body">
+          <h3>{{ martyr.full_name }}</h3>
+          {% if martyr.martyrdom_date %}<time>{{ martyr.martyrdom_date|jalali_date:"%Y/%m/%d" }}</time>{% endif %}
+        </div>
+      </a>
+    {% empty %}
+      <div class="empty-panel">
+        <span class="empty-symbol">{% include "icons/icon.html" with name="search" size=32 %}</span>
+        <h3>پرونده‌ای یافت نشد</h3>
+      </div>
+    {% endfor %}
+  </div>
 </section>
+
+<section class="shell home-section">
+  <div class="section-header">
+    <div><p class="eyebrow">بر اساس تاریخ</p><h2>آخرین شهادت‌ها</h2></div>
+    <button type="button" class="text-link" data-toggle-slider="recent">مشاهده همه ←</button>
+  </div>
+  <div class="hs" data-hs data-slider-id="recent">
+    {% for martyr in recent_martyrs %}
+      <a class="hs-card" href="{{ martyr.get_absolute_url }}">
+        <div class="hs-card-img">
+          {% if martyr.profile_image %}
+            <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
+          {% else %}
+            <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+          {% endif %}
+        </div>
+        <div class="hs-card-body">
+          <h3>{{ martyr.full_name }}</h3>
+          {% if martyr.martyrdom_date %}<time>{{ martyr.martyrdom_date|jalali_date:"%Y/%m/%d" }}</time>{% endif %}
+        </div>
+      </a>
+    {% empty %}
+      <div class="empty-panel">
+        <span class="empty-symbol">{% include "icons/icon.html" with name="search" size=32 %}</span>
+        <h3>پرونده‌ای یافت نشد</h3>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+</div>
 {% endblock %}

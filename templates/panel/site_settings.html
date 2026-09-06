@@ -1,0 +1,52 @@
+{% extends "panel/base_panel.html" %}
+{% load static %}
+{% block title %}تنظیمات سایت | پنل مدیریت شهیدنامه{% endblock %}
+{% block content %}
+<div class="panel-head">
+  <div>
+    <h1>تنظیمات سایت</h1>
+    <p>مدیریت موزیک پس‌زمینه و تنظیمات عمومی سایت.</p>
+  </div>
+</div>
+
+<div class="settings-card">
+  <h2>{% include "icons/icon.html" with name="play" size=20 %} موزیک پس‌زمینه</h2>
+  <p class="settings-desc">موزیک پس‌زمینه در صفحه اصلی سایت پخش می‌شود. می‌توانید لینک مستقیم فایل MP3 وارد کنید یا فایل صوتی آپلود کنید.</p>
+  
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="field field-check">
+      {{ form.music_enabled }}
+      <span>فعال‌سازی موزیک پس‌زمینه</span>
+    </div>
+    
+    <div class="field">
+      <span>لینک مستقیم فایل صوتی</span>
+      {{ form.music_url }}
+      {% if form.music_url.errors %}<ul class="errorlist">{% for e in form.music_url.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+    </div>
+    
+    <div class="field">
+      <span>یا آپلود فایل صوتی</span>
+      {{ form.music_file }}
+      {% if form.music_file.errors %}<ul class="errorlist">{% for e in form.music_file.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+      {% if form.instance.music_file %}
+        <small class="field-hint">فایل فعلی: {{ form.instance.music_file.name }}</small>
+      {% endif %}
+    </div>
+    
+    <div class="settings-actions">
+      <button type="submit" class="panel-btn">{% include "icons/icon.html" with name="plus" size=16 %} ذخیره تنظیمات</button>
+    </div>
+  </form>
+</div>
+
+<div class="settings-card" style="margin-top:16px">
+  <h2>{% include "icons/icon.html" with name="offline" size=20 %} سرویس‌ورکر و کش</h2>
+  <p class="settings-desc">با زدن دکمه زیر، سرویس‌ورکر و کش ذخیره‌شده در مرورگر همه کاربران پاک می‌شود. بعد از این کار، کاربران باید صفحه را رفرش کنند تا نسخه جدید سایت بارگذاری شود.</p>
+  <div class="settings-actions">
+    <a class="panel-btn is-danger" href="{% url 'martyrs:panel_clear_sw' %}" target="_blank">{% include "icons/icon.html" with name="close" size=16 %} پاک‌سازی سرویس‌ورکر</a>
+  </div>
+</div>
+{% endblock %}

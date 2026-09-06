@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}پنل مدیریت شهیدنامه{% endblock %}</title>
-    <link rel="icon" type="image/svg+xml" href="{% static 'icons/icon.svg' %}">
+    <link rel="icon" type="image/jpeg" href="{% static 'images/bg/logo-main.jpg' %}">
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/panel.css' %}">
     {{ form.media }}
@@ -18,7 +18,7 @@
     <div class="panel-layout">
       <aside class="panel-sidebar">
         <a class="panel-brand" href="{% url 'martyrs:panel_home' %}">
-          <span class="brand-mark" aria-hidden="true"><span></span></span>
+          <img class="panel-brand-logo" src="{% static 'images/bg/logo-main.jpg' %}" alt="شهیدنامه">
           <span><strong>شهیدنامه</strong><small>پنل مدیریت</small></span>
         </a>
         <nav aria-label="بخش‌های پنل">
@@ -27,6 +27,7 @@
           {% if perms.martyrs.add_martyr %}<a href="{% url 'martyrs:panel_martyr_new' %}"{% if request.resolver_match.url_name == 'panel_martyr_new' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="plus" size=18 %}</span> ثبت شهید جدید</a>{% endif %}
           <a href="{% url 'martyrs:panel_logs' %}"{% if request.resolver_match.url_name == 'panel_logs' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="clock" size=18 %}</span> تاریخچه تغییرات</a>
           {% if request.user.is_superuser %}<a href="{% url 'martyrs:panel_user_list' %}"{% if request.resolver_match.url_name == 'panel_user_list' or request.resolver_match.url_name == 'panel_user_new' or request.resolver_match.url_name == 'panel_user_edit' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="users" size=18 %}</span> کاربران و نقش‌ها</a>{% endif %}
+          {% if request.user.is_superuser %}<a href="{% url 'martyrs:panel_site_settings' %}"{% if request.resolver_match.url_name == 'panel_site_settings' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="play" size=18 %}</span> تنظیمات سایت</a>{% endif %}
           <div class="panel-nav-divider" aria-hidden="true"></div>
           <a href="{% url 'martyrs:home' %}" target="_blank" class="panel-nav-site">مشاهده سایت {% include "icons/icon.html" with name="external" size=14 %}</a>
           <form method="post" action="{% url 'martyrs:panel_logout' %}">{% csrf_token %}<button type="submit" class="panel-nav-logout"><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="logout" size=16 %}</span> خروج</button></form>

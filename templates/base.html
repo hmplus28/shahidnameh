@@ -17,8 +17,8 @@
     <meta property="og:locale" content="fa_IR">
     {% block og_extra %}{% endblock %}
     <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
-    <link rel="icon" type="image/svg+xml" href="{% static 'icons/icon.svg' %}">
-    <link rel="apple-touch-icon" href="{% static 'icons/icon.svg' %}">
+    <link rel="icon" type="image/jpeg" href="{% static 'images/bg/logo-main.jpg' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/bg/logo-main.jpg' %}">
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     {% block extra_head %}{% endblock %}
@@ -28,92 +28,109 @@
     <a class="skip-link" href="#main-content">عبور به محتوای اصلی</a>
 
     <div class="app-frame">
-      <!-- Sidebar (ثابت در دسکتاپ، کشویی در موبایل) -->
-      <aside class="app-sidebar" id="primary-navigation" aria-label="پیمایش اصلی">
-        <div class="app-sidebar-head">
-          <a class="brand" href="{% url 'martyrs:home' %}" aria-label="خانه شهیدنامه">
-            <span class="brand-mark" aria-hidden="true"><span></span></span>
-            <span class="brand-copy"><strong>شهیدنامه</strong><small>میراث ماندگار</small></span>
-          </a>
-          <button type="button" class="nav-close" data-nav-close aria-label="بستن منو">{% include "icons/icon.html" with name="close" size=18 %}</button>
-        </div>
-        <nav class="app-nav">
-          <a href="{% url 'martyrs:home' %}" class="app-nav-item"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}>
-            <span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="home" size=20 %}</span>
-            <span>خانه</span>
-          </a>
-          <a href="{% url 'martyrs:directory' %}" class="app-nav-item"{% if request.resolver_match.url_name == 'directory' or request.resolver_match.url_name == 'detail' %} aria-current="page"{% endif %}>
-            <span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="search" size=20 %}</span>
-            <span>فهرست شهدا</span>
-          </a>
-          <a href="{% url 'martyrs:offline' %}" class="app-nav-item"{% if request.resolver_match.url_name == 'offline' %} aria-current="page"{% endif %}>
-            <span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="offline" size=20 %}</span>
-            <span>دسترسی آفلاین</span>
-          </a>
-          <a href="#about" class="app-nav-item" data-nav-close>
-            <span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="mihrab" size=20 %}</span>
-            <span>درباره پلتفرم</span>
-          </a>
-        </nav>
-        <div class="app-sidebar-foot">
-          <a class="admin-link" href="{% url 'martyrs:panel_home' %}">
-            <span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="external" size=16 %}</span>
-            <span>ورود مدیران</span>
-          </a>
-          <p class="app-credit">توسعه توسط<br><a href="https://daynacode.ir" target="_blank" rel="noopener">تیم دایناکد</a></p>
-        </div>
-      </aside>
-      <div class="app-overlay" data-nav-close aria-hidden="true"></div>
-
-      <!-- محتوا + هدر -->
       <div class="app-main">
         <header class="app-header">
-          <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation" data-nav-toggle>
-            <span class="visually-hidden">باز و بسته‌کردن منو</span><i></i><i></i><i></i>
-          </button>
-          <a class="app-header-title" href="{% url 'martyrs:home' %}">
-            <span class="brand-mark small" aria-hidden="true"><span></span></span>
-            <strong>شهیدنامه</strong>
+          <a class="app-header-logo" href="{% url 'martyrs:home' %}">
+            <img class="header-logo-img" src="{% static 'images/bg/logo-main.jpg' %}" alt="شهیدنامه" loading="eager">
           </a>
+          <a class="app-header-title" href="{% url 'martyrs:home' %}">
+            <img class="header-quran-icon" src="{% static 'images/bg/quran-header.png' %}" alt="آیه قرآن" loading="eager">
+          </a>
+          <nav class="desktop-nav" aria-label="پیمایش">
+            <a href="{% url 'martyrs:home' %}">خانه</a>
+            <a href="{% url 'martyrs:directory' %}">فهرست شهدا</a>
+            <a href="{% url 'martyrs:ziyaratnama' %}">زیارت نامه</a>
+            <a href="{% url 'martyrs:panel_home' %}">ورود مدیران</a>
+          </nav>
           <div class="app-header-actions">
-            <a href="{% url 'martyrs:directory' %}" class="icon-btn" aria-label="جست‌وجو">{% include "icons/icon.html" with name="search" size=22 %}</a>
-            <a href="{% url 'martyrs:panel_home' %}" class="icon-btn" aria-label="ورود مدیران">{% include "icons/icon.html" with name="external" size=20 %}</a>
+            <button type="button" class="icon-btn" aria-label="جست‌وجو" data-search-toggle>{% include "icons/icon.html" with name="search" size=22 %}</button>
           </div>
         </header>
 
         <main id="main-content" class="app-content">{% block content %}{% endblock %}</main>
-
-        <footer id="about" class="app-footer">
-          <div class="footer-grid">
-            <div>
-              <div class="footer-brand"><span class="brand-mark small" aria-hidden="true"><span></span></span><strong>شهیدنامه</strong></div>
-              <p>سامانه‌ای برای پاسداشت دقیق و محترمانه زندگی، خاطرات و میراث شهدای ایران.</p>
-            </div>
-            <div class="footer-note"><span class="note-line"></span><p>هر پرونده، روایت یک زندگی است؛ با احترام ثبت کنیم و با امانت حفظ کنیم.</p></div>
-          </div>
-          <div class="footer-bottom">
-            <span>© {% jalali_year %} شهیدنامه</span>
-            <span class="footer-credit">توسعه توسط <a href="https://daynacode.ir" target="_blank" rel="noopener">تیم توسعه دایناکد</a></span>
-            <a href="{% url 'martyrs:offline' %}">دسترسی آفلاین</a>
-          </div>
-        </footer>
       </div>
     </div>
 
-    <!-- نوار ناوبری پایین (در همه اندازه‌ها) -->
+    <!-- نوار پایین -->
     <nav class="app-bottom-nav" aria-label="پیمایش سریع">
-      <a href="{% url 'martyrs:home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}><span class="bot-icn" aria-hidden="true">{% include "icons/icon.html" with name="home" size=22 %}</span><small>خانه</small></a>
-      <a href="{% url 'martyrs:directory' %}"{% if request.resolver_match.url_name == 'directory' or request.resolver_match.url_name == 'detail' %} aria-current="page"{% endif %}><span class="bot-icn" aria-hidden="true">{% include "icons/icon.html" with name="search" size=22 %}</span><small>جست‌وجو</small></a>
-      <a href="{% url 'martyrs:offline' %}"{% if request.resolver_match.url_name == 'offline' %} aria-current="page"{% endif %}><span class="bot-icn" aria-hidden="true">{% include "icons/icon.html" with name="offline" size=22 %}</span><small>آفلاین</small></a>
-      <button type="button" aria-label="باز کردن منو" data-nav-toggle-mobile><span class="bot-icn" aria-hidden="true">{% include "icons/icon.html" with name="menu" size=22 %}</span><small>بیشتر</small></button>
+      <a href="{% url 'martyrs:home' %}"{% if request.resolver_match.url_name == 'home' %} aria-current="page"{% endif %}>
+        <span class="bot-icn" aria-hidden="true">{% include "icons/icon.html" with name="home" size=22 %}</span>
+        <small>خانه</small>
+      </a>
+      <a href="{% url 'martyrs:directory' %}"{% if request.resolver_match.url_name == 'directory' or request.resolver_match.url_name == 'detail' %} aria-current="page"{% endif %}>
+        <span class="bot-icn" aria-hidden="true"><img src="{% static 'images/bg/tulip-icon.jpg' %}" alt="" class="tulip-icon"></span>
+        <small>فهرست شهدا</small>
+      </a>
+      <button type="button" aria-label="بیشتر" data-more-toggle>
+        <span class="bot-icn" aria-hidden="true"><img src="{% static 'images/bg/logo-main.jpg' %}" alt="" class="nav-icon-img"></span>
+        <small>بیشتر</small>
+      </button>
     </nav>
 
-    <section class="pwa-install-card" data-install-card hidden aria-live="polite">
-      <span class="pwa-install-glyph" aria-hidden="true">{% include "icons/icon.html" with name="install" size=24 %}</span>
-      <div><strong>شهیدنامه را نصب کنید</strong><small>دسترسی سریع‌تر و تجربه‌ای شبیه اپلیکیشن</small></div>
-      <button type="button" data-install-app>نصب</button>
-    </section>
+    <!-- شیت پایین — بیشتر -->
+    <div class="more-sheet" data-more-sheet hidden>
+      <div class="more-sheet-overlay" data-more-close></div>
+      <div class="more-sheet-panel">
+        <div class="more-sheet-handle"></div>
+        <div class="more-sheet-items">
+          <a href="{% url 'martyrs:ziyaratnama' %}" class="more-sheet-item">
+            <span class="more-sheet-icn">{% include "icons/icon.html" with name="star-islamic" size=22 %}</span>
+            <div><b>زیارت نامه</b><small>پخش ویدیوی زیارت نامه</small></div>
+          </a>
+          <a href="{% url 'martyrs:panel_home' %}" class="more-sheet-item">
+            <span class="more-sheet-icn">{% include "icons/icon.html" with name="admin-panel" size=22 %}</span>
+            <div><b>ورود مدیران</b><small>پنل مدیریت محتوا</small></div>
+          </a>
+          <button type="button" class="more-sheet-item" data-install-app data-more-close style="display:none">
+            <span class="more-sheet-icn">{% include "icons/icon.html" with name="install" size=22 %}</span>
+            <div><b>نصب شهیدنامه</b><small>افزودن به صفحه اصلی</small></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pwa-sheet" data-install-card>
+      <div class="pwa-sheet-backdrop" data-install-close></div>
+      <div class="pwa-sheet-panel">
+        <div class="pwa-sheet-handle"></div>
+        <button type="button" class="pwa-sheet-close" data-install-close aria-label="بستن">{% include "icons/icon.html" with name="close" size=20 %}</button>
+        <img class="pwa-sheet-logo" src="{% static 'images/bg/logo-main.jpg' %}" alt="شهیدنامه">
+        <h2>شهیدنامه را نصب کنید</h2>
+        <p>با نصب این برنامه، دسترسی سریع‌تر و تجربه‌ای شبیه اپلیکیشن خواهید داشت.</p>
+        <button type="button" class="pwa-sheet-btn" data-install-app>نصب رایگان</button>
+      </div>
+    </div>
     <p class="pwa-network-status" data-pwa-status hidden role="status"></p>
+
+    <!-- پخش موزیک پس‌زمینه -->
+    <div class="bg-music-control" data-bg-music {% if not site_settings.music_enabled %}hidden{% endif %}>
+      <button type="button" class="bg-music-btn" data-music-toggle aria-label="پخش موزیک">
+        <span class="play-icon">{% include "icons/icon.html" with name="play" size=22 %}</span>
+        <span class="stop-icon" style="display:none">{% include "icons/icon.html" with name="close" size=22 %}</span>
+      </button>
+    </div>
+    <audio id="bg-music" loop preload="none">
+      <source src="{{ site_settings.music_source }}" type="audio/mpeg">
+    </audio>
+
+    <!-- جستجو -->
+    <div class="search-popup" data-search-popup hidden>
+      <div class="search-popup-overlay" data-search-close></div>
+      <div class="search-popup-panel">
+        <div class="search-popup-handle"></div>
+        <div class="search-popup-header">
+          <h2>جست‌وجوی شهید</h2>
+          <button type="button" class="search-popup-close" data-search-close>{% include "icons/icon.html" with name="close" size=18 %}</button>
+        </div>
+        <form class="search-popup-form" action="{% url 'martyrs:directory' %}" method="get">
+          <div class="filter-field">
+            <input type="text" name="q" placeholder="نام شهید را بنویسید..." autocomplete="off">
+          </div>
+          <button class="button button-dark filter-submit" type="submit">جست‌وجو</button>
+        </form>
+      </div>
+    </div>
+
     <script src="{% static 'js/site.js' %}" defer></script>
   </body>
 </html>

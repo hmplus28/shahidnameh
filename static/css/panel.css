@@ -1,9 +1,23 @@
 .panel-body { margin:0; font-family:"Vazirmatn",sans-serif; background:#eef1ec; color:#22332f; height:100vh; height:100dvh; overflow:hidden; }
 .panel-layout { display:flex; height:100%; overflow:hidden; }
 .panel-sidebar { width:220px; flex:0 0 auto; background:#173f3d; color:#e8efe9; display:flex; flex-direction:column; padding:22px 16px; height:100%; overflow:hidden; }
-.panel-brand { display:flex; align-items:center; gap:11px; color:#fff; text-decoration:none; padding:0 8px 22px; border-bottom:1px solid rgba(255,255,255,.12); flex-shrink:0; }
-.brand-mark { width:36px; height:36px; border-radius:50% 50% 45% 45%; background:#2c6b5f; display:grid; place-items:center; box-shadow:inset 0 0 0 4px rgba(255,255,255,.12); }
-.brand-mark span { width:11px; height:18px; border:1.5px solid #d9b96a; border-radius:50% 50% 0 0; }
+.panel-brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#fff;
+  text-decoration:none;
+  padding:0 8px 20px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  flex-shrink:0;
+}
+.panel-brand-logo {
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  object-fit:contain;
+  border:2px solid rgba(255,255,255,.15);
+}
 .panel-brand strong { display:block; font-size:17px; }
 .panel-brand small { font-size:10.5px; opacity:.75; }
 .panel-sidebar nav { display:flex; flex-direction:column; gap:4px; margin-top:20px; flex:1; min-height:0; overflow-y:auto; }
@@ -17,7 +31,7 @@
 .panel-sidebar nav a:hover { background:rgba(255,255,255,.08); color:#fff; }
 .panel-sidebar nav a.is-active { background:rgba(217,185,106,.16); color:#f2dfae; font-weight:700; }
 .panel-nav-divider { height:1px; background:rgba(255,255,255,.14); margin:12px 4px; }
-.panel-nav-site { color:#cfdfd6; }
+.panel-nav-site { color:#e8d8a4; font-weight:600; }
 .panel-nav-logout { background:none; border:0; color:#f0c9c9; cursor:pointer; font-family:inherit; font-size:13.5px; padding:11px 13px; width:100%; text-align:right; border-radius:10px; transition:.15s; }
 .panel-nav-logout:hover { background:rgba(176,74,60,.25); color:#ffd9d0; }
 .panel-main { flex:1; padding:30px 36px 50px; max-width:1200px; height:100%; overflow-y:auto; }
@@ -42,7 +56,8 @@
 .panel-message.is-error { border-color:#b04a3c; color:#8c3527; }
 .panel-message.is-success { border-color:#3c8a56; }
 .panel-btn { display:inline-flex; align-items:center; gap:6px; background:#2c6b5f; color:#fff; border:0; border-radius:10px; padding:10px 20px; font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer; text-decoration:none; }
-.panel-btn svg { width:16px; height:16px; }
+.panel-btn svg { width:16px; height:16px; color:#fff; }
+.panel-btn svg * { stroke:#fff !important; }
 .mini-btn { display:inline-flex; align-items:center; gap:5px; background:#eef1ec; color:#173f3d; border:1px solid #d7ddd4; border-radius:8px; padding:6px 12px; font-family:inherit; font-size:11.5px; cursor:pointer; text-decoration:none; }
 .mini-btn svg { width:14px; height:14px; }
 .panel-link { display:inline-flex; align-items:center; gap:6px; margin-top:12px; color:#2c6b5f; font-size:12.5px; text-decoration:none; font-weight:600; }
@@ -52,6 +67,182 @@
 .panel-filter { display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
 .panel-input { border:1px solid #ccd6cc; border-radius:10px; padding:9px 13px; font-family:inherit; font-size:13.5px; background:#fff; width:100%; box-sizing:border-box; }
 .panel-filter .panel-input[type="search"] { flex:1; min-width:200px; width:auto; }
+.panel-filter .panel-input[type="search"],
+.panel-filter select {
+  height:44px;
+  min-height:44px;
+}
+
+@media (max-width:600px) {
+  .panel-filter {
+    flex-direction:column;
+  }
+  .panel-filter .panel-input[type="search"] {
+    min-width:0;
+    width:100%;
+  }
+  .panel-filter .panel-btn {
+    width:100%;
+    justify-content:center;
+  }
+}
+/* =============================================================
+   Martyr Cards — کارت‌های پرونده
+   ============================================================= */
+.martyr-cards {
+  display:grid;
+  gap:10px;
+}
+.martyr-card {
+  background:#fff;
+  border:1px solid #dde4dc;
+  border-radius:12px;
+  position:relative;
+  transition:box-shadow .15s;
+}
+.martyr-card:active {
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+.martyr-card-link {
+  display:block;
+  padding:14px 16px;
+  text-decoration:none;
+  color:#22332f;
+}
+.martyr-card-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+.martyr-card-header h3 {
+  margin:0;
+  font-size:14px;
+  color:#173f3d;
+  font-weight:700;
+}
+.martyr-card-tags {
+  display:flex;
+  gap:4px;
+  flex-shrink:0;
+}
+.martyr-card-meta {
+  display:flex;
+  gap:12px;
+  font-size:11px;
+  color:#7b8a80;
+}
+.martyr-card-actions {
+  display:flex;
+  gap:0;
+  border-top:1px solid #eef2ec;
+}
+.icon-action {
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 0;
+  background:0;
+  border:0;
+  border-right:1px solid #eef2ec;
+  color:#4a6359;
+  cursor:pointer;
+  text-decoration:none;
+  position:relative;
+  transition:background .1s,color .1s;
+  font-family:inherit;
+}
+.icon-action:last-child {
+  border-right:0;
+  border-radius:0 0 11px 0;
+}
+.icon-action:first-child {
+  border-radius:0 0 0 11px;
+}
+.icon-action svg {
+  width:18px;
+  height:18px;
+  flex-shrink:0;
+  display:block;
+}
+.icon-action:hover {
+  background:#f3f6f1;
+  color:#173f3d;
+}
+.icon-action:active {
+  background:#e8efe9;
+}
+.icon-action.is-feature {
+  color:#8a6d1f;
+}
+.icon-action.is-feature:hover {
+  background:#f6ecc9;
+}
+.icon-action.is-publish {
+  color:#256b3a;
+}
+.icon-action.is-publish:hover {
+  background:#dff0e2;
+}
+/* Tooltip — inside viewport */
+.icon-action::after {
+  content:attr(title);
+  position:absolute;
+  bottom:100%;
+  left:50%;
+  transform:translateX(-50%);
+  background:#22332f;
+  color:#fff;
+  font-size:11px;
+  font-weight:500;
+  padding:5px 10px;
+  border-radius:6px;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+  z-index:20;
+  margin-bottom:6px;
+}
+.icon-action::before {
+  content:"";
+  position:absolute;
+  bottom:100%;
+  left:50%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-top-color:#22332f;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+  z-index:20;
+  margin-bottom:0;
+}
+.icon-action:hover::after,
+.icon-action:hover::before {
+  opacity:1;
+}
+@media (hover:none) {
+  .icon-action:active::after,
+  .icon-action:active::before {
+    opacity:1;
+  }
+}
+
+@media (min-width:600px) {
+  .martyr-cards {
+    grid-template-columns:1fr 1fr;
+  }
+}
+@media (min-width:960px) {
+  .martyr-cards {
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+
+/* Table for desktop */
 .martyr-table-wrap { overflow-x:auto; }
 .martyr-table { width:100%; border-collapse:collapse; background:#fff; border-radius:16px; overflow:hidden; border:1px solid #dde4dc; font-size:13px; }
 .martyr-table th { background:#f3f6f1; text-align:right; padding:12px 14px; color:#4c5f55; font-size:12px; }
@@ -95,34 +286,160 @@ textarea.panel-input { min-height:90px; resize:vertical; }
 .inline-form .panel-input { width:100%; box-sizing:border-box; }
 .panel-columns { align-items:start; }
 .panel-card h2 { padding-bottom:10px; border-bottom:1px solid #eef2ec; margin-bottom:16px; }
-.field-check { flex-direction:row; align-items:center; gap:9px; min-height:44px; }
-.field-check span { margin:0 !important; }
 .confirm-actions { display:flex; gap:10px; margin-top:18px; }
-.login-wrap { min-height:100vh; min-height:100dvh; display:grid; place-items:center; padding:24px; background:linear-gradient(135deg,#12312f 0%,#173f3d 45%,#285c50 100%); position:relative; overflow:hidden; }
-.login-wrap:before { content:"✦"; position:absolute; top:-40px; left:-30px; font-size:260px; color:rgba(217,185,106,.07); pointer-events:none; }
-.login-wrap:after { content:""; position:absolute; bottom:-120px; right:-80px; width:340px; height:340px; border:1.5px solid rgba(255,255,255,.08); border-radius:50%; pointer-events:none; }
-body.is-login { height:auto; overflow:auto; }
-body.is-login .panel-layout, body.is-login .panel-main { display:block; height:auto; max-height:none; overflow:visible; }
-body.is-login .panel-sidebar, body.is-login .panel-nav-toggle, body.is-login .panel-overlay { display:none !important; }
-body.is-login .panel-main { max-width:none; padding:0; }
-.login-card { position:relative; z-index:1; background:#fffdf8; border-radius:22px; border:1px solid rgba(23,63,61,.14); padding:44px 42px 38px; width:min(400px,100%); display:flex; flex-direction:column; gap:15px; box-shadow:0 26px 60px rgba(10,28,26,.4); text-align:right; }
-.login-card .brand-mark { width:52px; height:52px; margin-bottom:2px; background:#2c6b5f; display:grid; place-items:center; border-radius:14px; }
-.login-card .brand-mark img { width:42px; height:42px; border-radius:10px; }
-.login-card h1 { margin:0; font-size:20px; color:#173f3d; }
-.login-card p { margin:0; font-size:13px; color:#68786f; line-height:1.9; }
-.login-card label { display:block; font-size:11.5px; color:#5c6f66; font-weight:600; margin-top:6px; }
-.login-card label input { display:block; width:100%; margin-top:6px; border:1px solid #ccd6cc; border-radius:11px; background:#fff; padding:11px 14px; font-family:inherit; font-size:14px; color:#22332f; outline:0; transition:border-color .15s,box-shadow .15s; }
-.login-card label input:focus { border-color:#2c6b5f; box-shadow:0 0 0 3px rgba(44,107,95,.14); }
-.login-card button[type="submit"] { margin-top:14px; border:0; border-radius:12px; background:#173f3d; color:#fff; font-family:inherit; font-size:14px; font-weight:700; padding:13px; cursor:pointer; transition:background .15s,transform .15s; box-shadow:0 10px 22px rgba(23,63,61,.28); }
-.login-card button[type="submit"]:hover { background:#2c6b5f; transform:translateY(-2px); }
-.login-hint { margin:4px 0 0; text-align:center; font-size:11px; color:#93a29a; }
 .panel-nav-toggle { display:none; }
+.autosave-status { margin:10px 0 0; font-size:12.5px; color:#3c8a56; }
+.autosave-status.is-error { color:#b04a3c; font-weight:600; }
+.publish-card { display:flex; flex-direction:column; gap:6px; }
+
+/* =============================================================
+   Login Page — صفحه ورود
+   ============================================================= */
+.login-wrap {
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:#173f3d;
+  overflow:hidden;
+}
+.login-wrap::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:url("/static/images/bg/bg-login.jpg") center/cover no-repeat;
+  opacity:.15;
+  z-index:0;
+}
+.login-card {
+  position:relative;
+  z-index:1;
+  background:rgba(255,253,248,.55);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.18);
+  padding:40px 32px 32px;
+  width:min(380px,100%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+}
+.login-brand-img {
+  width:80px;
+  height:80px;
+  object-fit:contain;
+  border-radius:50%;
+  border:3px solid rgba(255,255,255,.3);
+  margin-bottom:4px;
+}
+.login-card h1 {
+  margin:0;
+  font-size:18px;
+  color:#173f3d;
+  text-align:center;
+}
+.login-card p {
+  margin:0;
+  font-size:12px;
+  color:#68786f;
+  text-align:center;
+}
+.login-card .panel-message {
+  width:100%;
+  box-sizing:border-box;
+}
+.login-card label {
+  display:block;
+  width:100%;
+  font-size:12px;
+  color:#4c5f55;
+  font-weight:600;
+  text-align:right;
+  margin-top:4px;
+}
+.login-card label input {
+  display:block;
+  width:100%;
+  margin-top:6px;
+  border:1px solid #d7ddd4;
+  border-radius:12px;
+  background:#fff;
+  padding:12px 14px;
+  font-family:inherit;
+  font-size:14px;
+  color:#22332f;
+  outline:0;
+  transition:border-color .15s,box-shadow .15s;
+  box-sizing:border-box;
+}
+.login-card label input:focus {
+  border-color:#2c6b5f;
+  box-shadow:0 0 0 3px rgba(44,107,95,.12);
+}
+.login-card button[type="submit"] {
+  width:100%;
+  margin-top:8px;
+  border:0;
+  border-radius:12px;
+  background:#173f3d;
+  color:#fff;
+  font-family:inherit;
+  font-size:15px;
+  font-weight:700;
+  padding:14px;
+  cursor:pointer;
+  transition:background .15s;
+}
+.login-card button[type="submit"]:hover {
+  background:#2c6b5f;
+}
+.login-back {
+  display:block;
+  text-align:center;
+  margin-top:4px;
+  color:#000;
+  font-size:12px;
+  text-decoration:none;
+}
+.login-back:hover {
+  color:#173f3d;
+}
+
+body.is-login {
+  height:100vh;
+  height:100dvh;
+  overflow:hidden;
+}
+body.is-login .panel-layout,
+body.is-login .panel-main {
+  display:block;
+  height:auto;
+  max-height:none;
+  overflow:visible;
+}
+body.is-login .panel-sidebar,
+body.is-login .panel-nav-toggle,
+body.is-login .panel-overlay {
+  display:none !important;
+}
+body.is-login .panel-main {
+  max-width:none;
+  padding:0;
+}
+
 @media (max-width:900px) {
   .panel-body { height:auto; overflow:visible; }
   .panel-layout { display:block; height:auto; overflow:visible; }
   .panel-sidebar { position:fixed; right:0; top:0; bottom:0; z-index:70; transform:translateX(102%); transition:transform .28s ease; width:min(280px,84vw); }
   .panel-sidebar.is-open { transform:none; box-shadow:-20px 0 44px rgba(20,40,36,.3); }
   .panel-nav-toggle { display:flex; position:fixed; top:12px; right:12px; z-index:60; align-items:center; gap:8px; background:#173f3d; color:#fff; border:0; border-radius:10px; padding:10px 16px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(23,63,61,.35); }
+  .panel-nav-toggle svg { color:#fff; }
+  .panel-nav-toggle svg * { stroke:#fff !important; fill:#fff !important; }
   .panel-overlay { position:fixed; inset:0; background:rgba(15,30,27,.5); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:65; }
   body.panel-nav-open .panel-overlay { opacity:1; pointer-events:auto; }
   body.panel-nav-open { overflow:hidden; }
@@ -130,6 +447,207 @@ body.is-login .panel-main { max-width:none; padding:0; }
   .stat-cards { grid-template-columns:repeat(2,1fr); }
   .panel-columns { grid-template-columns:1fr; }
 }
-.autosave-status { margin:10px 0 0; font-size:12.5px; color:#3c8a56; }
-.autosave-status.is-error { color:#b04a3c; font-weight:600; }
-.publish-card { display:flex; flex-direction:column; gap:6px; }
+
+/* =============================================================
+   Log Cards — کارت‌های تاریخچه
+   ============================================================= */
+.log-cards {
+  display:grid;
+  gap:10px;
+}
+.log-card {
+  background:#fff;
+  border:1px solid #dde4dc;
+  border-radius:12px;
+  padding:14px 16px;
+}
+.log-card-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+}
+.log-card-time {
+  font-size:11px;
+  color:#7b8a80;
+}
+.log-card-body h3 {
+  margin:0 0 4px;
+  font-size:13px;
+  color:#173f3d;
+}
+.log-card-body small {
+  font-size:11px;
+  color:#7b8a80;
+}
+.log-card-footer {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed #e6ebe3;
+  font-size:11px;
+  color:#5c6f66;
+}
+.log-card-msg {
+  color:#7b8a80;
+}
+
+/* =============================================================
+   User Cards — کارت‌های کاربران
+   ============================================================= */
+.user-cards {
+  display:grid;
+  gap:10px;
+}
+.user-card {
+  background:#fff;
+  border:1px solid #dde4dc;
+  border-radius:12px;
+  overflow:hidden;
+}
+.user-card-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  padding:14px 16px 8px;
+}
+.user-card-name h3 {
+  margin:0;
+  font-size:14px;
+  color:#173f3d;
+}
+.user-card-name small {
+  display:block;
+  font-size:11px;
+  color:#7b8a80;
+  margin-top:2px;
+}
+.user-card-tags {
+  display:flex;
+  gap:4px;
+  flex-shrink:0;
+}
+.user-card-role {
+  padding:0 16px 10px;
+}
+.user-card-actions {
+  display:flex;
+  gap:0;
+  border-top:1px solid #eef2ec;
+}
+.user-card-actions .icon-action {
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:10px 0;
+  background:0;
+  border:0;
+  border-right:1px solid #eef2ec;
+  color:#4a6359;
+  cursor:pointer;
+  text-decoration:none;
+  position:relative;
+  transition:background .1s,color .1s;
+  font-family:inherit;
+}
+.user-card-actions .icon-action:last-child {
+  border-right:0;
+  border-radius:0 0 0 11px;
+}
+.user-card-actions .icon-action:first-child {
+  border-radius:0 0 11px 0;
+}
+.user-card-actions .icon-action svg {
+  width:18px;
+  height:18px;
+  display:block;
+}
+.user-card-actions .icon-action:hover {
+  background:#f3f6f1;
+  color:#173f3d;
+}
+.user-card-actions .icon-action.is-danger {
+  color:#b04a3c;
+}
+.user-card-actions .icon-action.is-danger:hover {
+  background:#f7ded9;
+}
+/* Tooltip */
+.user-card-actions .icon-action::after {
+  content:attr(title);
+  position:absolute;
+  bottom:100%;
+  left:50%;
+  transform:translateX(-50%);
+  background:#22332f;
+  color:#fff;
+  font-size:11px;
+  font-weight:500;
+  padding:5px 10px;
+  border-radius:6px;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s;
+  z-index:20;
+  margin-bottom:6px;
+}
+.user-card-actions .icon-action:hover::after {
+  opacity:1;
+}
+.icon-action-form {
+  display:contents;
+}
+
+@media (min-width:600px) {
+  .log-cards, .user-cards {
+    grid-template-columns:1fr 1fr;
+  }
+}
+@media (min-width:960px) {
+  .log-cards, .user-cards {
+    grid-template-columns:1fr 1fr 1fr;
+  }
+}
+
+/* =============================================================
+   Settings Page — صفحه تنظیمات
+   ============================================================= */
+.settings-card {
+  background:#fff;
+  border:1px solid #dde4dc;
+  border-radius:14px;
+  padding:24px;
+}
+.settings-card h2 {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:0 0 8px;
+  font-size:16px;
+  color:#173f3d;
+}
+.settings-desc {
+  color:#7b8a80;
+  font-size:13px;
+  line-height:1.7;
+  margin:0 0 20px;
+}
+.settings-card .field {
+  margin-bottom:16px;
+}
+.settings-actions {
+  margin-top:20px;
+  padding-top:16px;
+  border-top:1px solid #eef2ec;
+}
+.field-hint {
+  display:block;
+  font-size:11.5px;
+  color:#5c6f66;
+  margin-top:6px;
+}

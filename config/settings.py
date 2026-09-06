@@ -43,9 +43,9 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+X_FRAME_OPTIONS = "ALLOWALL"
 ROOT_URLCONF = "config.urls"
 
 TEMPLATES = [
@@ -58,6 +58,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "config.context_processors.site_settings",
             ],
         },
     },
@@ -114,7 +115,7 @@ JALALI_DATE_DEFAULTS = {
 # کوکی‌ها و حفاظت پیش‌فرض برای بخش مدیریت.
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
-X_FRAME_OPTIONS = "DENY"
+X_FRAME_OPTIONS = "ALLOWALL"
 SECURE_REFERRER_POLICY = "same-origin"
 
 if not DEBUG:
