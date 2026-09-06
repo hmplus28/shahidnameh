@@ -40,7 +40,7 @@
             <a href="{% url 'martyrs:home' %}">خانه</a>
             <a href="{% url 'martyrs:directory' %}">فهرست شهدا</a>
             <a href="{% url 'martyrs:ziyaratnama' %}">زیارت نامه</a>
-            <a href="{% url 'martyrs:panel_home' %}">ورود مدیران</a>
+            <a href="{% url 'martyrs:panel_home' %}" class="admin-link">ورود مدیران</a>
           </nav>
           <div class="app-header-actions">
             <button type="button" class="icon-btn" aria-label="جست‌وجو" data-search-toggle>{% include "icons/icon.html" with name="search" size=22 %}</button>
@@ -89,7 +89,7 @@
       </div>
     </div>
 
-    <div class="pwa-sheet" data-install-card>
+    <div class="pwa-sheet" data-install-card hidden>
       <div class="pwa-sheet-backdrop" data-install-close></div>
       <div class="pwa-sheet-panel">
         <div class="pwa-sheet-handle"></div>

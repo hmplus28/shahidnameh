@@ -89,37 +89,64 @@
   const installCard = document.querySelector('[data-install-card]');
   const sheetInstallBtns = document.querySelectorAll('[data-install-app]');
   const connectionStatus = document.querySelector('[data-pwa-status]');
-  let deferredInstallPrompt;
+  let deferredInstallPrompt = null;
+  let installPromptReady = false;
 
-  // Check if PWA is already installed
-  const isPWAInstalled = localStorage.getItem('pwaInstalled') === 'true';
-  
-  // Check if popup was shown today
-  function shouldShowInstallPopup() {
+  // Check if PWA is running in standalone mode (already installed)
+  const isStandalone =
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.matchMedia('(display-mode: fullscreen)').matches ||
+    window.matchMedia('(display-mode: minimal-ui)').matches ||
+    navigator.standalone === true;
+
+  // Check if user explicitly dismissed install in last 24h
+  function wasShownRecently() {
     const lastShown = localStorage.getItem('pwaPopupLastShown');
-    if (!lastShown) return true;
-    
-    const lastDate = new Date(lastShown);
-    const today = new Date();
-    const diffTime = Math.abs(today - lastDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    return diffDays >= 1;
+    if (!lastShown) return false;
+    const last = parseInt(lastShown, 10);
+    if (isNaN(last)) return false;
+    const now = Date.now();
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    return (now - last) < ONE_DAY;
   }
 
-  // Function to show install popup
-  function showInstallPopup() {
-    if (installCard && !isPWAInstalled && shouldShowInstallPopup()) {
-      installCard.hidden = false;
-      localStorage.setItem('pwaPopupLastShown', new Date().toISOString());
-    }
+  function markShownNow() {
+    localStorage.setItem('pwaPopupLastShown', String(Date.now()));
+  }
+
+  function hideInstallCard() {
+    if (installCard) installCard.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  function showInstallCard() {
+    if (!installCard) return;
+    // Never show in standalone mode (already installed)
+    if (isStandalone) return;
+    // Don't show if dismissed recently
+    if (wasShownRecently()) return;
+    // Don't show if browser says it's installed
+    if (localStorage.getItem('pwaInstalled') === 'true') return;
+    // Need beforeinstallprompt event first
+    if (!installPromptReady) return;
+    installCard.hidden = false;
+    markShownNow();
+  }
+
+  // Hide install UI elements initially if standalone
+  if (isStandalone) {
+    sheetInstallBtns.forEach((btn) => { btn.style.display = 'none'; });
+    hideInstallCard();
   }
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
+    installPromptReady = true;
+    // Show "install" entries in more-sheet
     sheetInstallBtns.forEach((btn) => { btn.style.display = ''; });
-    showInstallPopup();
+    // Show the popup (respects 24h throttle and standalone)
+    showInstallCard();
   });
 
   function handleInstallClick() {
@@ -128,34 +155,45 @@
       prompt.prompt().then(() => prompt.userChoice).then((choice) => {
         if (choice && choice.outcome === 'accepted') {
           localStorage.setItem('pwaInstalled', 'true');
-          if (installCard) installCard.hidden = true;
+          hideInstallCard();
           sheetInstallBtns.forEach((btn) => { btn.style.display = 'none'; });
+        } else {
+          // User dismissed the native prompt — hide our sheet too
+          hideInstallCard();
         }
         deferredInstallPrompt = null;
+        installPromptReady = false;
+      }).catch(() => {
+        hideInstallCard();
+        deferredInstallPrompt = null;
+        installPromptReady = false;
       });
     } else {
-      if (installCard) installCard.hidden = true;
+      // No beforeinstallprompt event (e.g. iOS Safari, or already installed)
+      // Show a hint message instead of doing nothing
+      const isIOSSafari = /iPhone|iPad|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/CriOS|FxiOS/.test(navigator.userAgent);
+      const hint = isIOSSafari
+        ? 'برای نصب: دکمه Share در سافاری را بزنید و «Add to Home Screen» را انتخاب کنید.'
+        : 'برای نصب: آیکون نصب (⊕) در نوار آدرس مرورگر را انتخاب کنید یا از منوی مرورگر «Install app» را بزنید.';
+      alert(hint);
+      hideInstallCard();
     }
   }
   sheetInstallBtns.forEach((btn) => btn.addEventListener('click', handleInstallClick));
 
   const installCloseBtns = document.querySelectorAll('[data-install-close]');
   installCloseBtns.forEach((btn) => btn.addEventListener('click', () => {
-    if (installCard) installCard.hidden = true;
+    hideInstallCard();
+    markShownNow();  // 24h throttle even on dismiss
   }));
-  
+
   window.addEventListener('appinstalled', () => {
     localStorage.setItem('pwaInstalled', 'true');
     deferredInstallPrompt = null;
-    if (installCard) installCard.hidden = true;
+    installPromptReady = false;
+    hideInstallCard();
     sheetInstallBtns.forEach((btn) => { btn.style.display = 'none'; });
   });
-
-  // Hide install UI if already installed
-  if (isPWAInstalled) {
-    if (installCard) installCard.hidden = true;
-    sheetInstallBtns.forEach((btn) => { btn.style.display = 'none'; });
-  }
 
   /* Network Status */
   function updateNetworkStatus() {

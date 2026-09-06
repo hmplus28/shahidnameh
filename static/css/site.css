@@ -304,7 +304,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
   inset:0;
   background-size:cover;
   background-position:center;
-  opacity:.08;
+  opacity:.04;
   pointer-events:none;
   z-index:0;
 }
@@ -508,7 +508,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 }
 .page-hero-bg {
   position:absolute; bottom:0; left:0; right:0;
-  height:50px; overflow:hidden; opacity:.1;
+  height:50px; overflow:hidden; opacity:.05;
 }
 .page-hero-bg img { width:100%; height:100%; object-fit:cover; }
 .page-hero h1 { color:var(--navy); font-size:24px; margin:4px 0; }
@@ -1340,6 +1340,19 @@ ul, ol { list-style:none; margin:0; padding:0; }
   .desktop-nav a:hover {
     background:rgba(23,63,61,.06);
     color:var(--jade);
+  }
+  .desktop-nav a.admin-link {
+    background:var(--jade);
+    color:#fff;
+    border-radius:99px;
+    padding:8px 18px;
+    margin-right:8px;
+    border:1px solid var(--jade);
+  }
+  .desktop-nav a.admin-link:hover {
+    background:var(--jade-2);
+    border-color:var(--jade-2);
+    color:#fff;
   }
 
   .martyr-cards { grid-template-columns:repeat(2,1fr); }
