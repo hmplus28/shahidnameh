@@ -17,10 +17,26 @@
   --gold-light:#ead7aa;
   --line:#ded8ca;
   --white:#fffdfa;
+
+  /* سطح‌های مات — بدون جلا و بازتاب */
+  --card-matte:#edefe6;
+  --card-matte-2:#f1ede1;
+  --card-matte-deep:#e5e9e0;
+  --matte-shadow:0 2px 10px rgba(23,63,61,.07);
+  --matte-shadow-lg:0 10px 28px rgba(23,63,61,.10);
+
+  /* دارایی‌های الگوی اسلامی — دانلودشده از اینترنت */
+  --pat-mihrab-arch:url("/static/images/patterns/mihrab-arch.png");
+  --pat-eslimi-texture:url("/static/images/patterns/eslimi-texture.jpg");
+  --pat-eslimi-divider:url("/static/images/patterns/eslimi-divider.jpg");
+  --pat-eslimi-border:url("/static/images/patterns/eslimi-border.jpg");
+  --pat-eslimi-star:url("/static/images/patterns/eslimi-star.jpg");
+
   --shadow:0 18px 46px rgba(19,55,52,.10);
   --radius:18px;
   --radius-sm:12px;
   --radius-xs:8px;
+  --radius-arch:130px;
 
   --header-h:56px;
   --bottom-nav-h:64px;
@@ -350,22 +366,25 @@ ul, ol { list-style:none; margin:0; padding:0; }
   scroll-snap-align:none;
 }
 
-/* Martyr Card Slide */
+/* Martyr Card Slide — کارت مات با قاب محرابی */
 .hs-card {
-  width:160px;
+  width:164px;
   border-radius:var(--radius-sm);
   overflow:hidden;
-  background:#fff;
+  background:var(--card-matte);
   border:1px solid var(--line);
-  box-shadow:0 2px 10px rgba(30,35,30,.06);
+  box-shadow:var(--matte-shadow);
   transition:box-shadow .2s;
+  padding:8px;
 }
-.hs-card:active { box-shadow:var(--shadow); }
+.hs-card:active { box-shadow:var(--matte-shadow-lg); }
 .hs-card-img {
   width:100%;
   height:180px;
-  background:linear-gradient(145deg,#e4e9df,#b6c9bd);
+  background:var(--card-matte-deep);
   overflow:hidden;
+  border-radius:var(--radius-arch) var(--radius-arch) 10px 10px;
+  border:1px solid #d9d4c5;
 }
 .hs-card-img img {
   width:100%;
@@ -374,7 +393,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
   object-position:center top;
 }
 .hs-card-body {
-  padding:12px 14px 14px;
+  padding:12px 8px 10px;
 }
 .hs-card-body h3 {
   color:var(--navy);
@@ -387,17 +406,17 @@ ul, ol { list-style:none; margin:0; padding:0; }
   font-size:11px;
 }
 
-/* Memory Slide */
+/* Memory Slide — مات */
 .memory-slide {
   width:260px;
   padding:16px 18px;
   border-right:3px solid var(--gold);
-  background:#fff;
+  background:var(--card-matte-2);
   border-radius:0 var(--radius-xs) var(--radius-xs) 0;
   display:flex;
   flex-direction:column;
   gap:8px;
-  box-shadow:0 1px 8px rgba(30,35,30,.06);
+  box-shadow:var(--matte-shadow);
 }
 .memory-slide-top,
 .memory-slide-by {
@@ -423,7 +442,20 @@ ul, ol { list-style:none; margin:0; padding:0; }
 /* =============================================================
    Stats Band
    ============================================================= */
-.stats-band { background:var(--jade); color:#fff; }
+.stats-band {
+  background:var(--jade);
+  color:#fff;
+  position:relative;
+}
+.stats-band::before {
+  content:"";
+  position:absolute; inset:0;
+  background-image:var(--pat-eslimi-texture);
+  background-size:280px;
+  opacity:.07;
+  mix-blend-mode:soft-light;
+  pointer-events:none;
+}
 .stats-grid {
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -449,18 +481,19 @@ ul, ol { list-style:none; margin:0; padding:0; }
   border:1px solid var(--line);
   border-radius:var(--radius-sm);
   overflow:hidden;
-  background:#eef2ec;
-  box-shadow:0 2px 12px rgba(30,35,30,.10);
+  background:var(--card-matte);
+  box-shadow:var(--matte-shadow);
 }
 .portrait {
   height:200px;
   display:grid; place-items:center;
-  background:linear-gradient(145deg,#d7ded6,#b0c0ba);
+  background:var(--card-matte-deep);
   position:relative;
   overflow:hidden;
+  border-radius:var(--radius-arch) var(--radius-arch) 0 0;
 }
-.portrait-2 { background:linear-gradient(145deg,#e7dfca,#c5bda7); }
-.portrait-3 { background:linear-gradient(145deg,#d4e0e0,#9eb9b2); }
+.portrait-2 { background:#e9e2ce; }
+.portrait-3 { background:#dfe6e2; }
 .portrait-img { width:100%; height:100%; object-fit:cover; object-position:center top; position:relative; z-index:1; }
 .martyr-card-body { padding:16px; }
 .martyr-card-body > p { color:var(--gold); font-size:11px; font-weight:700; }
@@ -470,7 +503,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .empty-panel {
   text-align:center;
   border:1px dashed #c8cabb;
-  background:#fffdf9;
+  background:var(--card-matte-2);
   border-radius:var(--radius-sm);
   padding:28px 18px;
   color:#68736f;
@@ -530,13 +563,13 @@ ul, ol { list-style:none; margin:0; padding:0; }
   gap:20px;
 }
 
-/* Filter Panel */
+/* Filter Panel — مات */
 .filter-panel {
   border:1px solid var(--line);
   border-radius:var(--radius-sm);
   padding:18px;
-  background:#fff;
-  box-shadow:0 1px 8px rgba(30,35,30,.05);
+  background:var(--card-matte);
+  box-shadow:var(--matte-shadow);
 }
 .filter-title {
   display:flex; align-items:end; justify-content:space-between;
@@ -554,7 +587,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .filter-field input, .filter-field select {
   width:100%; height:44px;
   border:1px solid #dddcd1;
-  background:#fff;
+  background:#faf9f4;
   outline:0;
   border-radius:var(--radius-xs);
   padding:0 12px;
@@ -595,19 +628,20 @@ ul, ol { list-style:none; margin:0; padding:0; }
   align-items:center;
   gap:12px;
   padding:12px;
-  background:#fff;
+  background:var(--card-matte);
   border:1px solid var(--line);
   border-radius:var(--radius-sm);
-  box-shadow:0 1px 8px rgba(30,35,30,.05);
+  box-shadow:var(--matte-shadow);
   transition:border-color .2s;
 }
 .directory-card:active { border-color:#b8c5ba; }
 .directory-mark {
   width:48px; height:48px;
   overflow:hidden;
-  border-radius:50%;
-  background:var(--jade-pale);
+  border-radius:var(--radius-arch) var(--radius-arch) var(--radius-xs) var(--radius-xs);
+  background:var(--card-matte-deep);
   display:grid; place-items:center;
+  border:1px solid #d9d4c5;
 }
 .directory-img { width:100%; height:100%; object-fit:cover; object-position:center top; border-radius:inherit; }
 .directory-main h3 { color:var(--navy); font-size:16px; line-height:1.4; margin:1px 0 2px; }
@@ -630,7 +664,20 @@ ul, ol { list-style:none; margin:0; padding:0; }
 /* =============================================================
    Profile / Martyr Detail
    ============================================================= */
-.profile-hero { background:linear-gradient(125deg,#e2e9df,#f4efdf); padding:16px 0 24px; }
+.profile-hero {
+  background:var(--card-matte-deep);
+  padding:16px 0 24px;
+  position:relative;
+}
+.profile-hero::before {
+  content:"";
+  position:absolute; inset:0;
+  background-image:var(--pat-eslimi-texture);
+  background-size:260px;
+  opacity:.06;
+  mix-blend-mode:soft-light;
+  pointer-events:none;
+}
 .profile-head { display:grid; gap:16px; }
 .back-link {
   color:var(--jade); font-size:11px; font-weight:700;
@@ -739,14 +786,14 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .detail-list dt { color:#7c8882; font-size:11px; }
 .detail-list dd { margin:0; color:#32443e; font-size:12px; }
 
-/* Narrative Grid */
+/* Narrative Grid — مات */
 .narrative-grid { display:grid; gap:10px; }
 .narrative-grid article {
   padding:16px;
   border:1px solid var(--line);
-  background:#fff;
+  background:var(--card-matte);
   border-radius:var(--radius-xs);
-  box-shadow:0 1px 8px rgba(30,35,30,.05);
+  box-shadow:var(--matte-shadow);
 }
 .narrative-grid h3 { color:var(--jade); font-size:14px; margin-bottom:6px; }
 .narrative-grid p, .timeline-records p { color:#66726e; font-size:13px; line-height:2.1; }
@@ -774,7 +821,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .memory-filter-pills { display:flex; gap:5px; flex-wrap:wrap; }
 .memory-filter-pills button {
   border:1px solid #d5dace;
-  background:#fff;
+  background:var(--card-matte-2);
   color:#66736d;
   padding:6px 12px;
   border-radius:99px;
@@ -785,11 +832,11 @@ ul, ol { list-style:none; margin:0; padding:0; }
 
 .detail-memories { display:grid; gap:12px; }
 .detail-memory {
-  background:#eef2ec;
+  background:var(--card-matte);
   border:1px solid var(--line);
   padding:16px;
   border-radius:var(--radius-xs);
-  box-shadow:0 1px 8px rgba(30,35,30,.10);
+  box-shadow:var(--matte-shadow);
 }
 .detail-memory > div {
   display:flex;
@@ -828,7 +875,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 }
 .testament-tags > div { display:flex; flex-wrap:wrap; gap:6px; }
 .testament-tags > div span {
-  background:#fff; color:var(--jade);
+  background:var(--card-matte-2); color:var(--jade);
   border:1px solid #d4ddd3;
   border-radius:99px; padding:5px 12px;
   font-size:11px; font-weight:700;
@@ -842,7 +889,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .gallery-grid figure {
   border-radius:var(--radius-xs);
   overflow:hidden;
-  background:#fff;
+  background:var(--card-matte);
   border:1px solid var(--line);
 }
 .gallery-grid img { width:100%; height:120px; object-fit:cover; }
@@ -854,7 +901,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .video-list { display:grid; gap:8px; margin-top:16px; }
 .video-list article {
   display:flex; align-items:center; gap:10px;
-  border:1px solid var(--line); background:#fff;
+  border:1px solid var(--line); background:var(--card-matte);
   border-radius:var(--radius-xs); padding:10px;
 }
 .video-play {
@@ -892,7 +939,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
   position:relative;
   min-width:100px;
   padding:8px 12px;
-  background:#fff;
+  background:var(--card-matte);
   border:1px solid var(--line);
   margin-left:-1px;
   flex:1;
@@ -917,11 +964,11 @@ ul, ol { list-style:none; margin:0; padding:0; }
 
 .comrade-grid { display:grid; gap:10px; }
 .comrade-card {
-  background:#fff;
+  background:var(--card-matte);
   border:1px solid var(--line);
   border-radius:var(--radius-xs);
   padding:14px;
-  box-shadow:0 1px 8px rgba(30,35,30,.05);
+  box-shadow:var(--matte-shadow);
 }
 .comrade-head { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
 .comrade-avatar {
@@ -937,7 +984,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .comrade-head small { color:#75827c; font-size:11px; display:block; }
 .comrade-card p { color:#4d5b55; font-size:13px; line-height:2; }
 
-.front-docs { padding:16px; background:#fff; border:1px solid var(--line); border-radius:var(--radius-xs); box-shadow:0 1px 8px rgba(30,35,30,.05); }
+.front-docs { padding:16px; background:var(--card-matte); border:1px solid var(--line); border-radius:var(--radius-xs); box-shadow:var(--matte-shadow); }
 .front-docs p { color:#5d6b66; font-size:13px; line-height:2.1; }
 
 /* =============================================================
@@ -1472,4 +1519,354 @@ ul, ol { list-style:none; margin:0; padding:0; }
     animation-duration:.01ms !important;
     transition-duration:.01ms !important;
   }
+}
+
+/* =============================================================
+   Hero جدید — صفحه اصلی (مات + محراب + اسلیمی)
+   ============================================================= */
+.hero-new {
+  position:relative;
+  min-height:520px;
+  padding:60px 0;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  background:var(--jade);
+}
+.hero-new-bg {
+  position:absolute; inset:0;
+  z-index:0;
+  opacity:.07;
+}
+.hero-new-bg img {
+  width:100%; height:100%;
+  object-fit:cover;
+  filter:blur(2px);
+}
+/* بافت اسلیمی روی hero — الگوی دانلودشده از اینترنت */
+.hero-new-eslimi {
+  position:absolute; inset:0;
+  z-index:1;
+  background-image:var(--pat-eslimi-texture);
+  background-size:340px;
+  opacity:.09;
+  mix-blend-mode:soft-light;
+  pointer-events:none;
+}
+.hero-new-overlay {
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 18% 32%, rgba(189,147,69,.14) 0%, transparent 46%),
+    radial-gradient(circle at 82% 74%, rgba(9,26,25,.55) 0%, transparent 58%);
+  z-index:1;
+  pointer-events:none;
+}
+/* قاب محراب طلایی — عنصر تزئینی دانلودشده از اینترنت */
+.hero-new-arch {
+  position:absolute;
+  left:-70px;
+  bottom:-90px;
+  width:min(430px, 46vw);
+  z-index:1;
+  opacity:.22;
+  filter:saturate(.9);
+  pointer-events:none;
+  user-select:none;
+}
+.hero-new-inner {
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:50px;
+  align-items:center;
+  width:100%;
+}
+.hero-new-content { color:#fff; }
+.hero-new-tag {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(189,147,69,.16);
+  border:1px solid rgba(189,147,69,.38);
+  color:var(--gold-light);
+  padding:6px 14px;
+  border-radius:99px;
+  font-size:11px;
+  font-weight:700;
+  margin-bottom:18px;
+}
+.hero-new-tag svg { width:18px; height:18px; display:block; }
+.hero-new-content h1 {
+  font-size:clamp(34px, 4.5vw, 54px);
+  line-height:1.25;
+  margin:0 0 18px;
+  font-weight:800;
+  letter-spacing:-1.2px;
+}
+.hero-new-content h1 em {
+  color:var(--gold-light);
+  font-style:normal;
+  background:linear-gradient(90deg, #ead7aa, #bd9345);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.hero-new-content > p {
+  font-size:15px;
+  line-height:2;
+  color:rgba(255,255,255,.78);
+  max-width:560px;
+  margin:0 0 24px;
+}
+.hero-new-search {
+  display:flex;
+  width:min(100%, 480px);
+  background:var(--card-matte-2);
+  border-radius:14px;
+  overflow:hidden;
+  padding:6px;
+  box-shadow:0 10px 26px rgba(6,18,17,.28);
+}
+.hero-new-search input {
+  flex:1;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  padding:11px 14px;
+  font-size:13px;
+  font-family:inherit;
+  color:var(--ink);
+}
+.hero-new-search input::placeholder { color:#6d7773; }
+.hero-new-search button {
+  padding:11px 22px;
+  background:var(--jade-2);
+  color:#fff;
+  border:0;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  font-family:inherit;
+  cursor:pointer;
+  transition:background .15s;
+}
+.hero-new-search button:hover { background:#2c6b5f; }
+/* پنل آمار — سطح مات (بدون شیشه‌ای) */
+.hero-new-stats {
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+  background:rgba(10,29,28,.42);
+  border:1px solid rgba(189,147,69,.28);
+  border-radius:18px;
+  padding:26px 22px;
+}
+.hero-stat {
+  text-align:center;
+  padding:0 8px;
+  border-left:1px solid rgba(255,255,255,.12);
+}
+.hero-stat:first-child { border-left:0; }
+.hero-stat strong {
+  display:block;
+  font-size:32px;
+  font-weight:800;
+  color:var(--gold-light);
+  line-height:1;
+  direction:ltr;
+}
+.hero-stat span {
+  display:block;
+  font-size:11px;
+  color:rgba(255,255,255,.7);
+  margin-top:6px;
+}
+
+/* =============================================================
+   جداکننده اسلیمی — نوار تزئینی میان بخش‌ها
+   ============================================================= */
+.eslimi-strip {
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:6px var(--gutter);
+  opacity:.85;
+}
+.eslimi-strip span {
+  flex:1;
+  height:1px;
+  background:linear-gradient(90deg, transparent, #c9b98a, transparent);
+}
+.eslimi-strip img {
+  width:150px;
+  height:26px;
+  object-fit:cover;
+  object-position:center 38%;
+  border-radius:99px;
+  filter:saturate(.75) brightness(1.06);
+}
+
+/* =============================================================
+   بخش روایت‌های تازه — تب‌دار (مات)
+   ============================================================= */
+.recent-stories { padding:36px 0 48px; }
+.stories-tabs {
+  display:flex;
+  gap:6px;
+  background:var(--card-matte-2);
+  border:1px solid var(--line);
+  border-radius:99px;
+  padding:5px;
+  width:max-content;
+  margin-bottom:22px;
+  box-shadow:var(--matte-shadow);
+}
+.stories-tab {
+  padding:9px 22px;
+  border:0;
+  background:transparent;
+  color:#5a6b66;
+  font-size:13px;
+  font-weight:600;
+  border-radius:99px;
+  cursor:pointer;
+  transition:all .2s;
+  font-family:inherit;
+}
+.stories-tab:hover {
+  background:rgba(23,63,61,.06);
+  color:var(--jade);
+}
+.stories-tab.is-active {
+  background:var(--jade);
+  color:#fff;
+}
+.stories-grid {
+  display:grid;
+  grid-template-columns:repeat(4, 1fr);
+  gap:16px;
+}
+/* کارت روایت — سطح مات با قاب تصویر محرابی */
+.story-card {
+  display:flex;
+  flex-direction:column;
+  background:var(--card-matte);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  padding:8px;
+  box-shadow:var(--matte-shadow);
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s;
+}
+.story-card:hover {
+  transform:translateY(-4px);
+  box-shadow:var(--matte-shadow-lg);
+  border-color:rgba(189,147,69,.5);
+}
+.story-card-img {
+  height:190px;
+  overflow:hidden;
+  background:var(--card-matte-deep);
+  position:relative;
+  border-radius:var(--radius-arch) var(--radius-arch) 10px 10px;
+  border:1px solid #d9d4c5;
+}
+.story-card-img img {
+  width:100%; height:100%;
+  object-fit:cover;
+  object-position:center top;
+  transition:transform .5s ease;
+}
+.story-card:hover .story-card-img img { transform:scale(1.04); }
+.story-card-body {
+  padding:14px 8px 14px;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+.story-card-tag {
+  display:inline-block;
+  width:max-content;
+  background:rgba(23,63,61,.09);
+  color:var(--jade);
+  border:1px solid rgba(23,63,61,.18);
+  border-radius:99px;
+  padding:3px 10px;
+  font-size:10px;
+  font-weight:700;
+  margin-bottom:8px;
+}
+.story-card-tag-memory {
+  background:rgba(189,147,69,.12);
+  color:#8a6a2a;
+  border-color:rgba(189,147,69,.3);
+}
+.story-card-body h3 {
+  font-size:16px;
+  color:var(--navy);
+  margin:0 0 6px;
+  line-height:1.5;
+}
+.story-card-meta {
+  font-size:11px;
+  color:#7a8782;
+  margin:2px 0;
+  line-height:1.7;
+}
+.story-card-memory .story-card-body { padding:18px 12px 16px; }
+.story-card-memory blockquote {
+  font-size:12.5px;
+  line-height:2;
+  color:#4d5b55;
+  margin:0 0 14px;
+  padding:0;
+  border:0;
+}
+.story-card-foot {
+  margin-top:auto;
+  padding-top:10px;
+  border-top:1px dashed #dfd9c8;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.story-card-foot span {
+  font-size:11px;
+  color:var(--jade);
+  font-weight:700;
+}
+.story-card-foot small {
+  font-size:10px;
+  color:#89918d;
+}
+
+/* =============================================================
+   واکنش‌گرا — بخش‌های جدید
+   ============================================================= */
+@media (max-width:1100px) {
+  .stories-grid { grid-template-columns:repeat(3, 1fr); }
+}
+@media (max-width:900px) {
+  .hero-new { min-height:auto; padding:48px 0; }
+  .hero-new-inner { grid-template-columns:1fr; gap:32px; }
+  .hero-new-stats { padding:18px 14px; gap:10px; }
+  .hero-stat strong { font-size:26px; }
+  .hero-new-arch { width:300px; left:-90px; bottom:-70px; opacity:.16; }
+}
+@media (max-width:760px) {
+  .stories-grid { grid-template-columns:repeat(2, 1fr); }
+  .stories-tabs { width:100%; }
+  .stories-tab { flex:1; padding:9px 14px; font-size:12px; }
+}
+@media (max-width:480px) {
+  .hero-new-content h1 { font-size:30px; }
+  .hero-new-search { display:block; padding:8px; }
+  .hero-new-search input { width:100%; padding:9px; }
+  .hero-new-search button { width:100%; margin-top:6px; }
+  .hero-new-stats { grid-template-columns:1fr 1fr; padding:14px 10px; }
+  .hero-stat:nth-child(3) { grid-column:1/-1; border-left:0; border-top:1px solid rgba(255,255,255,.12); padding-top:14px; margin-top:6px; }
+  .stories-grid { grid-template-columns:1fr; }
+  .eslimi-strip img { width:110px; height:22px; }
 }

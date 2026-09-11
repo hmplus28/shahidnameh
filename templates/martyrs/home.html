@@ -9,7 +9,9 @@
   <div class="hero-new-bg" aria-hidden="true">
     <img src="{% static 'images/bg/bg-home.jpg' %}" alt="" loading="eager">
   </div>
+  <div class="hero-new-eslimi" aria-hidden="true"></div>
   <div class="hero-new-overlay" aria-hidden="true"></div>
+  <img class="hero-new-arch" src="{% static 'images/patterns/mihrab-arch.png' %}" alt="" loading="eager" aria-hidden="true">
   <div class="shell hero-new-inner">
     <div class="hero-new-content">
       <span class="hero-new-tag">{% include "icons/icon.html" with name="crescent-star" size=18 %} بایگانی زنده یاد و نام</span>
@@ -37,6 +39,8 @@
     </div>
   </div>
 </section>
+
+<div class="eslimi-strip" aria-hidden="true"><span></span><img src="{% static 'images/patterns/eslimi-divider.jpg' %}" alt="" loading="lazy"><span></span></div>
 
 <!-- بخش ۱: شهدای شاخص -->
 <section class="shell home-section">
@@ -71,6 +75,8 @@
     {% endfor %}
   </div>
 </section>
+
+<div class="eslimi-strip" aria-hidden="true"><span></span><img src="{% static 'images/patterns/eslimi-divider.jpg' %}" alt="" loading="lazy"><span></span></div>
 
 <!-- بخش ۲: آخرین روایت‌ها (ادغام شهدا و خاطرات) -->
 <section class="shell home-section recent-stories">
