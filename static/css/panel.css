@@ -28,12 +28,12 @@
 .panel-nav-logout .nav-icn svg { width:16px; height:16px; display:block; }
 .panel-nav-toggle { display:flex; align-items:center; gap:8px; }
 .panel-nav-toggle .icn svg { width:18px; height:18px; display:block; }
-.panel-sidebar nav a:hover { background:rgba(255,255,255,.08); color:#fff; }
-.panel-sidebar nav a.is-active { background:rgba(217,185,106,.16); color:#f2dfae; font-weight:700; }
-.panel-nav-divider { height:1px; background:rgba(255,255,255,.14); margin:12px 4px; }
+.panel-sidebar nav a:hover { background:rgba(255,255,255,.06); color:#fff; }
+.panel-sidebar nav a.is-active { background:rgba(217,185,106,.11); color:#f2dfae; font-weight:700; }
+.panel-nav-divider { height:1px; background:rgba(255,255,255,.10); margin:12px 4px; }
 .panel-nav-site { color:#e8d8a4; font-weight:600; }
 .panel-nav-logout { background:none; border:0; color:#f0c9c9; cursor:pointer; font-family:inherit; font-size:13.5px; padding:11px 13px; width:100%; text-align:right; border-radius:10px; transition:.15s; }
-.panel-nav-logout:hover { background:rgba(176,74,60,.25); color:#ffd9d0; }
+.panel-nav-logout:hover { background:rgba(176,74,60,.18); color:#ffd9d0; }
 .panel-main { flex:1; padding:30px 36px 50px; max-width:1200px; height:100%; overflow-y:auto; }
 .panel-head { display:flex; justify-content:space-between; align-items:flex-start; gap:20px; margin-bottom:26px; flex-wrap:wrap; }
 .panel-head h1 { margin:0; font-size:25px; }
@@ -94,14 +94,14 @@
   gap:10px;
 }
 .martyr-card {
-  background:#fff;
+  background:#eef2ec;
   border:1px solid #dde4dc;
   border-radius:12px;
   position:relative;
   transition:box-shadow .15s;
 }
 .martyr-card:active {
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  box-shadow:0 2px 8px rgba(0,0,0,.10);
 }
 .martyr-card-link {
   display:block;
@@ -310,13 +310,13 @@ textarea.panel-input { min-height:90px; resize:vertical; }
   position:absolute;
   inset:0;
   background:url("/static/images/bg/bg-login.jpg") center/cover no-repeat;
-  opacity:.15;
+  opacity:.45;
   z-index:0;
 }
 .login-card {
   position:relative;
   z-index:1;
-  background:rgba(255,253,248,.55);
+  background:rgba(255,253,248,.39);
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
   border-radius:24px;
@@ -440,8 +440,8 @@ body.is-login .panel-main {
   .panel-nav-toggle { display:flex; position:fixed; top:12px; right:12px; z-index:60; align-items:center; gap:8px; background:#173f3d; color:#fff; border:0; border-radius:10px; padding:10px 16px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 14px rgba(23,63,61,.35); }
   .panel-nav-toggle svg { color:#fff; }
   .panel-nav-toggle svg * { stroke:#fff !important; fill:#fff !important; }
-  .panel-overlay { position:fixed; inset:0; background:rgba(15,30,27,.5); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:65; }
-  body.panel-nav-open .panel-overlay { opacity:1; pointer-events:auto; }
+  .panel-overlay { position:fixed; inset:0; background:rgba(15,30,27,.35); opacity:0; pointer-events:none; transition:opacity .25s ease; z-index:65; }
+  body.panel-nav-open .panel-overlay { opacity:.7; pointer-events:auto; }
   body.panel-nav-open { overflow:hidden; }
   .panel-main { padding:64px 18px 60px; height:auto; overflow:visible; }
   .stat-cards { grid-template-columns:repeat(2,1fr); }
