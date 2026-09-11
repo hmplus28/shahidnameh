@@ -863,9 +863,11 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .testament-layout { display:grid; gap:14px; }
 .testament-text {
   background:var(--navy); color:#fff;
-  padding:20px;
+  padding:26px 20px 20px;
   border-radius:var(--radius-sm);
   position:relative; overflow:hidden;
+  border-top:6px solid transparent;
+  border-image:repeating-linear-gradient(45deg, #1a1a1a 0 3px, #f4efe2 3px 6px, #f4efe2 6px 9px, #8c2323 9px 12px) 6;
 }
 .testament-text::after {
   content:""; position:absolute; bottom:-40px; left:-18px;
@@ -1576,6 +1578,16 @@ ul, ol { list-style:none; margin:0; padding:0; }
 }
 .epic-kufiyeh-top { border-radius:0; }
 .epic-kufiyeh-bottom { border-radius:0; }
+.epic-kufiyeh-trim {
+  height:6px;
+  background-size:12px 12px, 12px 12px, 12px 100%;
+  position:relative;
+  z-index:5;
+}
+/* پلاکارد فشرده — برای صفحه فهرست و زیارت‌نامه */
+.epic-banner-compact { padding:22px 0 26px; }
+.epic-banner-compact .epic-placard { max-width:420px; padding:24px 18px 16px; }
+.epic-banner-compact .epic-placard blockquote { font-size:13.5px; }
 
 .epic-banner {
   position:relative;

@@ -1,0 +1,27 @@
+{% load static %}
+{# پارامترها: quote, source, bg (مسیر تصویر static)، compact (bool)، badges (لیست جفت‌های icon/label) #}
+<section class="epic-banner{% if compact %} epic-banner-compact{% endif %}">
+  <span class="epic-kufiyeh epic-kufiyeh-top" aria-hidden="true"></span>
+  <div class="epic-banner-bg" aria-hidden="true">
+    <img src="{% static bg|default:'images/war-front/war-01.jpeg' %}" alt="" loading="lazy">
+  </div>
+  <div class="epic-banner-overlay" aria-hidden="true"></div>
+  <div class="shell epic-banner-inner">
+    <div class="epic-placard">
+      <span class="epic-placard-string" aria-hidden="true"></span>
+      <span class="epic-placard-hole epic-placard-hole-r" aria-hidden="true"></span>
+      <span class="epic-placard-hole epic-placard-hole-l" aria-hidden="true"></span>
+      <p class="epic-placard-eyebrow">{% include "icons/icon.html" with name="crescent-star" size=14 %} {{ eyebrow|default:"آیه شهادت" }}</p>
+      <blockquote>«{{ quote }}»</blockquote>
+      {% if source %}<span class="epic-placard-source">{{ source }}</span>{% endif %}
+    </div>
+    {% if badge1 or badge2 or badge3 %}
+      <ul class="epic-badges">
+        {% if badge1 %}<li class="epic-badge">{% include "icons/icon.html" with name="star-islamic" size=16 %} {{ badge1 }}</li>{% endif %}
+        {% if badge2 %}<li class="epic-badge">{% include "icons/icon.html" with name="crescent-star" size=16 %} {{ badge2 }}</li>{% endif %}
+        {% if badge3 %}<li class="epic-badge">{% include "icons/icon.html" with name="star-islamic" size=16 %} {{ badge3 }}</li>{% endif %}
+      </ul>
+    {% endif %}
+  </div>
+  <span class="epic-kufiyeh epic-kufiyeh-bottom" aria-hidden="true"></span>
+</section>
