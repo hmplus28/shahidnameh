@@ -4,7 +4,7 @@
 {% block content %}
 <div class="page-bg page-bg-directory">
 
-{% include "martyrs/partials/epic_banner.html" with quote="اینجا خاک، عطر یاس می‌دهد؛ فهرست نام‌هایی که راه را برای ما روشن کردند." eyebrow="یادمان شهدا" bg="images/cemetery/cemetery-01.jpg" badge1="نام‌آوران خاک" badge2="یادگاران خون" badge3="عاشورائیان زمان" compact=1 %}
+{% include "martyrs/partials/epic_banner.html" with quote="اینجا خاک، عطر یاس می‌دهد؛ فهرست نام‌هایی که راه را برای ما روشن کردند." eyebrow="یادمان شهدا" bg="images/cemetery/cemetery-01.jpg" compact=1 %}
 
 <section class="shell home-section">
   <div class="section-header">
@@ -18,7 +18,7 @@
           {% if martyr.profile_image %}
             <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
           {% else %}
-            <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+            <img class="default-img" src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
           {% endif %}
         </div>
         <div class="hs-card-body">
@@ -47,7 +47,7 @@
           {% if martyr.profile_image %}
             <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
           {% else %}
-            <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+            <img class="default-img" src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
           {% endif %}
         </div>
         <div class="hs-card-body">
@@ -76,7 +76,7 @@
           {% if martyr.profile_image %}
             <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
           {% else %}
-            <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+            <img class="default-img" src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
           {% endif %}
         </div>
         <div class="hs-card-body">

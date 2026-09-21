@@ -33,7 +33,7 @@
         {% if martyr.profile_image %}
           <img src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}">
         {% else %}
-          <img src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}">
+          <img class="default-img" src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}">
         {% endif %}
       </div>
       <div>
