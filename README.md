@@ -96,22 +96,35 @@ python3 manage.py loaddata shahid_chamran
 
 در محیط تولید، متغیر `DJANGO_SECRET_KEY` را با یک مقدار تصادفی و محرمانه تنظیم کنید. همچنین `DJANGO_DEBUG=false` و `DJANGO_ALLOWED_HOSTS` را مطابق دامنه‌های مجاز سرور تعیین کنید.
 
+دیتابیس **فقط MySQL/MariaDB** است و مشخصاتش با متغیرهای زیر داده می‌شود (روی cPanel نام دیتابیس/یوزر پیشوند یوزر سی‌پنل دارد):
+
 ```bash
 export DJANGO_SECRET_KEY="یک-کلید-طولانی-و-تصادفی"
 export DJANGO_DEBUG=false
 export DJANGO_ALLOWED_HOSTS="example.com,www.example.com"
 export DJANGO_CSRF_TRUSTED_ORIGINS="https://example.com,https://www.example.com"
+export DB_NAME="example_shahidnameh"
+export DB_USER="example_shahidnameh"
+export DB_PASSWORD="رمز-دیتابیس"
+export DB_HOST="localhost"
+export DB_PORT="3306"
 ```
+
+در استقرار cPanel نیازی به export نیست؛ همهٔ این مقادیر در فایل `.env` (که اسکریپت استقرار می‌سازد) نوشته می‌شوند.
 
 ## استقرار روی هاست cPanel (میزبانفا و مشابه)
 
-پروژه برای میزبانی روی هاست‌های اشتراکی cPanel آماده است و از **محیط مجازی «Setup Python App» خود سی‌پنل** استفاده می‌کند. کافی است برنامهٔ پایتون را در cPanel بسازید (Python 3.10+، Application root = پوشهٔ پروژه، startup file = `passenger_wsgi.py`) و سپس در ترمینال:
+پروژه برای میزبانی روی هاست‌های اشتراکی cPanel آماده است و از **محیط مجازی «Setup Python App» خود سی‌پنل** و **فقط از دیتابیس MySQL/MariaDB** استفاده می‌کند. کافی است در cPanel:
+
+1. در بخش **MySQL® Databases** دیتابیس و یوزر بسازید و با ALL PRIVILEGES به هم متصل کنید؛
+2. در **Setup Python App** برنامه بسازید (Python 3.10+، Application root = پوشهٔ پروژه، startup file = `passenger_wsgi.py`)؛
+3. در ترمینال:
 
 ```bash
 bash deploy/deploy_cpanel.sh
 ```
 
-اسکریپت به‌طور خودکار venv سی‌پنل را پیدا و استفاده می‌کند، فایل `.env` را با کلید امنیتی تصادفی می‌سازد، وابستگی‌ها را نصب، مایگریشن‌ها و `collectstatic` را اجرا، `passenger_wsgi.py` را بازسازی، قواعد امنیتی `.htaccess` را نصب و برنامه را ری‌استارت می‌کند. پشتیبانی از MySQL هم به‌صورت اختیاری (با `DB_ENGINE=mysql` در `.env`) فعال می‌شود. اسکریپت idempotent است؛ برای به‌روزرسانی: `git pull && bash deploy/deploy_cpanel.sh`.
+اسکریپت به‌طور خودکار venv سی‌پنل را پیدا و استفاده می‌کند، فایل `.env` را با کلید امنیتی تصادفی می‌سازد، مشخصات دیتابیس را کنترل و **اتصال واقعی به MySQL را آزمایش می‌کند**، وابستگی‌ها را نصب، مایگریشن‌ها و `collectstatic` را اجرا، `passenger_wsgi.py` را بازسازی، قواعد امنیتی `.htaccess` را نصب و برنامه را ری‌استارت می‌کند. بدون دیتابیس کامل، با پیام راهنما متوقف می‌شود. اسکریپت idempotent است؛ برای به‌روزرسانی: `git pull && bash deploy/deploy_cpanel.sh`.
 
 راهنمای کامل گام‌به‌گام و عیب‌یابی: [`deploy/GUIDE-CPANEL-FA.md`](deploy/GUIDE-CPANEL-FA.md)
 

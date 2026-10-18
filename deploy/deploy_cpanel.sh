@@ -9,9 +9,11 @@
 #       نمایش داده می‌شود و متوقف می‌شود.
 #    ۲. ساخت خودکار فایل ‎.env‎ با کلید امنیتی تصادفی (DJANGO_SECRET_KEY،
 #       DJANGO_DEBUG، DJANGO_ALLOWED_HOSTS و …) — مقادیر موجود بازنویسی نمی‌شوند.
-#    ۳. کنترل کامل بودن مشخصات MySQL (فقط اگر DB_ENGINE=mysql باشد؛
-#       پیش‌فرض پروژه SQLite است و بدون دیتابیس MySQL هم کار می‌کند).
-#    ۴. نصب وابستگی‌ها در همان venv سی‌پنل (Django، Pillow، whitenoise، …)
+#  ۳. کنترل کامل بودن مشخصات MySQL — این پروژه فقط با MySQL/MariaDB کار می‌کند
+#       و اسکریپت بدون مشخصات کامل دیتابیس ادامه نمی‌دهد (راهنمای گام‌به‌گام
+#       ساخت دیتابیس نمایش داده می‌شود). اتصال واقعی به MySQL هم پیش از
+#       هر کاری آزموده می‌شود.
+#    ۴. نصب وابستگی‌ها در همان venv سی‌پنل (Django، Pillow، whitenoise، mysqlclient، …)
 #    ۵. اجرای مایگریشن‌ها، جمع‌آوری فایل‌های استاتیک، همگام‌سازی نقش‌ها
 #       (configure_roles) و ساخت اختیاری مدیر اولیه
 #    ۶. ساخت/به‌روزرسانی ‎passenger_wsgi.py‎ (نقطه ورود Passenger سی‌پنل) —
@@ -105,36 +107,31 @@ env_value() {
     sed -n "s/^$1=//p" "$ENV_FILE" 2>/dev/null | tail -n 1 | tr -d '\r' || true
 }
 
-# کنترل کامل بودن مشخصات MySQL — اگر ناقص باشد با راهنمای گام‌به‌گام متوقف می‌شود
+# کنترل کامل بودن مشخصات MySQL — پروژه فقط با MySQL کار می‌کند؛ اگر ناقص
+# باشد با راهنمای گام‌به‌گام متوقف می‌شود
 mysql_env_check() {
-    local engine name_ user_ pass_ host_ port_
-    engine="$(env_value DB_ENGINE | tr '[:upper:]' '[:lower:]')"
-    case "$engine" in
-        mysql|mariadb) ;;
-        *) info "دیتابیس: SQLite (فایل db.sqlite3) — نیازی به تنظیمات اضافه نیست."; return 0 ;;
-    esac
+    local name_ user_ pass_ host_ port_
     name_="$(env_value DB_NAME)"
     user_="$(env_value DB_USER)"
     pass_="$(env_value DB_PASSWORD)"
     if [ -z "$name_" ] || [ -z "$user_" ] || [ -z "$pass_" ] || [ "$pass_" = "CHANGE_ME" ]; then
-        die "DB_ENGINE=mysql است اما مشخصات دیتابیس در ‎.env‎ کامل نیست
-(مقدار DB_PASSWORD هنوز CHANGE_ME/خالی است یا DB_NAME/DB_USER خالی‌اند).
+        die "مشخصات دیتابیس MySQL در ‎.env‎ کامل نیست
+(DB_PASSWORD هنوز CHANGE_ME/خالی است یا DB_NAME/DB_USER خالی‌اند).
+این پروژه فقط با MySQL/MariaDB کار می‌کند.
 
 راهنمای گام‌به‌گام ساخت دیتابیس در cPanel:
   ۱) بخش «MySQL® Databases» را باز کنید:
        • Create New Database → مثلاً shahidnameh (نام کامل می‌شود ${CPANEL_USER}_shahidnameh)
        • MySQL Users → Add New User (رمز قوی؛ یادداشتش کنید)
        • Add User To Database → همان یوزر/دیتابیس → تیک ALL PRIVILEGES → Changes
-  ۲) در فایل ‎.env‎ این خط‌ها را کامل و از کامنت خارج کنید:
-       DB_ENGINE=mysql
+  ۲) در فایل ‎.env‎ این خط‌ها را کامل کنید:
        DB_NAME=${CPANEL_USER}_shahidnameh
        DB_USER=${CPANEL_USER}_shahidnameh
        DB_PASSWORD=همان-رمزی-که-ساختید
        DB_HOST=localhost
        DB_PORT=3306
   ۳) این اسکریپت را دوباره اجرا کنید:
-       bash deploy/deploy_cpanel.sh
-  (اگر MySQL نمی‌خواهید این خط‌ها کامنت بمانند — دیتابیس فایل db.sqlite3 می‌شود)"
+       bash deploy/deploy_cpanel.sh"
     fi
     host_="$(env_value DB_HOST)"; host_="${host_:-localhost}"
     port_="$(env_value DB_PORT)"; port_="${port_:-3306}"
@@ -149,7 +146,7 @@ else
     SECRET_KEY="$(head -c 96 /dev/urandom | base64 | tr -d '\n=+/')"
     cat > "$ENV_FILE" << EOF
 # شهیدنامه — تنظیمات محیط تولید (توسط deploy/deploy_cpanel.sh ساخته شده)
-# مقادیر زیر را مطابق دامنه خود ویرایش کنید و سپس اسکریپت را دوباره اجرا کنید.
+# مقادیر زیر را مطابق دامنه و دیتابیس خود ویرایش کنید و سپس اسکریپت را دوباره اجرا کنید.
 
 # کلید امنیتی (تصادفی تولید شده — آن را تغییر ندهید)
 DJANGO_SECRET_KEY=$SECRET_KEY
@@ -166,16 +163,17 @@ DJANGO_ALLOWED_HOSTS=*
 # خط زیر را از کامنت درآورید و دامنه واقعی بنویسید:
 # DJANGO_CSRF_TRUSTED_ORIGINS=https://shahidnameh.example.ir
 
-# ── دیتابیس ──
-# پیش‌فرض: SQLite (هیچ کاری لازم نیست؛ فایل db.sqlite3 ساخته می‌شود).
-# برای MySQL/MariaDB سی‌پنل، خط‌های زیر را از کامنت درآورید و کامل کنید
-# (راهنمای ساخت دیتابیس در خروجی همین اسکریپت هم نمایش داده می‌شود):
-# DB_ENGINE=mysql
-# DB_NAME=${CPANEL_USER}_shahidnameh
-# DB_USER=${CPANEL_USER}_shahidnameh
-# DB_PASSWORD=CHANGE_ME
-# DB_HOST=localhost
-# DB_PORT=3306
+# ── دیتابیس MySQL (الزامی — این پروژه فقط با MySQL/MariaDB کار می‌کند) ──
+# در cPanel بخش «MySQL® Databases»:
+#   ۱) Create New Database → مثلاً shahidnameh (نام کامل: ${CPANEL_USER}_shahidnameh)
+#   ۲) MySQL Users → Add New User با رمز قوی
+#   ۳) Add User To Database → همان یوزر/دیتابیس → ALL PRIVILEGES → Changes
+# سپس مقادیر زیر را دقیقاً مطابق cPanel کامل کنید:
+DB_NAME=${CPANEL_USER}_shahidnameh
+DB_USER=${CPANEL_USER}_shahidnameh
+DB_PASSWORD=CHANGE_ME
+DB_HOST=localhost
+DB_PORT=3306
 
 # مدیر اولیه (اختیاری) — این سه خط را از کامنت درآورید تا superuser
 # خودکار ساخته شود (سپس اسکریپت را دوباره اجرا کنید):
@@ -184,7 +182,7 @@ DJANGO_ALLOWED_HOSTS=*
 # DJANGO_SUPERUSER_EMAIL=admin@example.com
 EOF
     say "فایل ‎.env‎ ساخته شد: $ENV_FILE"
-    warn "بعد از استقرار، DJANGO_ALLOWED_HOSTS را در ‎.env‎ به دامنه واقعی خود محدود کنید."
+    warn "مشخصات دیتابیس MySQL را در ‎.env‎ کامل کنید و اجازهٔ DJANGO_ALLOWED_HOSTS را به دامنه واقعی محدود کنید."
 fi
 mysql_env_check
 
@@ -290,19 +288,54 @@ say "به‌روزرسانی pip در venv سی‌پنل ..."
 say "نصب وابستگی‌ها (چند دقیقه صبر کنید) ..."
 "$VENV_PY" -m pip install --quiet -r "$PROJECT_DIR/requirements.txt"
 
-# اگر MySQL انتخاب شده باشد، درایور mysqlclient هم لازم است
-if [ "$(env_value DB_ENGINE | tr '[:upper:]' '[:lower:]')" = "mysql" ] \
-   || [ "$(env_value DB_ENGINE | tr '[:upper:]' '[:lower:]')" = "mariadb" ]; then
-    if ! "$VENV_PY" -c 'import MySQLdb' >/dev/null 2>&1; then
-        say "نصب درایور MySQL (mysqlclient) ..."
-        if ! "$VENV_PY" -m pip install --quiet mysqlclient; then
-            die "نصب mysqlclient ناموفق بود. در برخی هاست‌ها باید از بخش
+# درایور MySQL (mysqlclient) — برای این پروژه الزامی است
+if ! "$VENV_PY" -c 'import MySQLdb' >/dev/null 2>&1; then
+    say "نصب درایور MySQL (mysqlclient) ..."
+    if ! "$VENV_PY" -m pip install --quiet mysqlclient; then
+        die "نصب mysqlclient ناموفق بود. در برخی هاست‌ها باید از بخش
 «Setup Python App → Run Pip Install» مقدار mysqlclient را نصب کنید
-یا از پشتیبانی هاست بخواهید کتابخانه libmysqlclient را فعال کند.
-راه‌حل سریع‌تر: در ‎.env‎ خط DB_ENGINE را کامنت کنید تا SQLite استفاده شود."
-        fi
+یا از پشتیبانی هاست بخواهید کتابخانه libmysqlclient را فعال کند."
     fi
 fi
+
+# تست واقعی اتصال به MySQL با همان مشخصات .env — تا خطای دیتابیس همین‌جا
+# با پیام روشن دیده شود، نه وسط مایگریشن
+say "تست اتصال به MySQL ($(env_value DB_NAME)) ..."
+if ! DB_NAME="$(env_value DB_NAME)" DB_USER="$(env_value DB_USER)" DB_PASSWORD="$(env_value DB_PASSWORD)" DB_HOST="$(env_value DB_HOST)" DB_PORT="$(env_value DB_PORT)" \
+    "$VENV_PY" - << 'PYEOF'
+import os, sys
+try:
+    import MySQLdb
+except ImportError:
+    sys.exit(3)
+try:
+    MySQLdb.connect(
+        host=os.environ.get("DB_HOST", "localhost") or "localhost",
+        port=int(os.environ.get("DB_PORT", "3306") or "3306"),
+        user=os.environ["DB_USER"],
+        passwd=os.environ["DB_PASSWORD"],
+        db=os.environ["DB_NAME"],
+        charset="utf8mb4",
+    )
+except Exception as exc:
+    print(f"DB-CONNECT-ERROR: {exc}", file=sys.stderr)
+    sys.exit(4)
+PYEOF
+then
+    RC=$?
+    if [ "$RC" -eq 3 ]; then
+        die "درایور mysqlclient در دسترس نیست."
+    else
+        die "اتصال به MySQL ناموفق بود (کد $RC). رایج‌ترین علت‌ها:
+  • نام دیتابیس/یوزر در ‎.env‎ با آنچه در cPanel ساخته‌اید یکی نیست
+    (روی cPanel پیشوند یوزر-سی‌پنل لازم است، مثل ${CPANEL_USER}_shahidnameh)
+  • رمز DB_PASSWORD اشتباه است
+  • یوزر به دیتابیس متصل نشده (Add User To Database → ALL PRIVILEGES)
+  • DB_HOST باید معمولاً localhost بماند
+پیام خطای کامل در خروجی بالا آمده است. پس از اصلاح ‎.env‎ دوباره اجرا کنید."
+    fi
+fi
+say "اتصال به MySQL برقرار شد."
 
 # ------------------------------------------------------------- دستورات جنگو ----
 export DJANGO_SETTINGS_MODULE="$SETTINGS_MODULE"

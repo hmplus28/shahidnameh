@@ -3,6 +3,8 @@ from pathlib import Path
 import os
 import sys
 
+from django.core.exceptions import ImproperlyConfigured
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -99,37 +101,51 @@ WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# دیتابیس — پیش‌فرض SQLite (ساده و بدون تنظیمات برای هاست اشتراکی).
-# برای MySQL/MariaDB سی‌پنل در فایل ‎.env‎ بنویسید:  DB_ENGINE=mysql
-# و کلیدهای DB_NAME/DB_USER/DB_PASSWORD/DB_HOST/DB_PORT را کامل کنید.
-# (برای MySQL باید بستهٔ mysqlclient در محیط مجازی نصب شده باشد؛
-#  deploy/deploy_cpanel.sh به‌صورت خودکار آن را در صورت نیاز نصب می‌کند.)
+# دیتابیس — فقط MySQL/MariaDB
+#
+# این پروژه الزاماً با MySQL/MariaDB کار می‌کند (پیش‌فرض هاست‌های cPanel).
+# مشخصات از فایل ‎.env‎ خوانده می‌شود:
+#   DB_NAME / DB_USER / DB_PASSWORD  (الزامی)
+#   DB_HOST (پیش‌فرض localhost) / DB_PORT (پیش‌فرض 3306)
+# روی cPanel نام دیتابیس و یوزر معمولاً به‌شکل ‎<یوزر-سی‌پنل>_shahidnameh‎ است.
+# راهنمای ساخت دیتابیس: deploy/GUIDE-CPANEL-FA.md
 # ─────────────────────────────────────────────────────────────────────────────
-_DB_ENGINE = os.environ.get("DB_ENGINE", "sqlite").strip().lower()
+_DATABASE_NAME = os.environ.get("DB_NAME", "").strip()
+_DATABASE_USER = os.environ.get("DB_USER", "").strip()
 
-if _DB_ENGINE in ("mysql", "mariadb"):
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": os.environ.get("DB_NAME", ""),
-            "USER": os.environ.get("DB_USER", ""),
-            "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-            "HOST": os.environ.get("DB_HOST", "localhost"),
-            "PORT": os.environ.get("DB_PORT", "3306"),
-            "OPTIONS": {
-                "charset": "utf8mb4",
-                # برای پشتیبانی کامل از متن فارسی و ایموجی
-                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-            },
-        }
+if not _DATABASE_NAME or not _DATABASE_USER:
+    raise ImproperlyConfigured(
+        "این پروژه فقط با MySQL/MariaDB کار می‌کند و DB_NAME/DB_USER در فایل .env تنظیم نشده است.\n"
+        "در cPanel بخش «MySQL® Databases» یک دیتابیس و یوزر بسازید و در .env بنویسید:\n"
+        "  DB_NAME=<یوزر-سی‌پنل>_shahidnameh\n"
+        "  DB_USER=<یوزر-سی‌پنل>_shahidnameh\n"
+        "  DB_PASSWORD=رمز-دیتابیس\n"
+        "راهنمای کامل: deploy/GUIDE-CPANEL-FA.md"
+    )
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": _DATABASE_NAME,
+        "USER": _DATABASE_USER,
+        "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+        "HOST": os.environ.get("DB_HOST", "localhost"),
+        "PORT": os.environ.get("DB_PORT", "3306"),
+        # اتصال پایدار در Passenger (اتصال دوباره پس از ۶۰ ثانیه بیکاری)
+        "CONN_MAX_AGE": int(os.environ.get("DB_CONN_MAX_AGE", "60")),
+        "OPTIONS": {
+            "charset": "utf8mb4",
+            # برای پشتیبانی کامل از متن فارسی و ایموجی
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
+        # دیتابیس تست هم الزاماً utf8mb4 ساخته شود (بعضی سرورها پیش‌فرض latin1
+        # دارند و متن فارسی در تست‌ها خطای Incorrect string value می‌دهد)
+        "TEST": {
+            "CHARSET": "utf8mb4",
+            "COLLATION": "utf8mb4_unicode_ci",
+        },
     }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.environ.get("DJANGO_DB_NAME", str(BASE_DIR / "db.sqlite3")),
-        }
-    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
