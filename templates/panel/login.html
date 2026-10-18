@@ -6,7 +6,7 @@
 {% block content %}
 <div class="login-wrap">
   <form method="post" class="login-card">
-    <img class="login-brand-img" src="{% static 'images/bg/logo-main.jpg' %}" alt="شهیدنامه">
+    <img class="login-brand-img" src="{{ site_elements.site_logo.image_url }}" alt="شهیدنامه">
     <h1>ورود به پنل مدیریت</h1>
     <p>برای مدیریت پرونده‌ها وارد شوید</p>
     {% csrf_token %}

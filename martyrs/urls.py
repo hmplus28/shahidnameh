@@ -45,5 +45,8 @@ urlpatterns = [
     path("panel/settings/", panel_views.site_settings, name="panel_site_settings"),
     path("panel/backgrounds/", panel_views.backgrounds, name="panel_backgrounds"),
     path("panel/backgrounds/<str:key>/reset/", panel_views.background_reset, name="panel_background_reset"),
+    path("panel/elements/", panel_views.elements, name="panel_elements"),
+    path("panel/elements/<str:key>/reset/", panel_views.element_reset, name="panel_element_reset"),
+    path("manifest.webmanifest", views.manifest, name="manifest"),
     path("panel/clear-sw/", panel_views.clear_service_worker, name="panel_clear_sw"),
 ]

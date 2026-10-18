@@ -405,3 +405,103 @@ class BackgroundImage(models.Model):
             if key not in items:
                 items[key] = cls(key=key, opacity=cls.DEFAULT_OPACITY.get(key, 100))
         return items
+
+
+class SiteElement(models.Model):
+    """المان‌های گرافیکی سایت با امکان تعویض تصویر و تنظیم شفافیت از پنل مدیریت.
+
+    هر «المان» (لوگوی سایت، آیکون آیه قرآن سربرگ، آیکون لاله نوار پایین و
+    تصویر پیش‌فرض شهید) یک رکورد است. اگر تصویر سفارشی آپلود نشده باشد،
+    تصویر پیش‌فرض static همان المان استفاده می‌شود.
+    «شفافیت» میزان دیده‌شدن تصویر است: ۰٪ کاملاً نامرئی و ۱۰۰٪ نمایش کامل.
+    """
+
+    class Key(models.TextChoices):
+        SITE_LOGO = "site_logo", "لوگوی شهیدنامه"
+        QURAN_HEADER_ICON = "quran_header_icon", "آیکون آیه قرآن سربرگ"
+        TULIP_ICON = "tulip_icon", "آیکون لاله نوار پایین"
+        MARTYR_DEFAULT_PHOTO = "martyr_default_photo", "تصویر پیش‌فرض شهید"
+
+    # شفافیت پیش‌فرض هر المان (درصد) — نمایش کامل
+    DEFAULT_OPACITY = {
+        Key.SITE_LOGO: 100,
+        Key.QURAN_HEADER_ICON: 100,
+        Key.TULIP_ICON: 100,
+        Key.MARTYR_DEFAULT_PHOTO: 100,
+    }
+
+    # مسیر پیش‌فرض تصویر هر المان در پوشه static
+    DEFAULT_STATIC_PATH = {
+        Key.SITE_LOGO: "images/bg/logo-main.jpg",
+        Key.QURAN_HEADER_ICON: "images/bg/quran-header.png",
+        Key.TULIP_ICON: "images/bg/tulip-icon.jpg",
+        Key.MARTYR_DEFAULT_PHOTO: "images/martyr-default.jpg",
+    }
+
+    key = models.CharField("کلید", max_length=40, unique=True, choices=Key.choices)
+    image = models.ImageField(
+        "تصویر سفارشی", upload_to="elements/", blank=True,
+        help_text="در صورت خالی بودن، تصویر پیش‌فرض سایت نمایش داده می‌شود.",
+    )
+    opacity = models.PositiveSmallIntegerField(
+        "شفافیت نمایش (درصد)", default=100,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="۰ = کاملاً نامرئی، ۱۰۰ = نمایش کامل تصویر.",
+    )
+    updated_at = models.DateTimeField("آخرین ویرایش", auto_now=True)
+
+    class Meta:
+        verbose_name = "المان سایت"
+        verbose_name_plural = "المان‌های سایت"
+        ordering = ["key"]
+
+    def __str__(self):
+        return self.label
+
+    @property
+    def label(self):
+        return self.get_key_display()
+
+    @property
+    def default_opacity(self):
+        return self.DEFAULT_OPACITY.get(self.key, 100)
+
+    @property
+    def is_custom(self):
+        return bool(self.image)
+
+    @property
+    def default_image_url(self):
+        return static(self.DEFAULT_STATIC_PATH.get(self.key, "images/bg/logo-main.jpg"))
+
+    @property
+    def image_url(self):
+        """نشانی تصویر فعال: تصویر سفارشی در صورت آپلود، وگرنه تصویر پیش‌فرض."""
+        if self.image:
+            try:
+                return self.image.url
+            except ValueError:
+                return self.default_image_url
+        return self.default_image_url
+
+    @property
+    def opacity_css(self):
+        """مقدار شفافیت به‌صورت عددی ۰ تا ۱ برای استفاده در CSS."""
+        return f"{(self.opacity or 0) / 100:.2f}"
+
+    @classmethod
+    def load(cls, key):
+        """بازگرداندن رکورد المان؛ در نبود رکورد، نمونه پیش‌فرضِ ذخیره‌نشده."""
+        obj = cls.objects.filter(key=key).first()
+        if obj is None:
+            obj = cls(key=key, opacity=cls.DEFAULT_OPACITY.get(key, 100))
+        return obj
+
+    @classmethod
+    def load_map(cls):
+        """نقشه کامل همه المان‌ها برای استفاده در قالب‌ها (همیشه کامل است)."""
+        items = {obj.key: obj for obj in cls.objects.all()}
+        for key, _label in cls.Key.choices:
+            if key not in items:
+                items[key] = cls(key=key, opacity=cls.DEFAULT_OPACITY.get(key, 100))
+        return items

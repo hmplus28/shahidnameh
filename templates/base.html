@@ -16,9 +16,9 @@
     <meta property="og:description" content="{% block og_description %}پلتفرم پاسداشت زندگی، خاطرات و میراث شهدای ایران.{% endblock %}">
     <meta property="og:locale" content="fa_IR">
     {% block og_extra %}{% endblock %}
-    <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
-    <link rel="icon" type="image/jpeg" href="{% static 'images/bg/logo-main.jpg' %}">
-    <link rel="apple-touch-icon" href="{% static 'images/bg/logo-main.jpg' %}">
+    <link rel="manifest" href="{% url 'martyrs:manifest' %}">
+    <link rel="icon" type="image/jpeg" href="{{ site_elements.site_logo.image_url }}">
+    <link rel="apple-touch-icon" href="{{ site_elements.site_logo.image_url }}">
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/site.css' %}">
     {% include "partials/bg_style.html" %}
@@ -32,10 +32,10 @@
       <div class="app-main">
         <header class="app-header">
           <a class="app-header-logo" href="{% url 'martyrs:home' %}">
-            <img class="header-logo-img" src="{% static 'images/bg/logo-main.jpg' %}" alt="شهیدنامه" loading="eager">
+            <img class="header-logo-img" src="{{ site_elements.site_logo.image_url }}" alt="شهیدنامه" loading="eager">
           </a>
           <a class="app-header-title" href="{% url 'martyrs:home' %}">
-            <img class="header-quran-icon" src="{% static 'images/bg/quran-header.png' %}" alt="آیه قرآن" loading="eager">
+            <img class="header-quran-icon" src="{{ site_elements.quran_header_icon.image_url }}" alt="آیه قرآن" loading="eager">
           </a>
           <div class="app-header-actions">
             <button type="button" class="icon-btn" aria-label="جست‌وجو" data-search-toggle>{% include "icons/icon.html" with name="search" size=22 %}</button>
@@ -54,11 +54,11 @@
         <small>خانه</small>
       </a>
       <a href="{% url 'martyrs:directory' %}"{% if request.resolver_match.url_name == 'directory' or request.resolver_match.url_name == 'detail' %} aria-current="page"{% endif %}>
-        <span class="bot-icn" aria-hidden="true"><img src="{% static 'images/bg/tulip-icon.jpg' %}" alt="" class="tulip-icon"></span>
+        <span class="bot-icn" aria-hidden="true"><img src="{{ site_elements.tulip_icon.image_url }}" alt="" class="tulip-icon"></span>
         <small>فهرست شهدا</small>
       </a>
       <button type="button" aria-label="بیشتر" data-more-toggle>
-        <span class="bot-icn" aria-hidden="true"><img src="{% static 'images/bg/logo-main.jpg' %}" alt="" class="nav-icon-img"></span>
+        <span class="bot-icn" aria-hidden="true"><img src="{{ site_elements.site_logo.image_url }}" alt="" class="nav-icon-img"></span>
         <small>بیشتر</small>
       </button>
     </nav>
@@ -90,7 +90,7 @@
       <div class="pwa-sheet-panel">
         <div class="pwa-sheet-handle"></div>
         <button type="button" class="pwa-sheet-close" data-install-close aria-label="بستن">{% include "icons/icon.html" with name="close" size=20 %}</button>
-        <img class="pwa-sheet-logo" src="{% static 'images/bg/logo-main.jpg' %}" alt="شهیدنامه">
+        <img class="pwa-sheet-logo" src="{{ site_elements.site_logo.image_url }}" alt="شهیدنامه">
         <h2>شهیدنامه را نصب کنید</h2>
         <p>با نصب این برنامه، دسترسی سریع‌تر و تجربه‌ای شبیه اپلیکیشن خواهید داشت.</p>
         <button type="button" class="pwa-sheet-btn" data-install-app>نصب رایگان</button>

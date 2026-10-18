@@ -3,7 +3,7 @@ import re
 
 from django.conf import settings
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.templatetags.static import static
 
@@ -109,6 +109,39 @@ def martyr_detail(request, slug):
 
 def offline(request):
     return render(request, "offline.html", status=200)
+
+
+def manifest(request):
+    """مانیفست PWA به‌صورت پویا؛ لوگو و آیکون‌ها از تنظیمات پنل مدیریت خوانده می‌شود."""
+    from .models import SiteElement
+
+    logo = SiteElement.load("site_logo").image_url
+    tulip = SiteElement.load("tulip_icon").image_url
+    payload = {
+        "name": "شهیدنامه | میراث ماندگار",
+        "short_name": "شهیدنامه",
+        "id": "/",
+        "lang": "fa",
+        "dir": "rtl",
+        "start_url": "/",
+        "scope": "/",
+        "display": "standalone",
+        "display_override": ["window-controls-overlay", "standalone"],
+        "orientation": "portrait-primary",
+        "background_color": "#f5f1e8",
+        "theme_color": "#173f3d",
+        "description": "پلتفرم پاسداشت زندگی، خاطرات و میراث شهدای ایران.",
+        "categories": ["education", "lifestyle"],
+        "icons": [
+            {"src": logo, "sizes": "192x192", "type": "image/png", "purpose": "any"},
+            {"src": logo, "sizes": "512x512", "type": "image/png", "purpose": "any"},
+        ],
+        "shortcuts": [
+            {"name": "فهرست شهدا", "short_name": "جست‌وجو", "url": "/martyrs/", "icons": [{"src": tulip, "sizes": "any", "type": "image/png"}]},
+            {"name": "ورود مدیران", "short_name": "مدیریت", "url": "/panel/login/", "icons": [{"src": logo, "sizes": "any", "type": "image/png"}]},
+        ],
+    }
+    return JsonResponse(payload)
 
 
 def service_worker(request):

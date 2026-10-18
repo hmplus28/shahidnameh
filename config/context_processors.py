@@ -1,4 +1,4 @@
-from martyrs.models import BackgroundImage, SiteSettings
+from martyrs.models import BackgroundImage, SiteElement, SiteSettings
 
 
 def site_settings(request):
@@ -8,3 +8,8 @@ def site_settings(request):
 def background_assets(request):
     """نقشه کامل اسلات‌های تصویر پس‌زمینه برای استفاده در همه قالب‌ها."""
     return {"background_assets": BackgroundImage.load_map()}
+
+
+def site_elements(request):
+    """نقشه کامل المان‌های گرافیکی سایت (لوگو، آیکون‌ها و تصویر پیش‌فرض شهید)."""
+    return {"site_elements": SiteElement.load_map()}

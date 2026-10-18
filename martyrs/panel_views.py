@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .models import BackgroundImage, ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory
+from .models import BackgroundImage, ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteElement
 from .panel_forms import (
     ROLE_ADMIN,
     ROLE_AUTHOR,
@@ -24,6 +24,7 @@ from .panel_forms import (
     MartyrVideoForm,
     MemoryForm,
     PanelUserForm,
+    SiteElementForm,
     ensure_role_groups,
 )
 
@@ -599,6 +600,65 @@ def background_reset(request, key):
         _log(request.user, obj, CHANGE, f"بازگرداندن پس‌زمینه «{obj.label}» به پیش‌فرض")
         messages.success(request, f"پس‌زمینه «{obj.label}» به حالت پیش‌فرض بازگشت.")
     return redirect("martyrs:panel_backgrounds")
+
+
+@panel_access
+@superuser_only
+def elements(request):
+    """مدیریت المان‌های گرافیکی سایت: لوگو، آیکون‌ها و تصویر پیش‌فرض شهید.
+
+    برای هر المان می‌توان تصویر سفارشی آپلود کرد و شفافیت نمایش آن را
+    با اسلایدر تنظیم کرد؛ مثل صفحه تصاویر پس‌زمینه.
+    """
+    items = SiteElement.load_map()
+
+    if request.method == "POST":
+        key = request.POST.get("key", "")
+        if key not in items:
+            messages.error(request, "المان نامعتبر است.")
+            return redirect("martyrs:panel_elements")
+        obj = items[key]
+        form = SiteElementForm(request.POST, request.FILES, instance=obj, prefix=key)
+        if form.is_valid():
+            saved = form.save(commit=False)
+            saved.key = key
+            saved.save()
+            _log(request.user, saved, CHANGE, f"ویرایش المان «{saved.label}» از پنل (شفافیت {saved.opacity}٪)")
+            messages.success(request, f"المان «{saved.label}» ذخیره شد.")
+        else:
+            messages.error(request, "ذخیره ناموفق بود؛ فرمت تصویر و مقدار شفافیت را بررسی کنید.")
+        return redirect("martyrs:panel_elements")
+
+    cards = []
+    for key, obj in items.items():
+        cards.append({
+            "key": key,
+            "obj": obj,
+            "form": SiteElementForm(instance=obj, prefix=key),
+        })
+    return render(request, "panel/elements.html", {"cards": cards, "active_section": "settings"})
+
+
+@panel_access
+@superuser_only
+def element_reset(request, key):
+    """بازگرداندن یک المان به تصویر و شفافیت پیش‌فرض."""
+    if request.method == "POST":
+        valid_keys = [choice[0] for choice in SiteElement.Key.choices]
+        if key not in valid_keys:
+            messages.error(request, "المان نامعتبر است.")
+            return redirect("martyrs:panel_elements")
+        obj = SiteElement.objects.filter(key=key).first()
+        if obj is None:
+            messages.success(request, "این المان از قبل روی حالت پیش‌فرض است.")
+            return redirect("martyrs:panel_elements")
+        if obj.image:
+            obj.image.delete(save=False)
+        obj.opacity = obj.default_opacity
+        obj.save()
+        _log(request.user, obj, CHANGE, f"بازگرداندن المان «{obj.label}» به پیش‌فرض")
+        messages.success(request, f"المان «{obj.label}» به حالت پیش‌فرض بازگشت.")
+    return redirect("martyrs:panel_elements")
 
 
 @panel_access

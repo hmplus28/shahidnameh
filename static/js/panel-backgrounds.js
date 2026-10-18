@@ -1,4 +1,4 @@
-/* پیش‌نمایش زنده شفافیت تصاویر پس‌زمینه در پنل مدیریت شهیدنامه */
+/* پیش‌نمایش زنده شفافیت تصاویر پس‌زمینه و المان‌های سایت در پنل مدیریت شهیدنامه */
 (function () {
   "use strict";
 
@@ -33,10 +33,12 @@
     }
   });
 
-  // تایید پیش از بازگشت به پیش‌فرض
+  // تایید پیش از بازگشت به پیش‌فرض (پیام قابل‌تنظیم با data-confirm)
   document.querySelectorAll("[data-bg-reset]").forEach(function (btn) {
     btn.addEventListener("click", function (event) {
-      if (!window.confirm("\u0627\u06CC\u0646 \u067E\u0633\u200C\u0632\u0645\u06CC\u0646\u0647 \u0628\u0647 \u062A\u0635\u0648\u06CC\u0631 \u0648 \u0634\u0641\u0627\u0641\u06CC\u062A \u067E\u06CC\u0634\u200C\u0641\u0631\u0636 \u0628\u0627\u0632\u06AF\u0631\u062F\u062F\u061F")) {
+      var message = btn.getAttribute("data-confirm") ||
+        "\u0627\u06CC\u0646 \u067E\u0633\u200C\u0632\u0645\u06CC\u0646\u0647 \u0628\u0647 \u062A\u0635\u0648\u06CC\u0631 \u0648 \u0634\u0641\u0627\u0641\u06CC\u062A \u067E\u06CC\u0634\u200C\u0641\u0631\u0636 \u0628\u0627\u0632\u06AF\u0631\u062F\u062F\u061F";
+      if (!window.confirm(message)) {
         event.preventDefault();
       }
     });

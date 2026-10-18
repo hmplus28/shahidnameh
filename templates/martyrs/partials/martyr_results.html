@@ -9,7 +9,7 @@
       {% if martyr.profile_image %}
         <img class="directory-img" src="{{ martyr.profile_image.url }}" alt="{{ martyr.full_name }}" loading="lazy">
       {% else %}
-        <img class="directory-img default-img" src="{% static 'images/martyr-default.jpg' %}" alt="{{ martyr.full_name }}" loading="lazy">
+        <img class="directory-img default-img" src="{{ site_elements.martyr_default_photo.image_url }}" alt="{{ martyr.full_name }}" loading="lazy">
       {% endif %}
     </div>
     <div class="directory-main">

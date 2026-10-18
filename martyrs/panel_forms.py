@@ -2,7 +2,7 @@ from django import forms
 from jalali_date.fields import JalaliDateField
 from jalali_date.widgets import AdminJalaliDateWidget
 
-from .models import BackgroundImage, ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteSettings
+from .models import BackgroundImage, ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteElement, SiteSettings
 
 
 class MartyrSectionForm(forms.ModelForm):
@@ -234,4 +234,22 @@ class BackgroundImageForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["opacity"].widget.attrs["data-bg-slider"] = "1"
         self.fields["image"].label = "تصویر پس‌زمینه"
+        self.fields["opacity"].label = "شفافیت نمایش"
+
+
+class SiteElementForm(forms.ModelForm):
+    """فرم تعویض تصویر المان سایت (لوگو، آیکون‌ها و…) و تنظیم شفافیت آن."""
+
+    class Meta:
+        model = SiteElement
+        fields = ("image", "opacity")
+        widgets = {
+            "image": PersianClearableFileInput(attrs={"accept": "image/*", "class": "bg-file-input"}),
+            "opacity": forms.NumberInput(attrs={"type": "range", "min": 0, "max": 100, "step": 1}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["opacity"].widget.attrs["data-bg-slider"] = "1"
+        self.fields["image"].label = "تصویر المان"
         self.fields["opacity"].label = "شفافیت نمایش"
