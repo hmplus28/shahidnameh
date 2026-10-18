@@ -1,0 +1,29 @@
+{% comment %}
+متغیرهای CSS تصاویر پس‌زمینه — از تنظیمات پنل مدیریت خوانده می‌شود.
+این پارشال در base.html و base_panel.html صدا زده می‌شود تا هم سایت عمومی
+و هم پنل (از جمله صفحه ورود) از تنظیمات پس‌زمینه پیروی کنند.
+{% endcomment %}
+<style data-bg-vars>
+  :root {
+    --bg-home-hero-url:url("{{ background_assets.home_hero.image_url }}");
+    --bg-home-hero-opacity:{{ background_assets.home_hero.opacity_css }};
+    --bg-home-page-url:url("{{ background_assets.home_page.image_url }}");
+    --bg-home-page-opacity:{{ background_assets.home_page.opacity_css }};
+    --bg-directory-page-url:url("{{ background_assets.directory_page.image_url }}");
+    --bg-directory-page-opacity:{{ background_assets.directory_page.opacity_css }};
+    --bg-profile-hero-url:url("{{ background_assets.profile_hero.image_url }}");
+    --bg-profile-hero-opacity:{{ background_assets.profile_hero.opacity_css }};
+    --bg-profile-hero-wash:{{ background_assets.profile_hero.wash_css }};
+    --bg-epic-url:url("{{ background_assets.epic_banner.image_url }}");
+    --bg-epic-opacity:{{ background_assets.epic_banner.opacity_css }};
+    --bg-epic-ziyarat-url:url("{{ background_assets.epic_banner_ziyarat.image_url }}");
+    --bg-epic-ziyarat-opacity:{{ background_assets.epic_banner_ziyarat.opacity_css }};
+    --bg-panel-login-url:url("{{ background_assets.panel_login.image_url }}");
+    --bg-panel-login-opacity:{{ background_assets.panel_login.opacity_css }};
+    --bg-hero-arch-url:url("{{ background_assets.hero_arch.image_url }}");
+    --bg-hero-arch-opacity:{{ background_assets.hero_arch.opacity_css }};
+    --bg-eslimi-url:url("{{ background_assets.eslimi_texture.image_url }}");
+    --bg-eslimi-opacity:{{ background_assets.eslimi_texture.opacity_css }};
+    --bg-eslimi-divider-opacity:{{ background_assets.eslimi_divider.opacity_css }};
+  }
+</style>

@@ -7,11 +7,11 @@
 <!-- Hero جدید -->
 <section class="hero-new">
   <div class="hero-new-bg" aria-hidden="true">
-    <img src="{% static 'images/bg/bg-home.jpg' %}" alt="" loading="eager">
+    <img src="{{ background_assets.home_hero.image_url }}" alt="" loading="eager">
   </div>
   <div class="hero-new-eslimi" aria-hidden="true"></div>
   <div class="hero-new-overlay" aria-hidden="true"></div>
-  <img class="hero-new-arch" src="{% static 'images/patterns/mihrab-arch.png' %}" alt="" loading="eager" aria-hidden="true">
+  <img class="hero-new-arch" src="{{ background_assets.hero_arch.image_url }}" alt="" loading="eager" aria-hidden="true">
   <div class="shell hero-new-inner">
     <div class="hero-new-content">
       <span class="hero-new-tag">{% include "icons/icon.html" with name="crescent-star" size=18 %} بایگانی زنده یاد و نام</span>
@@ -40,9 +40,9 @@
   </div>
 </section>
 
-{% include "martyrs/partials/epic_banner.html" with quote="شهیدان راه خدا را مرده مپندارید؛ بلکه ایشان زنده‌اند و نزد پروردگار خویش روزی داده می‌شوند." source="آل‌عمران ۱۶۹" bg="images/war-front/war-01.jpeg" badge1="دفاع مقدس" badge2="ایثار و مقاومت" badge3="راه بی‌بازگشت" %}
+{% include "martyrs/partials/epic_banner.html" with quote="شهیدان راه خدا را مرده مپندارید؛ بلکه ایشان زنده‌اند و نزد پروردگار خویش روزی داده می‌شوند." source="آل‌عمران ۱۶۹" bg_asset=background_assets.epic_banner badge1="دفاع مقدس" badge2="ایثار و مقاومت" badge3="راه بی‌بازگشت" %}
 
-<div class="eslimi-strip" aria-hidden="true"><span></span><img src="{% static 'images/patterns/eslimi-divider.jpg' %}" alt="" loading="lazy"><span></span></div>
+<div class="eslimi-strip" aria-hidden="true"><span></span><img src="{{ background_assets.eslimi_divider.image_url }}" alt="" loading="lazy" style="opacity:{{ background_assets.eslimi_divider.opacity_css }}"><span></span></div>
 
 <!-- بخش ۱: شهدای شاخص -->
 <section class="shell home-section">
@@ -78,7 +78,7 @@
   </div>
 </section>
 
-<div class="eslimi-strip" aria-hidden="true"><span></span><img src="{% static 'images/patterns/eslimi-divider.jpg' %}" alt="" loading="lazy"><span></span></div>
+<div class="eslimi-strip" aria-hidden="true"><span></span><img src="{{ background_assets.eslimi_divider.image_url }}" alt="" loading="lazy" style="opacity:{{ background_assets.eslimi_divider.opacity_css }}"><span></span></div>
 
 <!-- بخش ۲: آخرین روایت‌ها (ادغام شهدا و خاطرات) -->
 <section class="shell home-section recent-stories">

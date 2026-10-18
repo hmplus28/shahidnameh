@@ -55,7 +55,7 @@ class PanelTests(TestCase):
     def test_login_page_and_dashboard_render(self):
         response = self.client.get(reverse("martyrs:panel_login"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "پنل مدیریت شهیدنامه")
+        self.assertContains(response, "ورود به پنل مدیریت")
 
         self._login_as_superuser()
         dashboard = self.client.get(reverse("martyrs:panel_home"))
@@ -153,6 +153,8 @@ class PanelTests(TestCase):
         self._login_as_superuser()
         response = self.client.get(reverse("martyrs:panel_martyr_list"))
         expected = jdate.fromgregorian(date=self.martyr.martyrdom_date).strftime("%Y/%m/%d")
+        # قالب‌ها اعداد را فارسی نمایش می‌دهند
+        expected = expected.translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
 
         self.assertContains(response, expected)
 

@@ -8,6 +8,7 @@
     <link rel="icon" type="image/jpeg" href="{% static 'images/bg/logo-main.jpg' %}">
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
     <link rel="stylesheet" href="{% static 'css/panel.css' %}">
+    {% include "partials/bg_style.html" %}
     {{ form.media }}
   </head>
   <body class="panel-body {% block body_class %}{% endblock %}">
@@ -28,6 +29,7 @@
           <a href="{% url 'martyrs:panel_logs' %}"{% if request.resolver_match.url_name == 'panel_logs' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="clock" size=18 %}</span> تاریخچه تغییرات</a>
           {% if request.user.is_superuser %}<a href="{% url 'martyrs:panel_user_list' %}"{% if request.resolver_match.url_name == 'panel_user_list' or request.resolver_match.url_name == 'panel_user_new' or request.resolver_match.url_name == 'panel_user_edit' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="users" size=18 %}</span> کاربران و نقش‌ها</a>{% endif %}
           {% if request.user.is_superuser %}<a href="{% url 'martyrs:panel_site_settings' %}"{% if request.resolver_match.url_name == 'panel_site_settings' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="play" size=18 %}</span> تنظیمات سایت</a>{% endif %}
+          {% if request.user.is_superuser %}<a href="{% url 'martyrs:panel_backgrounds' %}"{% if request.resolver_match.url_name == 'panel_backgrounds' %} class="is-active"{% endif %}><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="star-islamic" size=18 %}</span> تصاویر پس‌زمینه</a>{% endif %}
           <div class="panel-nav-divider" aria-hidden="true"></div>
           <a href="{% url 'martyrs:home' %}" target="_blank" class="panel-nav-site">مشاهده سایت {% include "icons/icon.html" with name="external" size=14 %}</a>
           <form method="post" action="{% url 'martyrs:panel_logout' %}">{% csrf_token %}<button type="submit" class="panel-nav-logout"><span class="nav-icn" aria-hidden="true">{% include "icons/icon.html" with name="logout" size=16 %}</span> خروج</button></form>

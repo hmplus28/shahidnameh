@@ -318,7 +318,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .eyebrow { color:var(--gold); font-size:11px; font-weight:700; letter-spacing:.05em; }
 .home-section { padding:24px 0; position:relative; z-index:1; }
 
-/* Page Backgrounds */
+/* Page Backgrounds — تصویر و شفافیت از تنظیمات پنل (متغیرهای CSS) */
 .page-bg {
   position:relative;
 }
@@ -330,15 +330,16 @@ ul, ol { list-style:none; margin:0; padding:0; }
   max-width:var(--app-max);
   background-size:cover;
   background-position:center;
-  opacity:.12;
   pointer-events:none;
   z-index:0;
 }
 .page-bg-home::before {
-  background-image:url("/static/images/bg/bg-home.jpg");
+  background-image:var(--bg-home-page-url,url("/static/images/bg/bg-home.jpg"));
+  opacity:var(--bg-home-page-opacity,.12);
 }
 .page-bg-directory::before {
-  background-image:url("/static/images/bg/bg-directory.jpg");
+  background-image:var(--bg-directory-page-url,url("/static/images/bg/bg-directory.jpg"));
+  opacity:var(--bg-directory-page-opacity,.12);
 }
 
 .section-header {
@@ -680,23 +681,19 @@ ul, ol { list-style:none; margin:0; padding:0; }
   background:var(--card-matte-deep);
   padding:16px 0 24px;
   position:relative;
-  background-image:url("/static/images/chafiyeh.jpg");
+  /* تصویر چفیه + پوشش سفید متناسب با شفافیت تنظیم‌شده در پنل */
+  background-image:
+    linear-gradient(rgba(255,255,255,var(--bg-profile-hero-wash,.68)),rgba(255,255,255,var(--bg-profile-hero-wash,.68))),
+    var(--bg-profile-hero-url,url("/static/images/chafiyeh.jpg"));
   background-size:cover;
   background-position:center;
-}
-.profile-hero::after {
-  content:"";
-  position:absolute; inset:0;
-  background:rgba(255,255,255,.68);
-  pointer-events:none;
-  z-index:0;
 }
 .profile-hero::before {
   content:"";
   position:absolute; inset:0;
-  background-image:var(--pat-eslimi-texture);
+  background-image:var(--bg-eslimi-url,var(--pat-eslimi-texture));
   background-size:260px;
-  opacity:.06;
+  opacity:calc(var(--bg-eslimi-opacity,.09)*.6667);
   mix-blend-mode:soft-light;
   pointer-events:none;
   z-index:0;
@@ -1421,20 +1418,20 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .hero-new-bg {
   position:absolute; inset:0;
   z-index:0;
-  opacity:.07;
+  opacity:var(--bg-home-hero-opacity,.07);
 }
 .hero-new-bg img {
   width:100%; height:100%;
   object-fit:cover;
   filter:blur(2px);
 }
-/* بافت اسلیمی روی hero — الگوی دانلودشده از اینترنت */
+/* بافت اسلیمی روی hero — تصویر و شفافیت از تنظیمات پنل */
 .hero-new-eslimi {
   position:absolute; inset:0;
   z-index:1;
-  background-image:var(--pat-eslimi-texture);
+  background-image:var(--bg-eslimi-url,var(--pat-eslimi-texture));
   background-size:340px;
-  opacity:.09;
+  opacity:var(--bg-eslimi-opacity,.09);
   mix-blend-mode:soft-light;
   pointer-events:none;
 }
@@ -1446,14 +1443,14 @@ ul, ol { list-style:none; margin:0; padding:0; }
   z-index:1;
   pointer-events:none;
 }
-/* قاب محراب طلایی — عنصر تزئینی دانلودشده از اینترنت */
+/* قاب محراب طلایی — شفافیت از تنظیمات پنل */
 .hero-new-arch {
   position:absolute;
   left:-84px;
   bottom:-64px;
   width:300px;
   z-index:1;
-  opacity:.16;
+  opacity:var(--bg-hero-arch-opacity,.16);
   filter:saturate(.9);
   pointer-events:none;
   user-select:none;
@@ -1614,6 +1611,7 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .epic-banner-bg {
   position:absolute; inset:0;
   z-index:0;
+  /* شفافیت واقعی از طریق style درون‌خطی قالب تنظیم می‌شود؛ مقدار زیر فقط جایگزین است */
   opacity:.34;
 }
 .epic-banner-bg img {

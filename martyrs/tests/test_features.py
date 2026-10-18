@@ -91,7 +91,7 @@ class FeatureFieldsTests(TestCase):
         self.assertIn("قطعه ۲۶", self.martyr.burial_place_full)
 
         response = self.client.get(self.martyr.get_absolute_url())
-        self.assertContains(response, "نام محل دفن")
+        self.assertContains(response, "محل دفن")
         self.assertContains(response, "بهشت زهرا")
         self.assertContains(response, "قطعه")
 
@@ -128,10 +128,11 @@ class HomePageWarDesignTests(TestCase):
     def test_home_contains_mihrab_and_war_elements(self):
         response = self.client.get(reverse("martyrs:home"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "hero-war-silhouette")  # المان خاکریز/جبهه
-        self.assertContains(response, "heading-frame")   # قاب تذهیبی عناوین
-        self.assertContains(response, "kafiyeh-bg")      # پترن چفیه
-        self.assertContains(response, "section-divider") # جداکننده مذهبی
+        self.assertContains(response, "hero-new-eslimi")  # بافت اسلیمی/محراب هیرو
+        self.assertContains(response, "hero-new-arch")    # قاب محراب
+        self.assertContains(response, "epic-banner")      # بخش جبهه/دفاع مقدس
+        self.assertContains(response, "epic-kufiyeh")     # پترن چفیه
+        self.assertContains(response, "eslimi-strip")     # جداکننده مذهبی
 
 
 class PanelFeatureTests(TestCase):

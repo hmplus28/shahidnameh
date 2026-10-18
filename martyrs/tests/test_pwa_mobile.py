@@ -9,7 +9,8 @@ class PwaAndMobileShellTests(TestCase):
         self.assertContains(response, 'rel="manifest"')
         self.assertContains(response, 'data-install-card')
         self.assertContains(response, 'class="app-bottom-nav"')
-        self.assertContains(response, 'data-nav-toggle-mobile')
+        # منوی «بیشتر» به‌جای ناوبری قدیمی موبایل
+        self.assertContains(response, 'data-more-toggle')
 
     def test_service_worker_is_root_scoped_and_uses_current_cache(self):
         response = self.client.get("/service-worker.js")

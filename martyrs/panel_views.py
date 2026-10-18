@@ -11,10 +11,11 @@ from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.utils.http import url_has_allowed_host_and_scheme
 
-from .models import ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory
+from .models import BackgroundImage, ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory
 from .panel_forms import (
     ROLE_ADMIN,
     ROLE_AUTHOR,
+    BackgroundImageForm,
     ComradeMartyrForm,
     MartyrForm,
     MartyrImageForm,
@@ -543,6 +544,61 @@ def site_settings(request):
     else:
         form = SiteSettingsForm(instance=obj)
     return render(request, "panel/site_settings.html", {"form": form})
+
+
+@panel_access
+@superuser_only
+def backgrounds(request):
+    """مدیریت همه تصاویر پس‌زمینه سایت: تعویض تصویر و تنظیم شفافیت هر اسلات."""
+    assets = BackgroundImage.load_map()
+
+    if request.method == "POST":
+        key = request.POST.get("key", "")
+        if key not in assets:
+            messages.error(request, "اسلات پس‌زمینه نامعتبر است.")
+            return redirect("martyrs:panel_backgrounds")
+        obj = assets[key]
+        form = BackgroundImageForm(request.POST, request.FILES, instance=obj, prefix=key)
+        if form.is_valid():
+            saved = form.save(commit=False)
+            saved.key = key
+            saved.save()
+            _log(request.user, saved, CHANGE, f"ویرایش پس‌زمینه «{saved.label}» از پنل (شفافیت {saved.opacity}٪)")
+            messages.success(request, f"پس‌زمینه «{saved.label}» ذخیره شد.")
+        else:
+            messages.error(request, "ذخیره ناموفق بود؛ فرمت تصویر و مقدار شفافیت را بررسی کنید.")
+        return redirect("martyrs:panel_backgrounds")
+
+    cards = []
+    for key, obj in assets.items():
+        cards.append({
+            "key": key,
+            "obj": obj,
+            "form": BackgroundImageForm(instance=obj, prefix=key),
+        })
+    return render(request, "panel/backgrounds.html", {"cards": cards, "active_section": "settings"})
+
+
+@panel_access
+@superuser_only
+def background_reset(request, key):
+    """بازگرداندن یک اسلات پس‌زمینه به تصویر و شفافیت پیش‌فرض."""
+    if request.method == "POST":
+        valid_keys = [choice[0] for choice in BackgroundImage.Key.choices]
+        if key not in valid_keys:
+            messages.error(request, "اسلات پس‌زمینه نامعتبر است.")
+            return redirect("martyrs:panel_backgrounds")
+        obj = BackgroundImage.objects.filter(key=key).first()
+        if obj is None:
+            messages.success(request, "این پس‌زمینه از قبل روی حالت پیش‌فرض است.")
+            return redirect("martyrs:panel_backgrounds")
+        if obj.image:
+            obj.image.delete(save=False)
+        obj.opacity = obj.default_opacity
+        obj.save()
+        _log(request.user, obj, CHANGE, f"بازگرداندن پس‌زمینه «{obj.label}» به پیش‌فرض")
+        messages.success(request, f"پس‌زمینه «{obj.label}» به حالت پیش‌فرض بازگشت.")
+    return redirect("martyrs:panel_backgrounds")
 
 
 @panel_access

@@ -1,4 +1,6 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.templatetags.static import static
 from django.urls import reverse
 from django.utils.text import slugify
 
@@ -281,3 +283,125 @@ class SiteSettings(models.Model):
     def load(cls):
         obj, _ = cls.objects.get_or_create(pk=1)
         return obj
+
+
+class BackgroundImage(models.Model):
+    """تصویر پس‌زمینه صفحات سایت با امکان تعویض تصویر و تنظیم شفافیت از پنل مدیریت.
+
+    هر «اسلات» پس‌زمینه (مثل پس‌زمینه صفحه اصلی یا بنر حماسی) یک رکورد است.
+    اگر تصویر سفارشی آپلود نشده باشد، تصویر پیش‌فرض static همان اسلات استفاده می‌شود.
+    «شفافیت» میزان دیده‌شدن تصویر است: ۰٪ کاملاً نامرئی و ۱۰۰٪ نمایش کامل.
+    """
+
+    class Key(models.TextChoices):
+        HOME_HERO = "home_hero", "پس‌زمینه هیرو صفحه اصلی"
+        HOME_PAGE = "home_page", "پس‌زمینه محو کل صفحه اصلی"
+        DIRECTORY_PAGE = "directory_page", "پس‌زمینه محو فهرست شهدا"
+        PROFILE_HERO = "profile_hero", "پس‌زمینه پرونده شهید (چفیه)"
+        EPIC_BANNER = "epic_banner", "بنر حماسی صفحه اصلی"
+        EPIC_BANNER_ZIYARAT = "epic_banner_ziyarat", "بنر حماسی زیارت‌نامه"
+        PANEL_LOGIN = "panel_login", "پس‌زمینه صفحه ورود پنل"
+        HERO_ARCH = "hero_arch", "قاب محراب صفحه اصلی"
+        ESLIMI_TEXTURE = "eslimi_texture", "بافت اسلیمی (تزئینی)"
+        ESLIMI_DIVIDER = "eslimi_divider", "جداکننده اسلیمی"
+
+    # شفافیت پیش‌فرض هر اسلات (درصد) — مطابق طراحی اولیه سایت
+    DEFAULT_OPACITY = {
+        Key.HOME_HERO: 7,
+        Key.HOME_PAGE: 12,
+        Key.DIRECTORY_PAGE: 12,
+        Key.PROFILE_HERO: 32,
+        Key.EPIC_BANNER: 34,
+        Key.EPIC_BANNER_ZIYARAT: 34,
+        Key.PANEL_LOGIN: 45,
+        Key.HERO_ARCH: 16,
+        Key.ESLIMI_TEXTURE: 9,
+        Key.ESLIMI_DIVIDER: 100,
+    }
+
+    # مسیر پیش‌فرض تصویر هر اسلات در پوشه static
+    DEFAULT_STATIC_PATH = {
+        Key.HOME_HERO: "images/bg/bg-home.jpg",
+        Key.HOME_PAGE: "images/bg/bg-home.jpg",
+        Key.DIRECTORY_PAGE: "images/bg/bg-directory.jpg",
+        Key.PROFILE_HERO: "images/chafiyeh.jpg",
+        Key.EPIC_BANNER: "images/war-front/war-01.jpeg",
+        Key.EPIC_BANNER_ZIYARAT: "images/memorials/memorial-01.jpg",
+        Key.PANEL_LOGIN: "images/bg/bg-login.jpg",
+        Key.HERO_ARCH: "images/patterns/mihrab-arch.png",
+        Key.ESLIMI_TEXTURE: "images/patterns/eslimi-texture.jpg",
+        Key.ESLIMI_DIVIDER: "images/patterns/eslimi-divider.jpg",
+    }
+
+    key = models.CharField("کلید", max_length=40, unique=True, choices=Key.choices)
+    image = models.ImageField(
+        "تصویر سفارشی", upload_to="backgrounds/", blank=True,
+        help_text="در صورت خالی بودن، تصویر پیش‌فرض سایت نمایش داده می‌شود.",
+    )
+    opacity = models.PositiveSmallIntegerField(
+        "شفافیت نمایش (درصد)", default=100,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="۰ = کاملاً نامرئی، ۱۰۰ = نمایش کامل تصویر.",
+    )
+    updated_at = models.DateTimeField("آخرین ویرایش", auto_now=True)
+
+    class Meta:
+        verbose_name = "تصویر پس‌زمینه"
+        verbose_name_plural = "تصاویر پس‌زمینه"
+        ordering = ["key"]
+
+    def __str__(self):
+        return self.label
+
+    @property
+    def label(self):
+        return self.get_key_display()
+
+    @property
+    def default_opacity(self):
+        return self.DEFAULT_OPACITY.get(self.key, 100)
+
+    @property
+    def is_custom(self):
+        return bool(self.image)
+
+    @property
+    def default_image_url(self):
+        return static(self.DEFAULT_STATIC_PATH.get(self.key, "images/bg/bg-home.jpg"))
+
+    @property
+    def image_url(self):
+        """نشانی تصویر فعال: تصویر سفارشی در صورت آپلود، وگرنه تصویر پیش‌فرض."""
+        if self.image:
+            try:
+                return self.image.url
+            except ValueError:
+                return self.default_image_url
+        return self.default_image_url
+
+    @property
+    def opacity_css(self):
+        """مقدار شفافیت به‌صورت عددی ۰ تا ۱ برای استفاده در CSS."""
+        return f"{(self.opacity or 0) / 100:.2f}"
+
+    @property
+    def wash_css(self):
+        """مکمل شفافیت (۱ منهای شفافیت) برای پوشش‌های روشن روی تصویر."""
+        return f"{1 - (self.opacity or 0) / 100:.2f}"
+
+    @classmethod
+    def load(cls, key):
+        """بازگرداندن رکورد اسلات؛ در نبود رکورد، نمونه پیش‌فرضِ ذخیره‌نشده."""
+        obj = cls.objects.filter(key=key).first()
+        if obj is None:
+            obj = cls(key=key, opacity=cls.DEFAULT_OPACITY.get(key, 100))
+        return obj
+
+    @classmethod
+    def load_map(cls):
+        """نقشه کامل همه اسلات‌ها برای استفاده در قالب‌ها (همیشه کامل است)."""
+        items = {obj.key: obj for obj in cls.objects.all()}
+        for key, _label in cls.Key.choices:
+            if key not in items:
+                items[key] = cls(key=key, opacity=cls.DEFAULT_OPACITY.get(key, 100))
+        return items

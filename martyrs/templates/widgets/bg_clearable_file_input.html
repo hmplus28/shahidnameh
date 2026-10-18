@@ -1,0 +1,17 @@
+{% comment %}
+ویجت انتخاب فایل تصویر پس‌زمینه با برچسب فارسی.
+وقتی تصویری ذخیره شده، نشانی فعلی + چک‌باکس «حذف تصویر» نمایش داده می‌شود.
+{% endcomment %}
+{% if widget.is_initial %}
+  <div class="bg-file-current">
+    <span class="bg-file-current-label">تصویر فعلی:</span>
+    <a href="{{ widget.value.url }}" target="_blank" rel="noopener">{{ widget.value }}</a>
+    {% if not widget.required %}
+      <label class="bg-file-clear">
+        <input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"{% if widget.attrs.disabled %} disabled{% endif %}>
+        <span>حذف تصویر و بازگشت به پیش‌فرض</span>
+      </label>
+    {% endif %}
+  </div>
+{% endif %}
+<input type="{{ widget.type }}" name="{{ widget.name }}"{% if widget.value != None %} value="{{ widget.value }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>

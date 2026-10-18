@@ -1,0 +1,72 @@
+{% extends "panel/base_panel.html" %}
+{% load static %}
+{% block title %}تصاویر پس‌زمینه | پنل مدیریت شهیدنامه{% endblock %}
+{% block content %}
+<div class="panel-head">
+  <div>
+    <h1>تصاویر پس‌زمینه</h1>
+    <p>تعویض تصویر پس‌زمینه همه بخش‌های سایت و تنظیم شفافیت هرکدام.</p>
+  </div>
+</div>
+
+<div class="bg-intro">
+  برای هر بخش، می‌توانید تصویر دلخواه آپلود کنید و با اسلایدر «شفافیت نمایش» میزان دیده‌شدن تصویر را تغییر دهید؛
+  ۰٪ یعنی تصویر کاملاً نامرئی و ۱۰۰٪ یعنی نمایش کامل. پیش‌نمایش هر تغییر به‌صورت زنده در همان کارت دیده می‌شود و
+  با دکمه «بازگشت به پیش‌فرض» هم می‌توانید تنظیمات اولیه را بازیابی کنید. تغییرات بلافاصله در سایت اعمال می‌شود.
+</div>
+
+<div class="bg-grid">
+  {% for card in cards %}
+  <article class="bg-card" data-bg-card>
+    <div class="bg-card-head">
+      <div>
+        <h2>{{ card.obj.label }}</h2>
+        <span class="bg-key-badge">{{ card.key }}</span>
+      </div>
+      {% if card.obj.is_custom %}
+        <span class="bg-state-tag is-custom">تصویر سفارشی</span>
+      {% else %}
+        <span class="bg-state-tag is-default">پیش‌فرض</span>
+      {% endif %}
+    </div>
+
+    <div class="bg-preview">
+      <div class="bg-preview-layer" data-bg-layer style="background-image:url('{{ card.obj.image_url }}');opacity:{{ card.obj.opacity_css }}"></div>
+      <div class="bg-preview-caption">
+        <span>شفافیت فعلی</span>
+        <b data-bg-value>{{ card.obj.opacity }}٪</b>
+      </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="hidden" name="key" value="{{ card.key }}">
+
+      <div class="field">
+        <span>{{ card.form.image.label }}</span>
+        {{ card.form.image }}
+        {% if card.form.image.errors %}<ul class="errorlist">{% for e in card.form.image.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+      </div>
+
+      <div class="bg-opacity-row">
+        <label for="id_{{ card.key }}-opacity">{{ card.form.opacity.label }}</label>
+        {{ card.form.opacity }}
+        <span class="bg-slider-value" data-bg-value>{{ card.obj.opacity }}٪</span>
+      </div>
+      {% if card.form.opacity.errors %}<ul class="errorlist">{% for e in card.form.opacity.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+
+      <div class="bg-actions">
+        <button type="submit" class="panel-btn">{% include "icons/icon.html" with name="plus" size=16 %} ذخیره</button>
+      </div>
+    </form>
+
+    <form method="post" action="{% url 'martyrs:panel_background_reset' card.key %}" class="bg-reset-form">
+      {% csrf_token %}
+      <button type="submit" class="bg-reset-btn" data-bg-reset>{% include "icons/icon.html" with name="close" size=14 %} بازگشت به پیش‌فرض</button>
+    </form>
+  </article>
+  {% endfor %}
+</div>
+
+<script src="{% static 'js/panel-backgrounds.js' %}" defer></script>
+{% endblock %}

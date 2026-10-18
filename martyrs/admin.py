@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
+from django.forms import ModelForm, NumberInput
 from django.urls import reverse
 from django.utils.html import format_html
 from jalali_date import date2jalali
 from jalali_date.admin import ModelAdminJalaliMixin, TabularInlineJalaliMixin
 
-from .models import ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteSettings
+from .models import BackgroundImage, ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteSettings
 
 ACTION_FLAGS = {1: "افزودن", 2: "ویرایش", 3: "حذف"}
 
@@ -200,3 +201,47 @@ class SiteSettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         ("موزیک پس‌زمینه", {"fields": ("music_enabled", "music_url")}),
     )
+
+
+class BackgroundImageAdminForm(ModelForm):
+    """فرم پنل استاندارد با اسلایدر شفافیت، هماهنگ با پنل اختصاصی."""
+
+    class Meta:
+        model = BackgroundImage
+        fields = "__all__"
+        widgets = {
+            "opacity": NumberInput(attrs={"type": "range", "min": 0, "max": 100, "step": 1}),
+        }
+
+
+@admin.register(BackgroundImage)
+class BackgroundImageAdmin(ModelAdminJalaliMixin, admin.ModelAdmin):
+    """مدیریت تصاویر پس‌زمینه و شفافیت آن‌ها از پنل استاندارد جنگو."""
+
+    form = BackgroundImageAdminForm
+    list_display = ("thumbnail", "key", "opacity", "is_custom_tag", "jalali_updated_at")
+    list_editable = ("opacity",)
+    fields = ("key", "thumbnail", "image", "opacity", "jalali_updated_at")
+    readonly_fields = ("key", "thumbnail", "jalali_updated_at")
+
+    @admin.display(description="پیش‌نمایش")
+    def thumbnail(self, obj):
+        url = obj.image_url
+        if obj.image:
+            return format_html('<img src="{}" style="width:72px;height:48px;object-fit:cover;border-radius:8px" />', url)
+        return format_html('<img src="{}" style="width:72px;height:48px;object-fit:cover;border-radius:8px;opacity:.6" />', url)
+
+    @admin.display(boolean=True, description="تصویر سفارشی")
+    def is_custom_tag(self, obj):
+        return obj.is_custom
+
+    @admin.display(description="آخرین ویرایش")
+    def jalali_updated_at(self, obj):
+        return date2jalali(obj.updated_at).strftime("%Y/%m/%d - %H:%M")
+
+    def has_add_permission(self, request):
+        # اسلات‌ها با مهاجرت ساخته می‌شوند؛ افزودن دستی مجاز نیست.
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

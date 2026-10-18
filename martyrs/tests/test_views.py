@@ -62,6 +62,8 @@ class MartyrViewsTests(TestCase):
         form = MartyrDirectoryFilterForm({"martyrdom_from": "1363-11-19"})
         response = self.client.get(self.martyr.get_absolute_url())
         expected_jalali = date2jalali(self.martyr.martyrdom_date).strftime("%Y/%m/%d")
+        # قالب‌ها اعداد را فارسی نمایش می‌دهند
+        expected_jalali = expected_jalali.translate(str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹"))
 
         self.assertTrue(form.is_valid())
         self.assertEqual(form.cleaned_data["martyrdom_from"], self.martyr.martyrdom_date)

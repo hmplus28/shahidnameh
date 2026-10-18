@@ -43,5 +43,7 @@ urlpatterns = [
     path("panel/users/<int:pk>/active-toggle/", panel_views.user_toggle_active, name="panel_user_toggle"),
     path("panel/users/<int:pk>/delete/", panel_views.user_delete, name="panel_user_delete"),
     path("panel/settings/", panel_views.site_settings, name="panel_site_settings"),
+    path("panel/backgrounds/", panel_views.backgrounds, name="panel_backgrounds"),
+    path("panel/backgrounds/<str:key>/reset/", panel_views.background_reset, name="panel_background_reset"),
     path("panel/clear-sw/", panel_views.clear_service_worker, name="panel_clear_sw"),
 ]

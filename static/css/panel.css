@@ -309,8 +309,12 @@ textarea.panel-input { min-height:90px; resize:vertical; }
   content:"";
   position:absolute;
   inset:0;
-  background:url("/static/images/bg/bg-login.jpg") center/cover no-repeat;
-  opacity:.45;
+  /* تصویر و شفافیت از تنظیمات «تصاویر پس‌زمینه» در پنل مدیریت */
+  background-image:var(--bg-panel-login-url,url("/static/images/bg/bg-login.jpg"));
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  opacity:var(--bg-panel-login-opacity,.45);
   z-index:0;
 }
 .login-card {
@@ -650,4 +654,204 @@ body.is-login .panel-main {
   font-size:11.5px;
   color:#5c6f66;
   margin-top:6px;
+}
+
+/* =============================================================
+   Backgrounds Page — مدیریت تصاویر پس‌زمینه (موبایل‌محور)
+   ============================================================= */
+.bg-intro {
+  background:#f2f7f2;
+  border:1px solid #dfe9df;
+  border-radius:14px;
+  padding:14px 16px;
+  color:#48604f;
+  font-size:12.5px;
+  line-height:1.9;
+  margin-bottom:16px;
+}
+.bg-grid { display:grid; gap:14px; }
+.bg-card {
+  background:#fff;
+  border:1px solid #dde4dc;
+  border-radius:14px;
+  padding:16px;
+}
+.bg-card-head {
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:12px;
+}
+.bg-card-head h2 {
+  margin:0;
+  font-size:14.5px;
+  color:#173f3d;
+  line-height:1.6;
+}
+.bg-key-badge {
+  display:inline-block;
+  margin-top:3px;
+  font-size:10px;
+  color:#6b7d72;
+  background:#eef2ec;
+  border-radius:6px;
+  padding:2px 8px;
+  direction:ltr;
+}
+.bg-state-tag {
+  flex-shrink:0;
+  font-size:10.5px;
+  font-weight:700;
+  border-radius:99px;
+  padding:4px 10px;
+  white-space:nowrap;
+}
+.bg-state-tag.is-custom { background:#e5f2e9; color:#22633b; }
+.bg-state-tag.is-default { background:#f2f0e6; color:#7c6a2f; }
+
+/* پیش‌نمایش زنده تصویر و شفافیت */
+.bg-preview {
+  position:relative;
+  height:132px;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid #e3e8e1;
+  /* پس‌زمینه شطرنجی برای دید بهتر شفافیت */
+  background-color:#fbfaf6;
+  background-image:
+    linear-gradient(45deg,#ece9df 25%,transparent 25%,transparent 75%,#ece9df 75%),
+    linear-gradient(45deg,#ece9df 25%,transparent 25%,transparent 75%,#ece9df 75%);
+  background-size:18px 18px;
+  background-position:0 0,9px 9px;
+  margin-bottom:14px;
+}
+.bg-preview-layer {
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+}
+.bg-preview-caption {
+  position:absolute;
+  bottom:0;
+  right:0;
+  left:0;
+  background:rgba(23,63,61,.72);
+  color:#fff;
+  font-size:10.5px;
+  padding:4px 10px;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+.bg-preview-caption b { font-weight:700; }
+
+/* اسلایدر شفافیت */
+.bg-opacity-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:4px 0 16px;
+}
+.bg-opacity-row label {
+  font-size:12px;
+  font-weight:700;
+  color:#41544b;
+  white-space:nowrap;
+}
+.bg-slider {
+  flex:1;
+  min-width:0;
+  -webkit-appearance:none;
+  appearance:none;
+  height:34px;
+  background:transparent;
+  cursor:pointer;
+}
+.bg-slider::-webkit-slider-runnable-track {
+  height:8px;
+  border-radius:99px;
+  background:linear-gradient(to left,#2c6b5f,#bcd8c8);
+}
+.bg-slider::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid #2c6b5f;
+  margin-top:-8px;
+  box-shadow:0 2px 6px rgba(23,63,61,.25);
+}
+.bg-slider::-moz-range-track {
+  height:8px;
+  border-radius:99px;
+  background:linear-gradient(to left,#2c6b5f,#bcd8c8);
+}
+.bg-slider::-moz-range-thumb {
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#fff;
+  border:3px solid #2c6b5f;
+}
+.bg-slider-value {
+  min-width:52px;
+  text-align:center;
+  font-size:13px;
+  font-weight:800;
+  color:#173f3d;
+  background:#eef2ec;
+  border-radius:8px;
+  padding:6px 4px;
+}
+.bg-actions {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:10px;
+}
+.bg-actions .panel-btn { flex-shrink:0; }
+.bg-file-current {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px;
+  font-size:11.5px;
+  color:#5c6f66;
+  background:#f6f8f4;
+  border:1px dashed #d7dfd6;
+  border-radius:8px;
+  padding:8px 10px;
+  margin-bottom:10px;
+  word-break:break-all;
+}
+.bg-file-current a { color:#22633b; font-weight:600; }
+.bg-file-clear {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-weight:700;
+  color:#8a4a2a;
+  cursor:pointer;
+}
+.bg-reset-form { margin-top:10px; }
+.bg-reset-btn {
+  background:transparent;
+  border:1px solid #d8c9a4;
+  color:#8a6d1f;
+  border-radius:10px;
+  padding:9px 14px;
+  font-family:inherit;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+}
+.bg-file-input {
+  font-size:12px;
+  color:#41544b;
+}
+@media (min-width:960px) {
+  .bg-grid { grid-template-columns:1fr 1fr; }
 }

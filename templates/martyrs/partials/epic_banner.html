@@ -1,9 +1,9 @@
 {% load static %}
-{# پارامترها: quote, source, bg (مسیر تصویر static)، compact (bool)، badges (لیست جفت‌های icon/label) #}
+{# پارامترها: quote, source, bg (مسیر تصویر static)، bg_asset (اسلات پس‌زمینه از پنل)، compact (bool)، badges (لیست جفت‌های icon/label) #}
 <section class="epic-banner{% if compact %} epic-banner-compact{% endif %}">
   <span class="epic-kufiyeh epic-kufiyeh-top" aria-hidden="true"></span>
-  <div class="epic-banner-bg" aria-hidden="true">
-    <img src="{% static bg|default:'images/war-front/war-01.jpeg' %}" alt="" loading="lazy">
+  <div class="epic-banner-bg" aria-hidden="true"{% if bg_asset %} style="opacity:{{ bg_asset.opacity_css }}"{% endif %}>
+    <img src="{% if bg_asset %}{{ bg_asset.image_url }}{% else %}{% static bg|default:'images/war-front/war-01.jpeg' %}{% endif %}" alt="" loading="lazy">
   </div>
   <div class="epic-banner-overlay" aria-hidden="true"></div>
   <div class="shell epic-banner-inner">

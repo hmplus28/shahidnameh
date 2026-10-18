@@ -2,7 +2,7 @@ from django import forms
 from jalali_date.fields import JalaliDateField
 from jalali_date.widgets import AdminJalaliDateWidget
 
-from .models import ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteSettings
+from .models import BackgroundImage, ComradeMartyr, Martyr, MartyrImage, MartyrInjury, MartyrSection, MartyrVideo, Memory, SiteSettings
 
 
 class MartyrSectionForm(forms.ModelForm):
@@ -210,3 +210,28 @@ class SiteSettingsForm(forms.ModelForm):
         self.fields["music_enabled"].widget.attrs["class"] = "panel-check"
         self.fields["music_url"].widget.attrs["placeholder"] = "لینک مستقیم فایل MP3"
         self.fields["music_file"].widget.attrs["accept"] = "audio/*"
+
+
+class PersianClearableFileInput(forms.ClearableFileInput):
+    """ویجت انتخاب فایل با قالب فارسی (نمایش تصویر فعلی + چک‌باکس حذف)."""
+
+    template_name = "widgets/bg_clearable_file_input.html"
+
+
+class BackgroundImageForm(forms.ModelForm):
+    """فرم تعویض تصویر پس‌زمینه و تنظیم شفافیت آن (اسلایدر ۰ تا ۱۰۰ درصد)."""
+
+    class Meta:
+        model = BackgroundImage
+        fields = ("image", "opacity")
+        widgets = {
+            "image": PersianClearableFileInput(attrs={"accept": "image/*", "class": "bg-file-input"}),
+            # اسلایدر انتخاب شفافیت ۰ تا ۱۰۰
+            "opacity": forms.NumberInput(attrs={"type": "range", "min": 0, "max": 100, "step": 1}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["opacity"].widget.attrs["data-bg-slider"] = "1"
+        self.fields["image"].label = "تصویر پس‌زمینه"
+        self.fields["opacity"].label = "شفافیت نمایش"
