@@ -1,9 +1,38 @@
 """تنظیمات اصلی پلتفرم یادبود شهیدنامه."""
 from pathlib import Path
 import os
+import sys
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# لودر فایل ‎.env‎ — مخصوص استقرار روی cPanel/Passenger
+#
+# Passenger فایل ‎.env‎ را خودکار نمی‌خواند؛ بنابراین مقادیر محیطی (کلید امنیتی،
+# DEBUG، دیتابیس و…) از این فایل خوانده می‌شوند. متغیرهای واقعی محیط همیشه
+# اولویت دارند (setdefault) و اگر ‎.env‎ وجود نداشته باشد چیزی خراب نمی‌شود.
+# ─────────────────────────────────────────────────────────────────────────────
+def _load_dotenv(path: Path) -> None:
+    try:
+        raw_lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for raw_line in raw_lines:
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key = key.strip()
+        value = value.strip()
+        if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
+            value = value[1:-1]
+        if key:
+            os.environ.setdefault(key, value)
+
+
+_load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "development-only-change-this-secret")
 DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() == "true"
@@ -69,12 +98,38 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ.get("DJANGO_DB_NAME", str(BASE_DIR / "db.sqlite3")),
+# ─────────────────────────────────────────────────────────────────────────────
+# دیتابیس — پیش‌فرض SQLite (ساده و بدون تنظیمات برای هاست اشتراکی).
+# برای MySQL/MariaDB سی‌پنل در فایل ‎.env‎ بنویسید:  DB_ENGINE=mysql
+# و کلیدهای DB_NAME/DB_USER/DB_PASSWORD/DB_HOST/DB_PORT را کامل کنید.
+# (برای MySQL باید بستهٔ mysqlclient در محیط مجازی نصب شده باشد؛
+#  deploy/deploy_cpanel.sh به‌صورت خودکار آن را در صورت نیاز نصب می‌کند.)
+# ─────────────────────────────────────────────────────────────────────────────
+_DB_ENGINE = os.environ.get("DB_ENGINE", "sqlite").strip().lower()
+
+if _DB_ENGINE in ("mysql", "mariadb"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": os.environ.get("DB_NAME", ""),
+            "USER": os.environ.get("DB_USER", ""),
+            "PASSWORD": os.environ.get("DB_PASSWORD", ""),
+            "HOST": os.environ.get("DB_HOST", "localhost"),
+            "PORT": os.environ.get("DB_PORT", "3306"),
+            "OPTIONS": {
+                "charset": "utf8mb4",
+                # برای پشتیبانی کامل از متن فارسی و ایموجی
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.environ.get("DJANGO_DB_NAME", str(BASE_DIR / "db.sqlite3")),
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -96,6 +151,17 @@ STORAGES = {
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
 }
+
+# در حالت اجرای تست‌ها، استوریج manifest whitenoise بدون اجرای قبلیِ
+# collectstatic خطای «Missing staticfiles manifest entry» می‌دهد و تست‌ها
+# از یک کلون تازه قابل اجرا نیستند؛ در تست‌ها از استوریج ساده استفاده می‌کنیم.
+# (در تولید manifest لازم است و deploy/deploy_cpanel.sh خودش collectstatic
+# را اجرا می‌کند.)
+if "test" in sys.argv:
+    STORAGES = {
+        **STORAGES,
+        "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+    }
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 

@@ -103,6 +103,18 @@ export DJANGO_ALLOWED_HOSTS="example.com,www.example.com"
 export DJANGO_CSRF_TRUSTED_ORIGINS="https://example.com,https://www.example.com"
 ```
 
+## استقرار روی هاست cPanel (میزبانفا و مشابه)
+
+پروژه برای میزبانی روی هاست‌های اشتراکی cPanel آماده است و از **محیط مجازی «Setup Python App» خود سی‌پنل** استفاده می‌کند. کافی است برنامهٔ پایتون را در cPanel بسازید (Python 3.10+، Application root = پوشهٔ پروژه، startup file = `passenger_wsgi.py`) و سپس در ترمینال:
+
+```bash
+bash deploy/deploy_cpanel.sh
+```
+
+اسکریپت به‌طور خودکار venv سی‌پنل را پیدا و استفاده می‌کند، فایل `.env` را با کلید امنیتی تصادفی می‌سازد، وابستگی‌ها را نصب، مایگریشن‌ها و `collectstatic` را اجرا، `passenger_wsgi.py` را بازسازی، قواعد امنیتی `.htaccess` را نصب و برنامه را ری‌استارت می‌کند. پشتیبانی از MySQL هم به‌صورت اختیاری (با `DB_ENGINE=mysql` در `.env`) فعال می‌شود. اسکریپت idempotent است؛ برای به‌روزرسانی: `git pull && bash deploy/deploy_cpanel.sh`.
+
+راهنمای کامل گام‌به‌گام و عیب‌یابی: [`deploy/GUIDE-CPANEL-FA.md`](deploy/GUIDE-CPANEL-FA.md)
+
 ## تیم توسعه
 
 توسعه و نگهداری این سامانه توسط **تیم توسعه دایناکد** انجام شده است.
