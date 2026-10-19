@@ -3,4 +3,10 @@ Pillow>=10.4,<12
 gunicorn>=23.0,<24
 whitenoise>=6.7,<7
 django-jalali-date==2.0.0
-mysqlclient>=2.2,<3
+# setuptools روی پایتون ۳.۱۲+ لازم است: django-jalali-date از distutils
+# استفاده می‌کند که از پایتون ۳.۱۲ حذف شده و فقط با نصب setuptools برمی‌گردد.
+setuptools>=69
+# درایور MySQL — پایتونِ خالص و بدون نیاز به کامپایلر (برای هاست‌های اشتراکی
+# که اجازهٔ gcc ندارند). اگر mysqlclient نصب باشد، config/__init__.py همان
+# را ترجیح می‌دهد؛ وگرنه همین PyMySQL به‌نام MySQLdb معرفی می‌شود.
+PyMySQL[rsa]>=1.1,<3

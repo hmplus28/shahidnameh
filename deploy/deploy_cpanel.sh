@@ -14,7 +14,10 @@
 #       و اسکریپت بدون مشخصات کامل دیتابیس ادامه نمی‌دهد (راهنمای گام‌به‌گام
 #       ساخت دیتابیس نمایش داده می‌شود). اتصال واقعی به MySQL هم پیش از
 #       هر کاری آزموده می‌شود.
-#    ۴. نصب وابستگی‌ها در همان venv سی‌پنل (Django، Pillow، whitenoise، mysqlclient، …)
+#    ۴. نصب وابستگی‌ها در همان venv سی‌پنل (Django، Pillow، whitenoise و …)
+#       + درایور MySQL: اول mysqlclient امتحان می‌شود؛ روی هاست‌هایی که
+#       کامپایلر ندارند (خطای Permission denied: 'gcc') خودکار PyMySQL
+#       (پایتون خالص، بدون نیاز به کامپایل) نصب می‌شود.
 #    ۵. اجرای مایگریشن‌ها، جمع‌آوری فایل‌های استاتیک، همگام‌سازی نقش‌ها
 #       (configure_roles) و ساخت اختیاری مدیر اولیه
 #    ۶. ساخت/به‌روزرسانی ‎passenger_wsgi.py‎ (نقطه ورود Passenger سی‌پنل) —
@@ -347,13 +350,28 @@ say "به‌روزرسانی pip در venv سی‌پنل ..."
 say "نصب وابستگی‌ها (چند دقیقه صبر کنید) ..."
 "$VENV_PY" -m pip install --quiet -r "$PROJECT_DIR/requirements.txt"
 
-# درایور MySQL (mysqlclient) — برای این پروژه الزامی است
+# درایور MySQL — برای این پروژه الزامی است
+# اول mysqlclient (درایور سریع C)؛ روی هاست‌های اشتراکی که اجازهٔ کامپایل
+# ندارند (خطای «Permission denied: 'gcc'» هنگام build wheel) به‌صورت خودکار
+# PyMySQL (پایتون خالص) نصب می‌شود. پروژه با هر دو درایور کار می‌کند
+# (نگاه کنید به config/__init__.py). چون PyMySQL در requirements.txt هست،
+# معمولاً همین‌جا موجود است و mysqlclient اصلاً امتحان نمی‌شود.
 if ! "$VENV_PY" -c 'import MySQLdb' >/dev/null 2>&1; then
-    say "نصب درایور MySQL (mysqlclient) ..."
-    if ! "$VENV_PY" -m pip install --quiet mysqlclient; then
-        die "نصب mysqlclient ناموفق بود. در برخی هاست‌ها باید از بخش
-«Setup Python App → Run Pip Install» مقدار mysqlclient را نصب کنید
-یا از پشتیبانی هاست بخواهید کتابخانه libmysqlclient را فعال کند."
+    if "$VENV_PY" -c 'import pymysql' >/dev/null 2>&1; then
+        info "درایور MySQL: PyMySQL (از قبل نصب است)."
+    else
+        say "نصب درایور MySQL (اول mysqlclient، در صورت عدم امکان PyMySQL) ..."
+        if "$VENV_PY" -m pip install --quiet mysqlclient >/dev/null 2>&1 \
+           && "$VENV_PY" -c 'import MySQLdb' >/dev/null 2>&1; then
+            say "درایور MySQL: mysqlclient."
+        else
+            warn "نصب mysqlclient ممکن نشد (این هاست اجازهٔ کامپایل/gcc نمی‌دهد)."
+            if ! "$VENV_PY" -m pip install --quiet "PyMySQL[rsa]"; then
+                die "نصب هیچ درایور MySQL ممکن نشد. در cPanel → Setup Python App
+بخش «Run Pip Install» مقدار  PyMySQL[rsa]  را نصب کنید و دوباره اجرا کنید."
+            fi
+            say "درایور MySQL: PyMySQL (پایتون خالص — بدون نیاز به کامپایلر)."
+        fi
     fi
 fi
 
@@ -366,7 +384,13 @@ import os, sys
 try:
     import MySQLdb
 except ImportError:
-    sys.exit(3)
+    try:
+        import pymysql
+    except ImportError:
+        sys.exit(3)
+    pymysql.version_info = (1, 4, 6, "final", 0)
+    pymysql.install_as_MySQLdb()
+    import MySQLdb
 try:
     MySQLdb.connect(
         host=os.environ.get("DB_HOST", "localhost") or "localhost",
@@ -383,7 +407,7 @@ PYEOF
 then
     RC=$?
     if [ "$RC" -eq 3 ]; then
-        die "درایور mysqlclient در دسترس نیست."
+        die "هیچ درایور MySQL (mysqlclient یا PyMySQL) در دسترس نیست."
     else
         die "اتصال به MySQL ناموفق بود (کد $RC). رایج‌ترین علت‌ها:
   • نام دیتابیس/یوزر در ‎.env‎ با آنچه در cPanel ساخته‌اید یکی نیست
