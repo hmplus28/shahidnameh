@@ -156,7 +156,8 @@ bash deploy/deploy_cpanel.sh
 | نشانه | علت و راه‌حل |
 |---|---|
 | خطای 503 | معمولاً `passenger_wsgi.py` با پایتون اشتباه اجرا شده. یک بار `bash deploy/deploy_cpanel.sh` را اجرا کنید (برای venv سی‌پنل نسخهٔ بدون re-exec می‌سازد) و در Setup Python App دکمهٔ Restart را بزنید. |
-| «محیط مجازی سی‌پنل پیدا نشد» | هنوز برنامهٔ پایتون نساخته‌اید (گام ۴) یا Application root با پوشهٔ پروژه فرق دارد؛ از `--venv` استفاده کنید. |
+| «محیط مجازی سی‌پنل پیدا نشد» | هنوز برنامهٔ پایتون نساخته‌اید (گام ۴) یا Application root با پوشهٔ پروژه فرق دارد. توجه: venv سی‌پنل بسته به Application root می‌تواند در یکی از این مسیرها باشد: `~/virtualenv/shahidnameh/<نسخه>` یا `~/virtualenv/public_html/shahidnameh/<نسخه>`. اسکریپت هر دو را خودش پیدا می‌کند؛ اگر مسیر دیگری است، پیام خطا فهرست venvهای یافت‌شده را نشان می‌دهد — مسیر را با `bash deploy/deploy_cpanel.sh --venv <مسیر>` بدهید. |
+| خطای `/dev/fd/20: No such file or directory` هنگام اجرای اسکریپت | نسخهٔ قدیمی اسکریپت روی سرورهایی که `/dev/fd` ندارند خطا می‌داد؛ با `git pull` آخرین نسخهٔ اسکریپت را بگیرید (رفع شده) یا موقتاً مسیر venv را مستقیم بدهید: `bash deploy/deploy_cpanel.sh --venv ~/virtualenv/public_html/shahidnameh/3.12` |
 | «مشخصات دیتابیس MySQL کامل نیست» | گام ۳ را انجام دهید (ساخت دیتابیس و یوزر) و مقادیر `DB_*` را در `.env` کامل کنید؛ سپس دوباره اجرا کنید. |
 | «اتصال به MySQL ناموفق بود» | نام دیتابیس/یوزر باید دقیقاً مطابق cPanel باشد (با پیشوند یوزر سی‌پنل)؛ رمز را چک کنید؛ یوزر را با ALL PRIVILEGES به دیتابیس متصل کنید؛ `DB_HOST=localhost` بماند. پیام خطای کامل MySQL بالای همین پیام چاپ می‌شود. |
 | خطای نصب mysqlclient | از پشتیبانی هاست بخواهید `libmysqlclient` را فعال کند یا خودشان از «Run Pip Install» در Setup Python App مقدار `mysqlclient` را نصب کنند؛ سپس دوباره اجرا کنید. |

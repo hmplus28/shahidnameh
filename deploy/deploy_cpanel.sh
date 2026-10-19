@@ -4,9 +4,10 @@
 #
 #  کارهایی که انجام می‌دهد:
 #    ۱. یافتن و «الزام» استفاده از محیط مجازی «Setup Python App» خود سی‌پنل
-#       (مسیر ‎~/virtualenv/<پوشه-پروژه>/<نسخه>‎) — این اسکریپت هیچ venv دستی
-#       نمی‌سازد؛ اگر برنامهٔ پایتون در سی‌پنل ساخته نشده باشد، راهنمای گام‌به‌گام
-#       نمایش داده می‌شود و متوقف می‌شود.
+#       (مسیر ‎~/virtualenv/<مسیر-اپ>/<نسخه>‎؛ مثلاً ‎~/virtualenv/shahidnameh/3.12‎
+#       یا وقتی اپ داخل public_html است ‎~/virtualenv/public_html/shahidnameh/3.12‎)
+#       — این اسکریپت هیچ venv دستی نمی‌سازد؛ اگر برنامهٔ پایتون در سی‌پنل
+#       ساخته نشده باشد، راهنمای گام‌به‌گام نمایش داده می‌شود و متوقف می‌شود.
 #    ۲. ساخت خودکار فایل ‎.env‎ با کلید امنیتی تصادفی (DJANGO_SECRET_KEY،
 #       DJANGO_DEBUG، DJANGO_ALLOWED_HOSTS و …) — مقادیر موجود بازنویسی نمی‌شوند.
 #  ۳. کنترل کامل بودن مشخصات MySQL — این پروژه فقط با MySQL/MariaDB کار می‌کند
@@ -201,8 +202,14 @@ python_ok() {
 # سی‌پنل برای هر برنامه پایتون، venv را در ‎~/virtualenv/<Application root>/<نسخه>‎
 # می‌سازد. این اسکریپت طبق الزام پروژه، «فقط» از همین venv استفاده می‌کند و
 # هیچ‌وقت venv دستی نمی‌سازد (به‌جز حالتی که خودتان با ‎--venv‎ مسیر بدهید).
+#
+# توجه مهم: در این تابع عمداً از process substitution یعنی <(...) و here-string
+# یعنی <<< استفاده نشده، چون روی بعضی سرورهای cPanel مسیر ‎/dev/fd‎ در دسترس
+# نیست و آن ساختارها با خطای «/dev/fd/20: No such file or directory» شکست
+# می‌خورند (باگ واقعی که روی هاست میزبانفا دیده شد). به‌جایش از here-document
+# و لولهٔ ساده استفاده شده که همه‌جا کار می‌کند.
 find_cpanel_venv() {
-    local ver_dir proj_base rel
+    local ver_dir proj_base rel act venv_dir
     local -a roots=()
 
     proj_base="$(basename "$PROJECT_DIR")"
@@ -216,23 +223,62 @@ find_cpanel_venv() {
             ;;
     esac
 
-    # الگوی استاندارد کلودلینوکس: ~/virtualenv/<اپ>/<نسخه>/bin/python
-    local root
+    # الگوی استاندارد کلودلینوکس: ~/virtualenv/<مسیر-اپ>/<نسخه>/bin/python
+    local root versions
     for root in "${roots[@]}"; do
         [ -d "$root" ] || continue
-        while IFS= read -r ver_dir; do
-            if [ -x "${ver_dir%/}/bin/python" ] && python_ok "${ver_dir%/}/bin/python"; then
-                echo "${ver_dir%/}"
-                return 0
-            fi
-        done < <(ls -1d "$root"/*/ 2>/dev/null | sort -rV)
+        versions="$(ls -1d "$root"/*/ 2>/dev/null | sort -rV || true)"
+        if [ -n "$versions" ]; then
+            while IFS= read -r ver_dir; do
+                [ -n "$ver_dir" ] || continue
+                ver_dir="${ver_dir%/}"
+                if [ -x "$ver_dir/bin/python" ] && python_ok "$ver_dir/bin/python"; then
+                    echo "$ver_dir"
+                    return 0
+                fi
+            done <<SHAHEOF
+$versions
+SHAHEOF
+        fi
         # الگوی نادر: venv مستقیماً داخل پوشه اپ
         if [ -x "$root/bin/python" ] && python_ok "$root/bin/python"; then
             echo "$root"
             return 0
         fi
     done
+
+    # جستجوی سراسری: هر venv زیر ‎~/virtualenv‎ که نام پوشهٔ پروژه یکی از
+    # اجزای مسیرش باشد؛ مثلاً وقتی Application root چیز دیگری بوده ولی پوشه
+    # پروژه در مسیرش هست:  ~/virtualenv/public_html/shahidnameh/3.12
+    if [ -d "$HOME/virtualenv" ] && [ -n "$proj_base" ]; then
+        local all_acts
+        all_acts="$(find "$HOME/virtualenv" -maxdepth 6 -type f -name activate -path '*/bin/activate' 2>/dev/null | sort -rV || true)"
+        if [ -n "$all_acts" ]; then
+            while IFS= read -r act; do
+                [ -n "$act" ] || continue
+                venv_dir="${act%/bin/activate}"
+                case "$venv_dir" in
+                    */"$proj_base"|*/"$proj_base"/*)
+                        if [ -x "$venv_dir/bin/python" ] && python_ok "$venv_dir/bin/python"; then
+                            echo "$venv_dir"
+                            return 0
+                        fi
+                        ;;
+                esac
+            done <<SHAHEOF2
+$all_acts
+SHAHEOF2
+        fi
+    fi
     return 1
+}
+
+# فهرست همهٔ venv های زیر ‎~/virtualenv‎ — فقط برای نمایش در پیام خطا تا کاربر
+# بتواند مسیر درست را با ‎--venv‎ بدهد
+list_cpanel_venvs() {
+    [ -d "$HOME/virtualenv" ] || return 0
+    find "$HOME/virtualenv" -maxdepth 6 -type f -name activate -path '*/bin/activate' 2>/dev/null \
+        | sed 's#/bin/activate$##' | sort -u || true
 }
 
 if [ -z "$VENV_DIR" ]; then
@@ -241,18 +287,31 @@ if [ -z "$VENV_DIR" ]; then
 fi
 
 if [ -z "$VENV_DIR" ]; then
+    VENV_CANDIDATES="$(list_cpanel_venvs)"
+    if [ -n "$VENV_CANDIDATES" ]; then
+        CAND_MSG="محیط‌های مجازی که روی هاست پیدا شد:
+  $VENV_CANDIDATES
+  اگر برنامهٔ شما بین آن‌هاست، این‌طور اجرا کنید:
+       bash deploy/deploy_cpanel.sh --venv <مسیر-از-لیست-بالا>"
+    else
+        CAND_MSG="هیچ محیط مجازی‌ای زیر ‎~/virtualenv‎ پیدا نشد؛ یعنی هنوز در سی‌پنل برنامهٔ پایتون ساخته نشده است."
+    fi
     die "محیط مجازی «Setup Python App» سی‌پنل برای این پروژه پیدا نشد.
 این اسکریپت طبق الزام پروژه باید از venv خود سی‌پنل استفاده کند و venv دستی نمی‌سازد.
+$CAND_MSG
 
 راه‌حل (پیشنهادی و ساده) — ساخت برنامه پایتون در سی‌پنل:
   ۱) وارد cPanel شوید و بخش «Setup Python App» (یا «Python Selector») را باز کنید.
   ۲) روی «Create Application» بزنید و این مقادیر را وارد کنید:
        • Python version : 3.11 (یا هر نسخه ≥ 3.10 که ارائه می‌دهد)
-       • Application root : $(basename "$PROJECT_DIR")   ← پوشه همین پروژه
+       • Application root : مسیر پوشهٔ همین پروژه نسبت به هوم
+         (مثلاً «$(basename "$PROJECT_DIR")» یا اگر داخل public_html است
+         «public_html/$(basename "$PROJECT_DIR")»)
        • Application URL  : دامنه یا زیردامنه شما
        • Application startup file : passenger_wsgi.py
-  ۳) روی «Create» بزنید. سی‌پنل خودش venv را می‌سازد (معمولاً در
-     ‎~/virtualenv/$(basename "$PROJECT_DIR")/<نسخه>‎).
+  ۳) روی «Create» بزنید. سی‌پنل خودش venv را می‌سازد، مثلاً در یکی از این مسیرها:
+     ‎~/virtualenv/$(basename "$PROJECT_DIR")/<نسخه>‎
+     ‎~/virtualenv/public_html/$(basename "$PROJECT_DIR")/<نسخه>‎
   ۴) دوباره این اسکریپت را اجرا کنید:
        bash deploy/deploy_cpanel.sh
      اسکریپت خودش venv سی‌پنل را پیدا و همه مراحل را با آن انجام می‌دهد.
