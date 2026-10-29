@@ -1,5 +1,4 @@
 from datetime import date
-from urllib.parse import quote
 
 from django.contrib.admin.models import ADDITION, LogEntry
 from django.test import TestCase
@@ -26,8 +25,8 @@ class SeoAndPublishingTests(TestCase):
         response = self.client.get("/sitemap.xml")
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, quote(self.published.slug))
-        self.assertNotContains(response, quote(self.draft.slug))
+        self.assertContains(response, self.published.get_absolute_url())
+        self.assertNotContains(response, self.draft.get_absolute_url())
 
     def test_robots_txt_disallows_admin_and_links_sitemap(self):
         response = self.client.get("/robots.txt")

@@ -127,7 +127,9 @@ class Martyr(models.Model):
         return [(label, value) for label, value in labels if value]
 
     def get_absolute_url(self):
-        return reverse("martyrs:detail", kwargs={"slug": self.slug})
+        # نشانی عمومی فقط با شناسهٔ عددی — اسلاگ فارسی روی بعضی هاست‌ها
+        # (Passenger/آپاچی) درست پاس داده نمی‌شود و ۴۰۴ می‌دهد.
+        return reverse("martyrs:detail", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
         if not self.slug:

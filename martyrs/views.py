@@ -83,12 +83,28 @@ def martyr_directory(request):
     return render(request, "martyrs/martyr_directory.html", context)
 
 
-def martyr_detail(request, slug):
+def martyr_detail(request, pk):
+    """صفحهٔ پروندهٔ شهید — با شناسهٔ عددی (بدون اسلاگ، بدون دردسر انکودینگ)."""
     queryset = Martyr.objects.prefetch_related("memories", "images", "videos", "sections", "injuries", "comrades")
     is_staff = request.user.is_staff
     if not is_staff:
         queryset = queryset.filter(is_published=True)
-    martyr = get_object_or_404(queryset, slug=slug)
+    martyr = get_object_or_404(queryset, pk=pk)
+    return _render_martyr_detail(request, martyr, is_staff)
+
+
+def martyr_by_slug(request, slug):
+    """لینک‌های قدیمی اسلاگ‌دار (فارسی) را برای همیشه به نشانی عددی می‌برد.
+
+    اسلاگ فارسی روی بعضی سرورها (Passenger/آپاچی) درست پاس داده نمی‌شود و ۴۰۴
+    می‌دهد؛ نشانی‌های جدید فقط شناسهٔ عددی دارند و این نما فقط سازگاری با
+    لینک‌های قبلی (کتاب‌نشده‌ها، بایگانی جست‌وجوگرها و…) را نگه می‌دارد.
+    """
+    martyr = get_object_or_404(Martyr, slug=slug)
+    return redirect(martyr.get_absolute_url(), permanent=True)
+
+
+def _render_martyr_detail(request, martyr, is_staff):
     memories = martyr.memories.all()
     hero_image = next((img for img in martyr.images.all() if img.image), None)
     context = {

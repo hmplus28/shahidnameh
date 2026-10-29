@@ -135,13 +135,13 @@ class PanelTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(self.martyr.sections.filter(title="دوران کودکی").exists())
 
-        public = self.client.get(reverse("martyrs:detail", args=[self.martyr.slug]))
+        public = self.client.get(reverse("martyrs:detail", args=[self.martyr.pk]))
         self.assertContains(public, "دوران کودکی")
 
     def test_empty_fields_hidden_on_public_detail(self):
         self.martyr.family_life = ""
         self.martyr.save()
-        response = self.client.get(reverse("martyrs:detail", args=[self.martyr.slug]))
+        response = self.client.get(reverse("martyrs:detail", args=[self.martyr.pk]))
 
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "اطلاعات این بخش هنوز ثبت نشده است")

@@ -49,7 +49,7 @@
       {% else %}
         <form method="post" action="{% url 'martyrs:panel_martyr_toggle' martyr.pk 'publish' %}" class="icon-action-form">{% csrf_token %}<button class="icon-action is-publish" title="انتشار در سایت">{% include "icons/icon.html" with name="play" size=18 %}</button></form>
       {% endif %}
-      <a class="icon-action" href="{% url 'martyrs:detail' martyr.slug %}" target="_blank" title="مشاهده در سایت">{% include "icons/icon.html" with name="external" size=18 %}</a>
+      <a class="icon-action" href="{% url 'martyrs:detail' martyr.pk %}" target="_blank" title="مشاهده در سایت">{% include "icons/icon.html" with name="external" size=18 %}</a>
     </div>
     {% endif %}
   </div>

@@ -213,6 +213,19 @@ ul, ol { list-style:none; margin:0; padding:0; }
 .more-sheet-item b { display:block; color:var(--navy); font-size:14px; }
 .more-sheet-item small { display:block; color:#75827c; font-size:11px; margin-top:1px; }
 
+/* اعتبار توسعه‌دهنده (دایناکد) — کم‌رنگ و جداشده از بقیهٔ آیتم‌ها */
+.more-sheet-item.more-sheet-credit {
+  margin-top:6px;
+  padding-top:12px;
+  border-top:1px solid rgba(20,40,32,.08);
+  opacity:.8;
+  min-height:48px;
+}
+.more-sheet-credit .more-sheet-icn { background:transparent; }
+.more-sheet-credit .more-sheet-icn img { width:22px; height:22px; object-fit:contain; }
+.more-sheet-credit b { font-size:12.5px; color:#4b5a53; }
+.more-sheet-credit small { direction:ltr; text-align:right; }
+
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes slideUp { from { transform:translateY(100%); } to { transform:translateY(0); } }
 

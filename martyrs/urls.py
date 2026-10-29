@@ -14,7 +14,10 @@ urlpatterns = [
     path("robots.txt", views.robots_txt, name="robots"),
     path("sitemap.xml", sitemap, {"sitemaps": SITEMAPS}, name="sitemap"),
     path("martyrs/", views.martyr_directory, name="directory"),
-    path("martyrs/<str:slug>/", views.martyr_detail, name="detail"),
+    # مهم: مسیر عددی قبل از مسیر اسلاگ باشد تا «۱۲» به‌جای اسلاگ، شناسه تلقی شود
+    path("martyrs/<int:pk>/", views.martyr_detail, name="detail"),
+    # لینک‌های قدیمی اسلاگ‌دار → ۳۰۱ به نشانی عددی (سازگاری با لینک‌های پخش‌شده)
+    path("martyrs/<str:slug>/", views.martyr_by_slug, name="detail_by_slug"),
     path("ziyaratnama/", views.ziyaratnama, name="ziyaratnama"),
     path("panel/login/", panel_views.PanelLoginView.as_view(), name="panel_login"),
     path("panel/logout/", auth_views.LogoutView.as_view(next_page="martyrs:panel_login"), name="panel_logout"),
