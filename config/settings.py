@@ -37,7 +37,10 @@ def _load_dotenv(path: Path) -> None:
 _load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "development-only-change-this-secret")
-DEBUG = os.environ.get("DJANGO_DEBUG", "true").lower() == "true"
+# پیش‌فرض امن: اگر DJANGO_DEBUG تنظیم نشده باشد، DEBUG خاموش است.
+# (روی سرور واقعی یک بار با DEFAULT=true صفحهٔ فنی دیباگ لو رفت؛ امن‌ترین
+# پیش‌فرض برای استقرار تولید، False است — روشن‌کردن فقط برای توسعهٔ محلی.)
+DEBUG = os.environ.get("DJANGO_DEBUG", "false").lower() == "true"
 ALLOWED_HOSTS = [host.strip() for host in os.environ.get("DJANGO_ALLOWED_HOSTS", "*").split(",") if host.strip()]
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()

@@ -7,7 +7,7 @@
 {% block og_description %}{{ martyr.biography_summary|default:martyr.testament_text|striptags|truncatechars:160 }}{% endblock %}
 {% block og_extra %}
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
-{% if hero_image %}<meta property="og:image" content="{{ request.build_absolute_uri }}{{ hero_image.image.url }}">{% endif %}
+{% if martyr.profile_image %}<meta property="og:image" content="{{ request.build_absolute_uri }}{{ martyr.profile_image.url }}">{% elif hero_image %}<meta property="og:image" content="{{ request.build_absolute_uri }}{{ hero_image.image.url }}">{% endif %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",

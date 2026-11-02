@@ -432,6 +432,42 @@ say "جمع‌آوری فایل‌های استاتیک ..."
 say "همگام‌سازی گروه‌ها و مجوزها (نویسنده/ناظر) ..."
 "$VENV_PY" "$PROJECT_DIR/manage.py" configure_roles || warn "همگام‌سازی نقش‌ها رد شد (احتمالاً از قبل انجام شده)."
 
+# ---------------------------------------------------------------- بررسی media ----
+# عکس‌های آپلودی (پروفایل/گالری/المان‌ها) باید روی دیسک داخل MEDIA_ROOT باشند؛
+# اگر ردیف‌ها در دیتابیس هستند ولی فایل روی دیسک نیست، عکس‌ها ۴۰۴ می‌شوند.
+say "بررسی پوشهٔ رسانه (media) ..."
+MEDIA_REPORT="$("$VENV_PY" "$PROJECT_DIR/manage.py" shell -c "
+from pathlib import Path
+from django.conf import settings
+root = Path(settings.MEDIA_ROOT)
+count = sum(1 for f in root.rglob('*') if f.is_file()) if root.exists() else 0
+print('MEDIA_ROOT=' + str(root))
+print('MEDIA_FILES=' + str(count))
+try:
+    from martyrs.models import Martyr, MartyrImage
+    db_rows = Martyr.objects.exclude(profile_image='').count() + MartyrImage.objects.exclude(image='').count()
+    print('MEDIA_DB_ROWS=' + str(db_rows))
+except Exception:
+    pass
+" 2>/dev/null || true)"
+MEDIA_ROOT_REPORTED="$(printf '%s\n' "$MEDIA_REPORT" | sed -n 's/^MEDIA_ROOT=//p')"
+MEDIA_FILES="$(printf '%s\n' "$MEDIA_REPORT" | sed -n 's/^MEDIA_FILES=//p')"
+MEDIA_DB_ROWS="$(printf '%s\n' "$MEDIA_REPORT" | sed -n 's/^MEDIA_DB_ROWS=//p')"
+if [ -n "$MEDIA_ROOT_REPORTED" ]; then
+    info "مسیر رسانه‌ها: $MEDIA_ROOT_REPORTED"
+fi
+case "${MEDIA_FILES:-}" in
+    "") warn "بررسی رسانه‌ها انجام نشد (غیرحالزوم)." ;;
+    0)
+        if [ -n "$MEDIA_DB_ROWS" ] && [ "$MEDIA_DB_ROWS" != "0" ]; then
+            warn "دیتابیس $MEDIA_DB_ROWS عکس ثبت کرده ولی هیچ فایلی روی دیسک نیست! عکس‌ها از دست رفته‌اند؛ در پنل دوباره آپلود کنید (متن‌ها و اطلاعات سالم‌اند)."
+        else
+            info "پوشهٔ رسانه خالی است (تا کنون فایلی آپلود نشده)."
+        fi
+        ;;
+    *) info "تعداد فایل‌های رسانه روی دیسک: $MEDIA_FILES" ;;
+esac
+
 # سوپریوزر خودکار اگر متغیرها در .env از کامنت درآمده باشند
 SU_USERNAME="$(env_value DJANGO_SUPERUSER_USERNAME)"
 SU_PASSWORD="$(env_value DJANGO_SUPERUSER_PASSWORD)"
