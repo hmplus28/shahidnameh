@@ -1,7 +1,12 @@
+import shutil
+import tempfile
 from datetime import date
+from pathlib import Path
 
+from django.conf import settings
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from martyrs.models import Martyr
@@ -166,3 +171,63 @@ class PanelTests(TestCase):
         response = self.client.get(reverse("martyrs:panel_logs"))
 
         self.assertContains(response, "تاریخچه تغییرات")
+
+
+_TEST_MEDIA_ROOT = tempfile.mkdtemp(prefix="shahidnameh-test-media-")
+
+
+class PanelProfileImageUploadTests(TestCase):
+    """رگرسیون: فرم ثبت/ویرایش شهید در پنل باید request.FILES را بپذیرد.
+
+    پیش‌تر ویو فقط request.POST به فرم می‌داد و فایل عکس پروفایل بی‌صدا دور
+    ریخته می‌شد؛ رکورد «ذخیره شد» اما عکس هرگز روی دیسک نمی‌رفت.
+    """
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(_TEST_MEDIA_ROOT, ignore_errors=True)
+        super().tearDownClass()
+
+    @staticmethod
+    def _tiny_jpeg():
+        # ImageField جنگو فایل را با Pillow باز می‌کند؛ باید JPEG واقعی باشد
+        from io import BytesIO
+
+        from PIL import Image as PILImage
+
+        buf = BytesIO()
+        PILImage.new("RGB", (4, 4), (10, 80, 30)).save(buf, "JPEG")
+        buf.seek(0)
+        return SimpleUploadedFile("profile.jpg", buf.read(), content_type="image/jpeg")
+
+    def setUp(self):
+        self.superuser = get_user_model().objects.create_superuser(
+            "boss2", "b2@example.com", "pass12345"
+        )
+        self.client.force_login(self.superuser)
+        self.image = self._tiny_jpeg()
+
+    @override_settings(MEDIA_ROOT=_TEST_MEDIA_ROOT)
+    def test_martyr_create_with_profile_image_saves_file(self):
+        response = self.client.post(
+            reverse("martyrs:panel_martyr_new"),
+            {"first_name": "حسن", "last_name": "باقری", "profile_image": self.image},
+        )
+        martyr = Martyr.objects.get(first_name="حسن", last_name="باقری")
+        self.assertRedirects(
+            response, reverse("martyrs:panel_martyr_edit", args=[martyr.pk])
+        )
+        self.assertTrue(martyr.profile_image, "عکس پروفایل باید ذخیره می‌شد")
+        self.assertTrue((Path(settings.MEDIA_ROOT) / martyr.profile_image.name).exists())
+
+    @override_settings(MEDIA_ROOT=_TEST_MEDIA_ROOT)
+    def test_martyr_edit_with_profile_image_updates_file(self):
+        martyr = Martyr.objects.create(first_name="مهدی", last_name="کریمی")
+        response = self.client.post(
+            reverse("martyrs:panel_martyr_edit", args=[martyr.pk]),
+            {"first_name": "مهدی", "last_name": "کریمی", "profile_image": self.image},
+        )
+        self.assertEqual(response.status_code, 302)
+        martyr.refresh_from_db()
+        self.assertTrue(martyr.profile_image, "عکس پروفایل باید در ویرایش ذخیره می‌شد")
+        self.assertTrue((Path(settings.MEDIA_ROOT) / martyr.profile_image.name).exists())

@@ -133,7 +133,8 @@ def martyr_create(request):
     if not can_edit(request):
         messages.error(request, "شما اجازه ثبت و ویرایش محتوا را ندارید.")
         return redirect("martyrs:panel_martyr_list")
-    form = MartyrForm(request.POST or None)
+    # request.FILES لازم است: بدون آن فایل عکس پروفایل بی‌صدا دور ریخته می‌شد
+    form = MartyrForm(request.POST or None, request.FILES or None)
     if request.method == "POST" and form.is_valid():
         martyr = form.save()
         _log(request.user, martyr, ADDITION, "ثبت از پنل اختصاصی")
@@ -150,7 +151,8 @@ def martyr_create(request):
 def martyr_edit(request, pk):
     martyr = get_object_or_404(Martyr, pk=pk)
     readonly = not can_edit(request)
-    form = MartyrForm(request.POST or None, instance=martyr)
+    # request.FILES لازم است: بدون آن فایل عکس پروفایل بی‌صدا دور ریخته می‌شد
+    form = MartyrForm(request.POST or None, request.FILES or None, instance=martyr)
     if request.method == "POST":
         if readonly:
             messages.error(request, "نقش شما فقط امکان مشاهده دارد.")
